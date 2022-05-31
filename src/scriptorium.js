@@ -61,7 +61,11 @@ var scriptorium = (
                     
                     if (text.charAt (i) === '"') {
                         i++;
-                        arr.push (JSON.parse(text.substring (lastToken, i)));
+                        try {
+                            arr.push (JSON.parse(text.substring (lastToken, i)));
+                        } catch {
+                            return {err: "bad escaped character in string", pos: lastToken}
+                        }
                     
                     } else
                         return {err: "unterminated string", pos: lastToken};
@@ -81,7 +85,7 @@ var scriptorium = (
                 return {pos: i, arr: arr};
 
             } else
-                return {err: "Expected ')'", pos: i};
+                return {err: "expected ')'", pos: i};
         }
         
         var skipWhitespace = function (text, i) {
