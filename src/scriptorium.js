@@ -12,10 +12,10 @@ var scriptorium = (
             if (ret.err)
                 return ret;
             
-            if (ret.pos === text.length)
+            else if (ret.pos === text.length)
                 return ret.arr;
                 
-            if (text.substr(ret.pos, 2) === "/*")
+            else if (text.substr(ret.pos, 2) === "/*")
                 return {err: "unterminated comment", pos: ret.pos};
             
             else
@@ -61,7 +61,7 @@ var scriptorium = (
                     
                     if (text.charAt (i) === '"') {
                         i++;
-                        arr.push (text.substring (lastToken, i));
+                        arr.push (JSON.parse(text.substring (lastToken, i)));
                     
                     } else
                         return {err: "unterminated string", pos: lastToken};

@@ -3,7 +3,7 @@
 
 # scriptorium
 
-*Scriptorium* is estimated to be a Turing complete alternative to lambda calculus. Its intention is operating over s-expressions to expand asserted template occurences while aiming to be intuitive enough to introduce code templating to non-technical users. *Scriptorium* is designed as a Lisp-ish creation with only one kind of rules: templating rules. Being such a minimalistic creation, complete *Scriptorium* implementation takes less than XYZ Javascript lines of code.
+*Scriptorium* is estimated to be a Turing complete alternative to lambda calculus. Its intention is operating over s-expressions to expand asserted template occurences while aiming to be intuitive enough to introduce code templating to non-technical users. *Scriptorium* is designed as a creation with only one kind of rules: templating rules. Being such a minimalistic creation, complete *Scriptorium* implementation takes less than XYZ Javascript lines of code.
 
 ## declaring and expanding templates
 
@@ -126,3 +126,4 @@ This package contains a Javascript implementation of *Scriptorium*. Just include
 To try *Scriptorium* within browser, please refer to [Scriptorium Playground `// under construction //`](https://contrast-zone.github.io/scriptorium/playground/index.html).
 
     // under construction //
+
