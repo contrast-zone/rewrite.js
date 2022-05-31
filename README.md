@@ -1,3 +1,6 @@
+
+    // under construction //
+
 # scriptorium
 
 *Scriptorium* is estimated to be a Turing complete alternative to lambda calculus. Its intention is operating over s-expressions to expand asserted template occurences while aiming to be intuitive enough to introduce code templating to non-technical users. *Scriptorium* is designed as a Lisp-ish creation with only one kind of rules: templating rules. Being such a minimalistic creation, complete *Scriptorium* implementation takes less than XYZ Javascript lines of code.
@@ -120,4 +123,6 @@ Note how template occurences, to be recognized in s-expression, have to be enclo
 
 This package contains a Javascript implementation of *Scriptorium*. Just include `src/scriptorium.js` in your HTML or js file, and call `scriptorium(...s-expression string...)` function to return an output s-expression packed within an array.
 
-To try *Scriptorium* within browser, please refer to [Scriptorium Playground](playground/index.html).
+To try *Scriptorium* within browser, please refer to [Scriptorium Playground](playground/index.html). `// under construction //`
+
+    // under construction //
