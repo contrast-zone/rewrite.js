@@ -123,6 +123,6 @@ Note how template occurences, to be recognized in s-expression, have to be enclo
 
 This package contains a Javascript implementation of *Scriptorium*. Just include `src/scriptorium.js` in your HTML or js file, and call `scriptorium(...s-expression string...)` function to return an output s-expression packed within an array.
 
-To try *Scriptorium* within browser, please refer to [Scriptorium Playground](playground/index.html). `// under construction //`
+To try *Scriptorium* within browser, please refer to [Scriptorium Playground](https://contrast-zone.github.io/scriptorium/playground/index.html). `// under construction //`
 
     // under construction //
