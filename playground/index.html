@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Scriptorium</title>
-<script src="../src/scriptorium.js"></script>
+<title>Rewrite</title>
+<script src="../src/rewrite.js"></script>
 
 <script id="exmpl1" type="text/plain">
 /*
@@ -13,11 +13,11 @@
 
 (
     (
-        TEMPL
-        ((ASK greet) (ANS hello world))
-    ) (
-        greet
+        REWRITE
+        ((READ greet) (WRITE hello world))
     )
+
+    greet
 )
 </script>
 
@@ -28,11 +28,11 @@
 
 (
     (
-        TEMPL
-        ((ASK greet (VAR x)) (ANS hello (x)))
-    ) (
-        greet world
+        REWRITE
+        ((READ greet (VAR <x>)) (WRITE hello <x>))
     )
+
+    greet world
 )
 </script>
 
@@ -43,12 +43,12 @@
 
 (
     (
-        TEMPL
-        ((ASK x) (ANS Venus))
-        ((ASK y) (ANS milk ))
-    ) (
-        (x) likes (y)
+        REWRITE
+        ((READ <x>) (WRITE Venus))
+        ((READ <y>) (WRITE milk ))
     )
+
+    <x> likes <y>
 )
 </script>
 
@@ -59,14 +59,14 @@
 
 (
     (
-        TEMPL
+        REWRITE
         (
-            (ASK l (VAR a) (VAR b))
-            (ANS (a) likes (b)    )
+            (READ  l (VAR <a>) (VAR <b>))
+            (WRITE <a> likes <b>    )
         )
-    ) (
-        l Pluto bones
     )
+    
+    l Pluto bones
 )
 </script>
 
@@ -77,20 +77,21 @@
 
 (
     (
-        TEMPL
-        ((ASK x) (ANS Nikki ))
-        ((ASK y) (ANS cheese))
+        REWRITE
+        ((READ <x>) (WRITE Nikki ))
+        ((READ <y>) (WRITE cheese))
         (
-            (ASK l (VAR a) (VAR b))
-            (ANS (a) likes (b)    )
+            (READ  l (VAR <a>) (VAR <b>))
+            (WRITE <a> likes <b>        )
         )
-    ) (
-        l (x) (y)
     )
+    
+    l <x> <y>
 )
 </script>
 
 <script id="exmpl6" type="text/plain">
+
 /*
     Theorem verifying by substitution,
     featuring proof of: `x /\ (x -> y)` |- `y`
@@ -98,32 +99,96 @@
 
 (
     (
-        TEMPL
+        REWRITE
         (
             // commutativity: `a /\ b` |- `b /\ a`
             
-            (ASK comm ((VAR a) /\ (VAR b)))
-            (ANS (b) /\ (a))
+            (READ  comm: (VAR <a>) /\ (VAR <b>))
+            (WRITE <b> /\ <a>)
         ) (
             // modus ponens: `(a -> b) /\ a` |- `b`
             
-            (ASK mp (((VAR a) -> (VAR b)) /\ (VAR a)))
-            (ANS (b))
+            (READ  mp: ((VAR <a>) -> (VAR <b>)) /\ (VAR <a>))
+            (WRITE <b>)
         ) (
             // quod erat demonstrandum: `a` |- `a`
             
-            (ASK qed (VAR a))
-            (ANS (a))
+            (READ qed: (VAR <a>))
+            (WRITE <a>)
         )
-    ) (
-        qed (
-            mp (
-                comm (
-                    x /\ (x -> y) // assumption
-                )
-            )
-        ) // conclusion: `y`
     )
+
+    // applying rules in reverse order
+    qed:
+    mp:
+    comm:
+
+    // assumption
+    x /\ (x -> y)
+                
+    // conclusion after applying rules: `y`    
+)
+</script>
+
+<script id="exmpl7" type="text/plain">
+/*
+    Boolean operations and conditional
+*/
+
+(
+    (
+        REWRITE
+        
+        // AND
+        (
+            (READ  (true) && (true))
+            (WRITE true)
+        ) (
+            (READ  (true) && (false))
+            (WRITE false)
+        ) (
+            (READ  (false) && (true))
+            (WRITE false)
+        ) (
+            (READ  (false) && (false))
+            (WRITE false)
+        )
+        
+        // OR
+        (
+            (READ  (true) || (true))
+            (WRITE true)
+        ) (
+            (READ  (true) || (false))
+            (WRITE true)
+        ) (
+            (READ  (false) || (true))
+            (WRITE true)
+        ) (
+            (READ  (false) || (false))
+            (WRITE false)
+        )
+        
+        // NOT
+        (
+            (READ  ! (true))
+            (WRITE false)
+        ) (
+            (READ  ! (false))
+            (WRITE true)
+        )
+        
+        // IF
+        (
+            (READ  IF (true) THEN (VAR then) ELSE (VAR else))
+            (WRITE then)
+        ) (
+            (READ  IF (false) THEN (VAR then) ELSE (VAR else))
+            (WRITE else)
+        )
+    )
+
+    IF (!((true && false) || false)) THEN yes ELSE no
 )
 </script>
 
@@ -233,7 +298,7 @@
 <tbody>
 <tr>
 <td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
-<font size="5"><strong>scriptorium playground (under construction)</strong></font>
+<font size="5"><strong>rewrite playground (under construction)</strong></font>
 </td>
 </tr>
 <tr>
@@ -259,6 +324,7 @@
         <a href="javascript:populate('exmpl4');">&nbsp;&nbsp;&nbsp; Pluto likes bones</a>
         <a href="javascript:populate('exmpl5');">&nbsp;&nbsp;&nbsp; Nikki likes cheese</a>
         <a href="javascript:populate('exmpl6');">&nbsp;&nbsp;&nbsp; theorem verifying</a>
+        <a href="javascript:populate('exmpl7');">&nbsp;&nbsp;&nbsp; Boolean operations</a>
     </div>
 </div>
                 </b>
@@ -404,7 +470,7 @@
     cr = String.fromCharCode(13);
     
     function compile () {
-        var p = scriptorium (input1.value);
+        var p = rewrite (input1.value);
         if (p.err) {
             var c = getCoords (input1.value, p.pos)
             output.value = "Error: " + p.err + " at " + "(" + c.row + ", " + c.column + ")";
