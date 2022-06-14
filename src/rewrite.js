@@ -148,7 +148,7 @@ var rewrite = (
             while (Array.isArray (node)) {
                 thisrwrt = thisrwrt.concat (pickRules (node));
                 
-                if (execute (node, thisrwrt)) {
+                if (execute (node, JSON.parse(JSON.stringify(thisrwrt)))) {
                     changed = true;
                     node = top;
                     continue;
@@ -212,8 +212,8 @@ var rewrite = (
         
         var matches = function (exp0, exp1, vars) {
             if (Array.isArray (exp1) && exp1[0] === "VAR") {
-                for (var i = 0; i < vars.length; i++)
-                    if (vars[i][0][0] === exp1[1][0])
+                for (var i = vars.length - 1; i >= 0; i--)
+                    if (vars[i][0] === exp1[1][0])
                         return matches (exp0, vars[i][1], vars);
                 
                 vars.push ([exp1[1][0], exp0]);
@@ -244,7 +244,7 @@ var rewrite = (
                 
                 if (isString (srch[0]))
                     srch[0] = replaceVar (srch[0], vars);
-
+                    
                 if (Array.isArray (srch[0]))
                     replaceVars (srch[0], repl[0], vars);
                     
@@ -264,7 +264,7 @@ var rewrite = (
         var isString = function (str) {
             return (typeof str === 'string' || str instanceof String)
         }
-        
+
         return parse;
     }) ()
 );
