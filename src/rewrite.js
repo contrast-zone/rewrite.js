@@ -6,13 +6,11 @@ var rewrite = (
     (function () {
         "use strict";
         
-        var replacedSites = [];
-        
         var parse = function (text) {
             var ret = deepParse (text, 0);
-            
-            replacedSites = [];
+
             reduce (ret.arr, []);
+            normalize (ret.arr);
             
             if (ret.err)
                 return ret;
@@ -130,6 +128,18 @@ var rewrite = (
             } while (i > pos);
             
             return i;
+        }
+        
+        var normalize = function (node) {
+            while (Array.isArray (node)) {
+                if (Array.isArray (node[0]) && isString (node[0][0]) && node[0][1] === null)
+                    node[0] = node[0][0];
+                    
+                if (Array.isArray (node[0]))
+                    normalize (node[0]);
+                
+                node = node[1];
+            }
         }
         
         var reduce = function (node, rwrt) {
