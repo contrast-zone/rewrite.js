@@ -1,4 +1,4 @@
-// scriptorium.js
+// rewrite.js
 // (c) contrast zone, 2022
 // MIT License
 
