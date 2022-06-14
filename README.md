@@ -7,7 +7,7 @@
 
 ---
 
-To try *Rewrite* within browser, please refer to [Rewrite Playground `// under construction //`](https://contrast-zone.github.io/rewrite/playground/index.html).
+To try *Rewrite* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html).
 
 ## declaring and expanding templates
 
