@@ -172,7 +172,6 @@ var rewrite = (
             if (Array.isArray (node)) {
                 while (node[0] && node[0][0] === "REWRITE") {
                     if (node[1]) {
-                        thisrwrt = [];
                         tmprwrt = node[0][1];
                         while (tmprwrt) {
                             thisrwrt.push (tmprwrt[0]);
@@ -193,8 +192,10 @@ var rewrite = (
         }
         
         var execute = function (node, rwrt) {
+            var vars;
+            
             for (var i = 0; i < rwrt.length; i++) {
-                var vars = [];
+                vars = [];
                 
                 if (matches (node, rwrt[i][0][1], vars)) {
                     replaceVars (node, rwrt[i][1][0][1], vars);
