@@ -101,11 +101,11 @@ To get familiar with *Rewrite* we bring a few illustrative examples:
         (
             (
                 REWRITE
-                ((READ  <x>) (ANS Nikki ))
-                ((WRITE <y>) (ANS cheese))
+                ((READ <x>) (WRITE Nikki ))
+                ((READ <y>) (WRITE cheese))
                 (
-                    (ASK l (VAR <a>) (VAR <b>))
-                    (ANS <a> likes <b>        )
+                    (READ l (VAR <a>) (VAR <b>))
+                    (WRITE <a> likes <b>        )
                 )
             )
             l <x> <y>
