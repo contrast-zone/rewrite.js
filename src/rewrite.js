@@ -156,6 +156,7 @@ var rewrite = (
                 
                 if (Array.isArray (node[0]))
                     if (reduce (node[0], thisrwrt)) {
+                        changed = true;
                         node = top;
                         continue;
                     }
@@ -222,10 +223,23 @@ var rewrite = (
                 return true
                 
             } else if (Array.isArray (exp0) && Array.isArray (exp1)) {
-                return matches (exp0[0], exp1[0], vars) && matches (exp0[1], exp1[1], vars);
+                if (exp0.length === 1 && exp1.length === 1)
+                    return matches (exp0[0], exp1[0], vars);
                 
-            } else if (isString (exp0) && isString (exp1[0]) && exp1[1] === null) {
+                else if (exp0.length === 2 && exp1.length === 2)
+                    return matches (exp0[0], exp1[0], vars) && matches (exp0[1], exp1[1], vars);
+                
+                else
+                    return false;
+                
+            } else if (isString (exp1) && exp0 && isString (exp0[0]) && exp0[1] === null) {
+                return exp0[0] === exp1;
+                
+            } else if (isString (exp0) && exp1 && isString (exp1[0]) && exp1[1] === null) {
                 return exp0 === exp1[0];
+                
+            //} else if (isString (exp0) && isString (exp1)) {
+            //    return exp0 === exp1;
                 
             } else if (isString (exp0) && isString (exp1)) {
                 return exp0 === exp1;
