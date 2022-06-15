@@ -9,6 +9,8 @@
 
 To try *Rewrite* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html).
 
+---
+
 ## declaring and expanding templates
 
 *Rewrite* brings only four keywords for declaring templates: `REWRITE`, `READ`, `WRITE`, and `VAR`. Templates are declared by the following patern:
