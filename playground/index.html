@@ -140,49 +140,49 @@
         
         // AND
         (
-            (READ  (true) && (true))
+            (READ  true && true)
             (WRITE true)
         ) (
-            (READ  (true) && (false))
+            (READ  true && false)
             (WRITE false)
         ) (
-            (READ  (false) && (true))
+            (READ  false && true)
             (WRITE false)
         ) (
-            (READ  (false) && (false))
+            (READ  false && false)
             (WRITE false)
         )
         
         // OR
         (
-            (READ  (true) || (true))
+            (READ  true || true)
             (WRITE true)
         ) (
-            (READ  (true) || (false))
+            (READ  true || false)
             (WRITE true)
         ) (
-            (READ  (false) || (true))
+            (READ  false || true)
             (WRITE true)
         ) (
-            (READ  (false) || (false))
+            (READ  false || false)
             (WRITE false)
         )
         
         // NOT
         (
-            (READ  ! (true))
+            (READ  ! true)
             (WRITE false)
         ) (
-            (READ  ! (false))
+            (READ  ! false)
             (WRITE true)
         )
         
         // IF
         (
-            (READ  IF (true) THEN (VAR then) ELSE (VAR else))
+            (READ  IF true THEN (VAR then) ELSE (VAR else))
             (WRITE then)
         ) (
-            (READ  IF (false) THEN (VAR then) ELSE (VAR else))
+            (READ  IF false THEN (VAR then) ELSE (VAR else))
             (WRITE else)
         )
     )
