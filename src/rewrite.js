@@ -131,18 +131,23 @@ var rewrite = (
         }
         
         var normalize = function (node) {
-            while (Array.isArray (node)) {
-                while (Array.isArray (node[0]) && !node[0][1])
-                    node[0] = node[0][0];
-                
-                if (node [0] === null && node[1] === null)
-                    node.splice (1, 1)
+            var deeper = function (node) {
+                while (Array.isArray (node)) {
+                    while (Array.isArray (node[0]) && !node[0][1])
+                        node[0] = node[0][0];
+                    
+                    if (node[0] === null && node[1] === null)
+                        node.splice (1, 1)
 
-                if (Array.isArray (node[0]))
-                    normalize (node[0]);
-                
-                node = node[1];
+                    if (Array.isArray (node[0]))
+                        deeper (node[0]);
+                    
+                    node = node[1];
+                }
             }
+            deeper (node);
+            while (Array.isArray (node) && Array.isArray (node[0]) && node[1] === null)
+                node.splice (0, 2, node[0][0], node[0][1]);
         }
         
         var reduce = function (node, rwrt) {
