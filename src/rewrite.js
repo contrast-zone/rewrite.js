@@ -224,6 +224,12 @@ var rewrite = (
                     
                 return true
                 
+            } else if (Array.isArray (exp0) && !exp0[1]) {
+                return matches (exp0[0], exp1, vars);
+                
+            } else if (Array.isArray (exp1) && !exp1[1]) {
+                return matches (exp0, exp1[0], vars);
+            
             } else if (Array.isArray (exp0) && Array.isArray (exp1)) {
                 if (exp0.length === 1 && exp1.length === 1)
                     return matches (exp0[0], exp1[0], vars);
@@ -236,45 +242,27 @@ var rewrite = (
 
             } else if (isString (exp0) && isString (exp1)) {
                 return exp0 === exp1;
-                
-            } else if (isString (exp0) && isString (exp1)) {
-                return exp0 === exp1;
-                
+
             } else if (exp0 === null && exp1 === null) {
                 return true;
-            
-            } else if (exp0 && exp0[1] === null) {
-                return matches (exp0[0], exp1, vars);
-                
-            } else if (exp1 && exp1[1] === null) {
-                return matches (exp0, exp1[0], vars);
-                
+
             } else {
                 return false;
             }
         }
         
         var replaceVars = function (srch, repl, vars) {
-            var oldsrch, n;
-            
             while (Array.isArray (repl)) {
                 srch[0] = repl[0];
                 if (repl[1] === null || repl[1])
                     srch[1] = repl[1];
                 
-                if (isString (srch[0])) {
-                    n = replaceVar (srch[0], vars);
-                    if (!isString (n) && n !== srch[0] && srch[1] === null && oldsrch)
-                        oldsrch[1] = n;
-                    
-                    else
-                        srch[0] = n;
-                }
+                if (isString (srch[0]))
+                    srch[0] = replaceVar (srch[0], vars);
                     
                 if (Array.isArray (srch[0]))
                     replaceVars (srch[0], repl[0], vars);
                 
-                oldsrch = srch;
                 repl = repl[1];
                 srch = srch[1];
             }
