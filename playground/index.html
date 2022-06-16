@@ -191,6 +191,33 @@
 )
 </script>
 
+<script id="exmpl8" type="text/plain">
+/*
+    metarules
+*/
+
+(
+    (
+       REWRITE
+       (
+           (READ  RULE (VAR <x>) -> (VAR <y>))
+           (WRITE REWRITE ((READ <x>) (WRITE <y>)))
+       )
+    )
+    
+    (
+        RULE
+        (
+            (VAR <a>) + (VAR <a>)
+        ) -> (
+            2 * <a>
+        )
+    )
+    
+    N + N
+)
+</script>
+
 <style type="text/css" media="screen">
     /*
     @font-face {
@@ -326,6 +353,8 @@
         <hr/>
         <a href="javascript:populate('exmpl6');">&nbsp;&nbsp;&nbsp; theorem verifying</a>
         <a href="javascript:populate('exmpl7');">&nbsp;&nbsp;&nbsp; Boolean operations</a>
+        <hr/>
+        <a href="javascript:populate('exmpl8');">&nbsp;&nbsp;&nbsp; metarules</a>
     </div>
 </div>
                 </b>

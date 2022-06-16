@@ -132,9 +132,9 @@ var rewrite = (
         
         var normalize = function (node) {
             while (Array.isArray (node)) {
-                if (Array.isArray (node[0]) && isString (node[0][0]) && node[0][1] === null)
+                if (Array.isArray (node[0]) && node[0][1] === null)
                     node[0] = node[0][0];
-                    
+
                 if (Array.isArray (node[0]))
                     normalize (node[0]);
                 
@@ -203,12 +203,11 @@ var rewrite = (
                     return true;
                 }
 
-                if (isString (node[0])) {
+                if (isString (node[0]))
                     if (matches (node[0], rwrt[i][0][1], vars)) {
                         node[0] = replaceVar (rwrt[i][1][0][1], vars);
                         return true;
                     }
-                }
             }
         }
         
@@ -231,15 +230,9 @@ var rewrite = (
                 
                 else
                     return false;
-                
-            } else if (isString (exp1) && exp0 && isString (exp0[0]) && exp0[1] === null) {
-                return exp0[0] === exp1;
-                
-            } else if (isString (exp0) && exp1 && isString (exp1[0]) && exp1[1] === null) {
-                return exp0 === exp1[0];
-                
-            //} else if (isString (exp0) && isString (exp1)) {
-            //    return exp0 === exp1;
+
+            } else if (isString (exp0) && isString (exp1)) {
+                return exp0 === exp1;
                 
             } else if (isString (exp0) && isString (exp1)) {
                 return exp0 === exp1;
@@ -247,23 +240,39 @@ var rewrite = (
             } else if (exp0 === null && exp1 === null) {
                 return true;
             
+            } else if (exp0 && exp0[1] === null) {
+                return matches (exp0[0], exp1, vars);
+                
+            } else if (exp1 && exp1[1] === null) {
+                return matches (exp0, exp1[0], vars);
+                
             } else {
                 return false;
             }
         }
         
         var replaceVars = function (srch, repl, vars) {
+            var oldsrch;
+            
             while (Array.isArray (repl)) {
                 srch[0] = repl[0];
                 if (repl[1] === null || repl[1])
                     srch[1] = repl[1];
                 
-                if (isString (srch[0]))
-                    srch[0] = replaceVar (srch[0], vars);
+                if (isString (srch[0])) {
+                    var n = replaceVar (srch[0], vars);
+                    
+                    if (!isString (n) && n !== srch[0] && srch[1] === null)
+                        oldsrch[1] = n;
+                    
+                    else
+                        srch[0] = n;
+                }
                     
                 if (Array.isArray (srch[0]))
                     replaceVars (srch[0], repl[0], vars);
-                    
+                
+                oldsrch = srch;
                 repl = repl[1];
                 srch = srch[1];
             }
