@@ -22,6 +22,7 @@ To try *Rewrite* within browser, please refer to [Rewrite Playground](https://co
             ((READ ...) (WRITE ...))
             ...
         )
+        
         ...s-expression which templates operate on...
     )
 
@@ -32,6 +33,7 @@ To try *Rewrite* within browser, please refer to [Rewrite Playground](https://co
             REWRITE
             ((READ greet) (WRITE hello world))
         )
+        
         greet
     )
 
@@ -46,6 +48,7 @@ If we want to use template variables, we assert them with keyword `VAR` under th
             REWRITE
             ((READ greet (VAR <x>)) (WRITE hello <x>))
         )
+        
         greet world
     )
 
@@ -70,6 +73,7 @@ To get familiar with *Rewrite* we bring a few illustrative examples:
                 ((READ <x>) (WRITE Venus))
                 ((READ <y>) (WRITE milk ))
             )
+            
             <x> likes <y>
         )
     
@@ -89,6 +93,7 @@ To get familiar with *Rewrite* we bring a few illustrative examples:
                     (WRITE <a> likes <b>    )
                 )
             )
+            
             l Pluto bones
         )
     
@@ -110,6 +115,7 @@ To get familiar with *Rewrite* we bring a few illustrative examples:
                     (WRITE <a> likes <b>        )
                 )
             )
+            
             l <x> <y>
         )
 
