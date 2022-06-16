@@ -252,7 +252,7 @@ var rewrite = (
         }
         
         var replaceVars = function (srch, repl, vars) {
-            var oldsrch = srch;
+            var oldsrch;
             
             while (Array.isArray (repl)) {
                 srch[0] = repl[0];
@@ -262,7 +262,7 @@ var rewrite = (
                 if (isString (srch[0])) {
                     var n = replaceVar (srch[0], vars);
                     
-                    if (!isString (n) && n !== srch[0] && srch[1] === null)
+                    if (!isString (n) && n !== srch[0] && srch[1] === null && oldsrch)
                         oldsrch[1] = n;
                     
                     else
