@@ -132,7 +132,7 @@ var rewrite = (
         
         var normalize = function (node) {
             while (Array.isArray (node)) {
-                while (node[1] === null && Array.isArray (node[0]) && !node[0][1])
+                while (Array.isArray (node[0]) && !node[0][1])
                     node[0] = node[0][0];
                 
                 if (node [0] === null && node[1] === null)
