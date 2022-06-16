@@ -179,6 +179,7 @@ var rewrite = (
             var thisrwrt = [], tmprwrt;
 
             if (Array.isArray (node)) {
+                normalize (node);
                 while (node[0] && node[0][0] === "REWRITE") {
                     if (node[1]) {
                         tmprwrt = node[0][1];
