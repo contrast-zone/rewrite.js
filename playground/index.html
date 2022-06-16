@@ -200,17 +200,20 @@
     (
        REWRITE
        (
-           (READ  RULE (VAR <x>) -> (VAR <y>))
+           (READ  var (VAR <x>))
+           (WRITE VAR <x>)
+       ) (
+           (READ  rule (VAR <x>) -> (VAR <y>))
            (WRITE REWRITE ((READ <x>) (WRITE <y>)))
        )
     )
     
     (
-        RULE
+        rule
         (
-            (VAR <a>) + (VAR <a>)
+            (var a) + (var a)
         ) -> (
-            2 * <a>
+            2 * a
         )
     )
     
