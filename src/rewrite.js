@@ -132,8 +132,11 @@ var rewrite = (
         
         var normalize = function (node) {
             while (Array.isArray (node)) {
-                if (Array.isArray (node[0]) && node[0][1] === null)
+                while (node[1] === null && Array.isArray (node[0]) && !node[0][1])
                     node[0] = node[0][0];
+                
+                if (node [0] === null && node[1] === null)
+                    node.splice (1, 1)
 
                 if (Array.isArray (node[0]))
                     normalize (node[0]);
@@ -252,7 +255,7 @@ var rewrite = (
         }
         
         var replaceVars = function (srch, repl, vars) {
-            var oldsrch;
+            var oldsrch, n;
             
             while (Array.isArray (repl)) {
                 srch[0] = repl[0];
@@ -260,8 +263,7 @@ var rewrite = (
                     srch[1] = repl[1];
                 
                 if (isString (srch[0])) {
-                    var n = replaceVar (srch[0], vars);
-                    
+                    n = replaceVar (srch[0], vars);
                     if (!isString (n) && n !== srch[0] && srch[1] === null && oldsrch)
                         oldsrch[1] = n;
                     
