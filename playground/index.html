@@ -216,41 +216,31 @@
 
 (
     (
-        (
-            REWRITE
-            
-            // helper substitutions
-            ((READ <va0>) (WRITE (VAR <a>) 0))
-            ((READ <va1>) (WRITE (VAR <a>) 1))
-            ((READ <vb0>) (WRITE (VAR <b>) 0))
-            ((READ <vb1>) (WRITE (VAR <b>) 1))
-        )
-        
         REWRITE
         
         // both numbers single digits
-        ((READ +     0     0) (WRITE                   0))
-        ((READ +     0     1) (WRITE                   1))
-        ((READ +     1     0) (WRITE                   1))
-        ((READ +     1     1) (WRITE                 1 0))
+        ((READ +             0             0) (WRITE                   0))
+        ((READ +             0             1) (WRITE                   1))
+        ((READ +             1             0) (WRITE                   1))
+        ((READ +             1             1) (WRITE                 1 0))
         
         // first number multiple digits, second number single digit
-        ((READ + <va0>     0) (WRITE               <a> 0))
-        ((READ + <va0>     1) (WRITE               <a> 1))
-        ((READ + <va1>     0) (WRITE               <a> 1))
-        ((READ + <va1>     1) (WRITE         (+ 1 <a>) 0))
+        ((READ + ((VAR <a>) 0)             0) (WRITE               <a> 0))
+        ((READ + ((VAR <a>) 0)             1) (WRITE               <a> 1))
+        ((READ + ((VAR <a>) 1)             0) (WRITE               <a> 1))
+        ((READ + ((VAR <a>) 1)             1) (WRITE         (+ 1 <a>) 0))
         
         // first number single digit, second number multiple digits
-        ((READ +     0 <vb0>) (WRITE               <b> 0))
-        ((READ +     0 <vb1>) (WRITE               <b> 1))
-        ((READ +     1 <vb0>) (WRITE               <b> 1))
-        ((READ +     1 <vb1>) (WRITE         (+ 1 <b>) 0))
+        ((READ +             0 ((VAR <b>) 0)) (WRITE               <b> 0))
+        ((READ +             0 ((VAR <b>) 1)) (WRITE               <b> 1))
+        ((READ +             1 ((VAR <b>) 0)) (WRITE               <b> 1))
+        ((READ +             1 ((VAR <b>) 1)) (WRITE         (+ 1 <b>) 0))
         
         // both numbers multiple digits
-        ((READ + <va0> <vb0>) (WRITE       (+ <a> <b>) 0))
-        ((READ + <va0> <vb1>) (WRITE       (+ <a> <b>) 1))
-        ((READ + <va1> <vb0>) (WRITE       (+ <a> <b>) 1))
-        ((READ + <va1> <vb1>) (WRITE (+ 1 (+ <a> <b>)) 0))
+        ((READ + ((VAR <a>) 0) ((VAR <b>) 0)) (WRITE       (+ <a> <b>) 0))
+        ((READ + ((VAR <a>) 0) ((VAR <b>) 1)) (WRITE       (+ <a> <b>) 1))
+        ((READ + ((VAR <a>) 1) ((VAR <b>) 0)) (WRITE       (+ <a> <b>) 1))
+        ((READ + ((VAR <a>) 1) ((VAR <b>) 1)) (WRITE (+ 1 (+ <a> <b>)) 0))
     )
 
     +
@@ -541,13 +531,31 @@
     
     cr = String.fromCharCode(13);
     
+    function stringify (node, indent) {
+        var str = ""
+        
+        str += indent + "(\n";
+        
+        for (var i = 0; i < node.length; i++) {
+            if (Array.isArray (node[i]))
+                str += stringify (node[i], indent + "    ");
+                
+            else
+                str += indent + "    " + node[i] + "\n";
+        }
+        
+        str += indent + ")\n";
+        
+        return str;
+    }
+    
     function compile () {
         var p = rewrite (input1.value);
         if (p.err) {
             var c = getCoords (input1.value, p.pos)
             output.value = "Error: " + p.err + " at " + "(" + c.row + ", " + c.column + ")";
         } else {
-            output1.value = JSON.stringify (p, null, 4);
+            output1.value = stringify (p, ""); //JSON.stringify (p, null, 4);
         }
         output1.selectionStart = 0;
         output1.selectionEnd = 0;
