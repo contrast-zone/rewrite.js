@@ -550,10 +550,10 @@
     }
     
     function compile () {
-        var p = rewrite (input1.value);
+        var p = rewrite (input1.value, 5000);
         if (p.err) {
             var c = getCoords (input1.value, p.pos)
-            output.value = "Error: " + p.err + " at " + "(" + c.row + ", " + c.column + ")";
+            output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
         } else {
             output1.value = stringify (p, ""); //JSON.stringify (p, null, 4);
         }

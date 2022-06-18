@@ -125,7 +125,7 @@ To get familiar with *Rewrite* we bring a few illustrative examples:
 
 ## using rewrite
 
-This package contains a Javascript implementation of *Rewrite*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite(...s-expression string...)` function to return an output s-expression packed within an array.
+This package contains a Javascript implementation of *Rewrite*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite(...s-expression string..., ...timeout...)` function to return an output s-expression packed within an array.
 
     // under construction //
 

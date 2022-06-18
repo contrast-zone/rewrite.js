@@ -5,13 +5,22 @@
 var rewrite = (
     (function () {
         "use strict";
+        var startTime, timeout;
         
-        var parse = function (text) {
-            var ret = deepParse (text, 0);
+        var parse = function (text, tmout) {
+            var ret;
+            
+            startTime = new Date().getTime();
+            timeout = tmout? tmout: Infinity;
+            ret = deepParse (text, 0);
 
-            reduce (ret.arr, []);
-            normalize (ret.arr);
-            ret.arr = flatten (ret.arr);
+            try {
+                reduce (ret.arr, []);
+                normalize (ret.arr);
+                ret.arr = flatten (ret.arr);
+            } catch (e) {
+                ret = {err: e, pos: -1};
+            }
             
             if (ret.err)
                 return ret;
@@ -135,6 +144,9 @@ var rewrite = (
             var thisrwrt = rwrt, top = node, changed = false;
             
             while (Array.isArray (node)) {
+                if ((new Date().getTime()) - startTime > timeout)
+                    throw "timeout of " + timeout + "ms expired";
+                    
                 thisrwrt = thisrwrt.concat (pickRules (node));
                 
                 if (applyRules (node, JSON.parse(JSON.stringify(thisrwrt)))) {
