@@ -264,22 +264,23 @@ var rewrite = (
         
         var normalize = function (node, parentNode) {
             while (Array.isArray (node)) {
-                while (parentNode && Array.isArray (node) && !parentNode[1]) {
+                while (node && parentNode && Array.isArray (node) && !parentNode[1]) {
                     parentNode[0] = node[0];
                     parentNode[1] = node[1];
                     node = parentNode[0];
                 }
 
-                if (Array.isArray (node[0]))
+                if (node && Array.isArray (node[0]))
                     normalize (node[0], node);
                 
-                if (parentNode && isString (node[0]) && !node[1]) {
+                if (node && parentNode && (isString (node[0]) || node[0] === null) && !node[1]) {
                     parentNode[0] = node[0];
                     node = parentNode[0];
                 }
 
                 parentNode = null;
-                node = node[1];
+                if (node)
+                    node = node[1];
             }
         }
         
