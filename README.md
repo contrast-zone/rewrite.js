@@ -3,7 +3,7 @@
 
 # rewrite
 
-*Rewrite* is estimated to be a Turing complete, s-expression based term rewriting system. Its intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users. *Rewrite* is designed as a creation with only one kind of rules: substitution rules. Being such a minimalist creation, complete *Rewrite* implementation takes less than 300 Javascript lines of code.
+*Rewrite* is estimated to be a Turing complete, s-expression based term rewriting system. Its intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users. *Rewrite* is designed as a creation with only one kind of rules: substitution rules. Being such a minimalist creation, complete *Rewrite* implementation takes about 300 Javascript lines of code.
 
 ---
 
@@ -41,7 +41,7 @@ evaluates to:
 
     (hello world)
 
-If we want to use template variables, we assert them with keyword `VAR` under the `ASK` tag. For example, code:
+If we want to use template variables, we assert them with keyword `VAR` under the `READ` tag. For example, code:
 
     (
         (

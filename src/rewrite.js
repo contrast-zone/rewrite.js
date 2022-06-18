@@ -11,6 +11,7 @@ var rewrite = (
 
             reduce (ret.arr, []);
             normalize (ret.arr);
+            ret.arr = flatten (ret.arr);
             
             if (ret.err)
                 return ret;
@@ -130,28 +131,13 @@ var rewrite = (
             return i;
         }
         
-        var normalize = function (node) {
-            while (Array.isArray (node)) {
-                while (Array.isArray (node[0]) && !node[0][1])
-                    node[0] = node[0][0];
-
-                if (node[0] === null && node[1] === null)
-                    node.splice (1, 1)
-
-                if (Array.isArray (node[0]))
-                    normalize (node[0]);
-                
-                node = node[1];
-            }
-        }
-        
         var reduce = function (node, rwrt) {
             var thisrwrt = rwrt, top = node, changed = false;
             
             while (Array.isArray (node)) {
                 thisrwrt = thisrwrt.concat (pickRules (node));
                 
-                if (execute (node, JSON.parse(JSON.stringify(thisrwrt)))) {
+                if (applyRules (node, JSON.parse(JSON.stringify(thisrwrt)))) {
                     changed = true;
                     node = top;
                     continue;
@@ -195,7 +181,7 @@ var rewrite = (
             return thisrwrt;
         }
         
-        var execute = function (node, rwrt) {
+        var applyRules = function (node, rwrt) {
             var vars;
             
             for (var i = 0; i < rwrt.length; i++) {
@@ -274,6 +260,42 @@ var rewrite = (
                     return vars[i][1];
             
             return exp;
+        }
+        
+        var normalize = function (node, parentNode) {
+            while (Array.isArray (node)) {
+                while (parentNode && Array.isArray (node) && !parentNode[1]) {
+                    parentNode[0] = node[0];
+                    parentNode[1] = node[1];
+                    node = parentNode[0];
+                }
+
+                if (Array.isArray (node[0]))
+                    normalize (node[0], node);
+                
+                if (parentNode && isString (node[0]) && !node[1]) {
+                    parentNode[0] = node[0];
+                    node = parentNode[0];
+                }
+
+                parentNode = null;
+                node = node[1];
+            }
+        }
+        
+        var flatten = function (node) {
+            var flat = []
+            while (Array.isArray (node)) {
+                if (Array.isArray (node[0]))
+                    flat.push (flatten (node[0]));
+                    
+                else
+                    flat.push (node[0]);
+                    
+                node = node[1]
+            }
+            
+            return flat
         }
         
         var isString = function (str) {

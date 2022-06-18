@@ -90,7 +90,7 @@
 )
 </script>
 
-<script id="exmpl6" type="text/plain">
+<script id="exmpl-proof" type="text/plain">
 /*
     Theorem verifying by substitution,
     featuring proof of: `x /\ (x -> y)` |- `y`
@@ -129,9 +129,9 @@
 )
 </script>
 
-<script id="exmpl7" type="text/plain">
+<script id="exmpl-bool" type="text/plain">
 /*
-    Boolean operations and conditional
+    Boolean operations
 */
 
 (
@@ -176,18 +176,9 @@
             (READ  ! false)
             (WRITE true)
         )
-        
-        // IF
-        (
-            (READ  IF true THEN (VAR then) ELSE (VAR else))
-            (WRITE then)
-        ) (
-            (READ  IF false THEN (VAR then) ELSE (VAR else))
-            (WRITE else)
-        )
     )
 
-    IF (!((true && false) || false)) THEN yes ELSE no
+    !((false && true) || false)
 )
 </script>
 
@@ -201,20 +192,16 @@
        REWRITE
        (
            (READ  var (VAR <x>))
-           (WRITE VAR <x>)
+           (WRITE VAR <x>      )
        ) (
-           (READ  rule (VAR <x>) -> (VAR <y>))
+           (READ  rule (VAR <x>) -> (VAR <y>)     )
            (WRITE REWRITE ((READ <x>) (WRITE <y>)))
        )
     )
     (
         (
             rule
-            (
-                (var a) + (var a)
-            ) -> (
-                2 * a
-            )
+            ((var a) + (var a)) -> (2 * a)
         )
         
         (N + N) + (N + N)
@@ -222,7 +209,7 @@
 )
 </script>
 
-<script id="exmpl9" type="text/plain">
+<script id="exmpl-binadd" type="text/plain">
 /*
     binary addition
 */
@@ -405,11 +392,11 @@
         <a href="javascript:populate('exmpl4');">&nbsp;&nbsp;&nbsp; Pluto likes bones</a>
         <a href="javascript:populate('exmpl5');">&nbsp;&nbsp;&nbsp; Nikki likes cheese</a>
         <hr/>
-        <a href="javascript:populate('exmpl6');">&nbsp;&nbsp;&nbsp; theorem verifying</a>
-        <a href="javascript:populate('exmpl7');">&nbsp;&nbsp;&nbsp; Boolean operations</a>
+        <a href="javascript:populate('exmpl-bool');">&nbsp;&nbsp;&nbsp; Boolean operations</a>
+        <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
+        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof checking</a>
         <hr/>
         <a href="javascript:populate('exmpl8');">&nbsp;&nbsp;&nbsp; metarules</a>
-        <a href="javascript:populate('exmpl9');">&nbsp;&nbsp;&nbsp; binary addition</a>
     </div>
 </div>
                 </b>
