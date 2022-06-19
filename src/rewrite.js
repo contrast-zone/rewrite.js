@@ -15,7 +15,9 @@ var rewrite = (
             ret = deepParse (text, 0);
 
             try {
+                normalize (ret.arr);
                 reduce (ret.arr, []);
+                stripRules (ret.arr);
                 normalize (ret.arr);
                 ret.arr = flatten (ret.arr);
             } catch (e) {
@@ -141,30 +143,58 @@ var rewrite = (
         }
         
         var reduce = function (node, rwrt) {
-            var thisrwrt = rwrt, top = node, changed = false;
-            
-            while (Array.isArray (node)) {
-                if ((new Date().getTime()) - startTime > timeout)
-                    throw "timeout of " + timeout + "ms expired";
+            var thisrwrt = rwrt, rules, nodearr = [], back, top = node, changed = false;
+
+            if (Array.isArray (node)) {
+                label1: while (top[0] !== "REWRITE") {
+                    if (!back) {
+                        if ((new Date().getTime()) - startTime > timeout)
+                            throw "timeout of " + timeout + "ms expired";
+
+                        do {
+                            rules = pickRules (node);
+                            if (rules.length > 0){
+                                node = node[1];
+                                thisrwrt = thisrwrt.concat (rules);
+                            }
+                        } while (rules.length > 0);
+                            
+                        if (Array.isArray (node[0]))
+                                if (reduce (node[0], thisrwrt)) {
+                                    normalize (node[0]);
+                                    changed = true;
+                                    node = top;
+                                    thisrwrt = rwrt;
+                                    nodearr = [];
+                                    continue;
+                                }
+
+                        nodearr.push ([node, thisrwrt]);                            
+                        node = node[1];
+                        
+                        if (!node)
+                             back = true;
                     
-                thisrwrt = thisrwrt.concat (pickRules (node));
-                
-                if (applyRules (node, JSON.parse(JSON.stringify(thisrwrt)))) {
-                    changed = true;
-                    node = top;
-                    continue;
-                }
-                
-                if (Array.isArray (node[0]))
-                    if (reduce (node[0], thisrwrt)) {
-                        changed = true;
-                        node = top;
-                        continue;
+                    } else {
+                        while (nodearr.length > 0) {
+                            back = nodearr.pop ();
+
+                            if (applyRules (back[0], JSON.parse(JSON.stringify(back[1])))) {
+                                normalize (back[0]);
+                                changed = true;
+                                node = top;
+                                thisrwrt = rwrt;
+                                back = false;
+                                nodearr = [];
+                                continue label1;
+                            }
+                        }
+                        
+                        break;
                     }
-                
-                node = node[1];
+                };
             }
-            
+
             return changed;
         }
         
@@ -172,24 +202,17 @@ var rewrite = (
             var thisrwrt = [], tmprwrt, tmpnode;
 
             if (Array.isArray (node)) {
-                while (node[0] && node[0][0] === "REWRITE") {
-                    if (node[1]) {
-                        tmprwrt = node[0][1];
-                        while (tmprwrt) {
-                            thisrwrt.push (tmprwrt[0]);
-                            tmprwrt = tmprwrt[1];
-                        }
-                        
-                        node[0] = node[1][0];
-                        node[1] = node[1][1];
-                            
-                    } else {
-                        node[0] = null;
-                        node.splice(1, 1);
+                if (Array.isArray (node[0]) && node[0][0] === "REWRITE") {
+                    tmprwrt = node[0][1];
+                    while (tmprwrt[0][0][0] === "READ") {
+                        thisrwrt.push (tmprwrt[0]);
+                        tmprwrt = tmprwrt[1];
                     }
+
+                    thisrwrt.push (tmprwrt);
                 }
             }
-            
+
             return thisrwrt;
         }
         
@@ -200,13 +223,13 @@ var rewrite = (
                 vars = [];
                 
                 if (matches (node, rwrt[i][0][1], vars)) {
-                    replaceVars (node, rwrt[i][1][0][1], vars);
+                    replaceVars (node, rwrt[i][1][1], vars);
                     return true;
                 }
 
                 if (isString (node[0]))
                     if (matches (node[0], rwrt[i][0][1], vars)) {
-                        node[0] = replaceVar (rwrt[i][1][0][1], vars);
+                        node[0] = replaceVar (rwrt[i][1][1], vars);
                         return true;
                     }
             }
@@ -216,7 +239,8 @@ var rewrite = (
             if (Array.isArray (exp1) && exp1[0] === "VAR") {
                 for (var i = vars.length - 1; i >= 0; i--)
                     if (vars[i][0] === exp1[1][0])
-                        return matches (exp0, vars[i][1], vars);
+                        //return matches (exp0, vars[i][1], vars);
+                        return matches (exp0, vars[i][1], []);
                 
                 vars.push ([exp1[1][0], exp0]);
                     
@@ -258,7 +282,7 @@ var rewrite = (
                 if (isString (srch[0]))
                     srch[0] = replaceVar (srch[0], vars);
                     
-                if (Array.isArray (srch[0]))
+                if (Array.isArray (srch[0]) && srch[0][0] !== "REWRITE")
                     replaceVars (srch[0], repl[0], vars);
                 
                 repl = repl[1];
@@ -272,6 +296,23 @@ var rewrite = (
                     return vars[i][1];
             
             return exp;
+        }
+        
+        var stripRules  = function (node, parentNode) {
+            while (Array.isArray (node)) {
+                while (node && parentNode && Array.isArray (node) && node[0]=== "REWRITE") {
+                    parentNode[0] = parentNode[1][0];
+                    parentNode[1] = parentNode[1][1];
+                    node = parentNode[0];
+                }
+
+                if (node && Array.isArray (node[0]))
+                    stripRules (node[0], node);
+                
+                parentNode = null;
+                if (node)
+                    node = node[1];
+            }
         }
         
         var normalize = function (node, parentNode) {
@@ -318,3 +359,4 @@ var rewrite = (
         return parse;
     }) ()
 );
+

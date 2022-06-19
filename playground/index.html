@@ -249,6 +249,25 @@
 )
 </script>
 
+<script id="exmpl-eqpred" type="text/plain">
+/*
+    equality predicate
+*/
+
+(
+    (
+        REWRITE
+        ((READ (VAR <x>) == (VAR <x>)) (WRITE true))
+        ((READ (VAR <x>) == (VAR <y>)) (WRITE false))
+    )
+  
+    ((x + 1) == (x + 1))
+    ((x + y) == (x - y))
+    ((a b c d) == (a (b (c (d)))))
+    ((a b c d) == ((((a) b) c) d))
+)
+</script>
+
 <style type="text/css" media="screen">
     /*
     @font-face {
@@ -382,11 +401,10 @@
         <a href="javascript:populate('exmpl4');">&nbsp;&nbsp;&nbsp; Pluto likes bones</a>
         <a href="javascript:populate('exmpl5');">&nbsp;&nbsp;&nbsp; Nikki likes cheese</a>
         <hr/>
+        <a href="javascript:populate('exmpl-eqpred');">&nbsp;&nbsp;&nbsp; equality predicate</a>
         <a href="javascript:populate('exmpl-bool');">&nbsp;&nbsp;&nbsp; Boolean operations</a>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
-        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof checking</a>
-        <hr/>
-        <a href="javascript:populate('exmpl8');">&nbsp;&nbsp;&nbsp; metarules</a>
+        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof checking // under construction //</a>
     </div>
 </div>
                 </b>
@@ -541,7 +559,7 @@
                 str += stringify (node[i], indent + "    ");
                 
             else
-                str += indent + "    " + node[i] + "\n";
+                str += indent + "    " + (node[i]?node[i].replaceAll("\n", "\\n"):"null") + "\n";
         }
         
         str += indent + ")\n";
@@ -550,12 +568,13 @@
     }
     
     function compile () {
-        var p = rewrite (input1.value, 5000);
+        var p = rewrite (input1.value/*, 5000*/);
         if (p.err) {
             var c = getCoords (input1.value, p.pos)
             output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
         } else {
-            output1.value = stringify (p, ""); //JSON.stringify (p, null, 4);
+            output1.value = stringify (p, "");
+            //output1.value = JSON.stringify (p, null, 4);
         }
         output1.selectionStart = 0;
         output1.selectionEnd = 0;

@@ -5,3 +5,4 @@
 - READ/WRITE substitution mechanism
 - flatten output s-expr
 - added timeout
+- deeper s-exprs rewritten first
