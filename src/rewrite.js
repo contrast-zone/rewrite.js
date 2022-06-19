@@ -146,7 +146,7 @@ var rewrite = (
             var thisrwrt = rwrt, rules, nodearr = [], back, top = node, changed = false;
 
             if (Array.isArray (node)) {
-                label1: while (top[0] !== "REWRITE") {
+                label1: while (true) {
                     if (!back) {
                         if ((new Date().getTime()) - startTime > timeout)
                             throw "timeout of " + timeout + "ms expired";
@@ -155,7 +155,7 @@ var rewrite = (
                             rules = pickRules (node);
                             if (rules.length > 0){
                                 node = node[1];
-                                thisrwrt = thisrwrt.concat (rules);
+                                thisrwrt = rules.concat (thisrwrt);
                             }
                         } while (rules.length > 0);
                             
