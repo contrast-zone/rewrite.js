@@ -239,9 +239,8 @@ var rewrite = (
             if (Array.isArray (exp1) && exp1[0] === "VAR") {
                 for (var i = vars.length - 1; i >= 0; i--)
                     if (vars[i][0] === exp1[1][0])
-                        //return matches (exp0, vars[i][1], vars);
-                        return matches (exp0, vars[i][1], []);
-                
+                        return matches (exp0, vars[i][1], vars);
+                        
                 vars.push ([exp1[1][0], exp0]);
                     
                 return true
@@ -359,4 +358,3 @@ var rewrite = (
         return parse;
     }) ()
 );
-
