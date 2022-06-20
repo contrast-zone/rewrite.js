@@ -148,9 +148,6 @@ var rewrite = (
             if (Array.isArray (node)) {
                 label1: while (true) {
                     if (!back) {
-                        if ((new Date().getTime()) - startTime > timeout)
-                            throw "timeout of " + timeout + "ms expired";
-
                         do {
                             rules = pickRules (node);
                             if (rules.length > 0){
@@ -199,17 +196,31 @@ var rewrite = (
         }
         
         var pickRules = function (node) {
-            var thisrwrt = [], tmprwrt, tmpnode;
+            var vars, tmprwrt, tmpvar, thisrwrt = [];
 
             if (Array.isArray (node)) {
                 if (Array.isArray (node[0]) && node[0][0] === "REWRITE") {
                     tmprwrt = node[0][1];
-                    while (tmprwrt[0][0][0] === "READ") {
-                        thisrwrt.push (tmprwrt[0]);
+                    while (tmprwrt[0][0][0] === "VAR" || tmprwrt[0][0][0] === "READ") {
+                        tmpvar = tmprwrt[0];
+                        vars = [];
+                        while (tmpvar[0][0] === "VAR") {
+                            vars.push (tmpvar[0][1]);
+                            tmpvar = tmpvar[1];
+                        }
+                        
+                        thisrwrt.push ([vars, tmpvar]);
                         tmprwrt = tmprwrt[1];
                     }
 
-                    thisrwrt.push (tmprwrt);
+                    tmpvar = tmprwrt;
+                    vars = [];
+                    while (tmpvar[0][0] === "VAR") {
+                        vars.push (tmpvar[0][1]);
+                        tmpvar = tmpvar[1];
+                    }
+                    
+                    thisrwrt.push ([vars, tmpvar]);
                 }
             }
 
@@ -222,29 +233,49 @@ var rewrite = (
             for (var i = 0; i < rwrt.length; i++) {
                 vars = [];
                 
-                if (matches (node, rwrt[i][0][1], vars)) {
-                    replaceVars (node, rwrt[i][1][1], vars);
+                vars = makeVars (rwrt[i][0]);
+                if (matches (node, rwrt[i][1][0][1], vars)) {
+                    replaceVars (node, rwrt[i][1][1][1], vars);
                     return true;
                 }
 
-                if (isString (node[0]))
-                    if (matches (node[0], rwrt[i][0][1], vars)) {
-                        node[0] = replaceVar (rwrt[i][1][1], vars);
+                if (isString (node[0])) {
+                    vars = makeVars (rwrt[i][0]);
+                    if (matches (node[0], rwrt[i][1][0][1], vars)) {
+                        node[0] = replaceVar (rwrt[i][1][1][1], vars);
                         return true;
                     }
+                }
             }
         }
         
+        var makeVars = function (ruleVars) {
+            var vars = [];
+            
+            for (var i = 0; i < ruleVars.length; i++)
+                vars.push ([ruleVars[i], undefined]);
+            
+            return vars
+        }
+        
         var matches = function (exp0, exp1, vars) {
-            if (Array.isArray (exp1) && exp1[0] === "VAR") {
-                for (var i = vars.length - 1; i >= 0; i--)
-                    if (vars[i][0] === exp1[1][0])
-                        return matches (exp0, vars[i][1], vars);
+            var thisvar = -1;
+            
+            if ((new Date().getTime()) - startTime > timeout)
+                throw "timeout of " + timeout + "ms expired";
+
+            for (var i = vars.length - 1; i >= 0; i--)
+                if (vars[i][0][0] === exp1)
+                    thisvar = i;
+            
+            if (thisvar >= 0) {
+                if (vars[thisvar][1] !== undefined)
+                    return matches (exp0, vars[thisvar][1], vars);
                         
-                vars.push ([exp1[1][0], exp0]);
+                vars[thisvar][1] = exp0;
                     
                 return true
-                
+
             } else if (Array.isArray (exp0) && !exp0[1]) {
                 return matches (exp0[0], exp1, vars);
                 
@@ -291,7 +322,7 @@ var rewrite = (
         
         var replaceVar = function (exp, vars) {
             for (var i = vars.length - 1; i >= 0; i--)
-                if (exp === vars[i][0])
+                if (exp === vars[i][0][0])
                     return vars[i][1];
             
             return exp;

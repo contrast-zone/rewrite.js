@@ -6,3 +6,4 @@
 - flatten output s-expr
 - added timeout
 - deeper s-exprs rewritten first
+- expelled VAR keyword to its own braces

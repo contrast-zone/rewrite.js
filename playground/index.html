@@ -29,7 +29,7 @@
 (
     (
         REWRITE
-        ((READ greet (VAR <x>)) (WRITE hello <x>))
+        ((VAR <x>) (READ greet <x>) (WRITE hello <x>))
     )
 
     greet world
@@ -61,7 +61,8 @@
     (
         REWRITE
         (
-            (READ  l (VAR <a>) (VAR <b>))
+            (VAR <a>) (VAR <b>)
+            (READ  l <a> <b>)
             (WRITE <a> likes <b>    )
         )
     )
@@ -81,8 +82,9 @@
         ((READ <x>) (WRITE Nikki ))
         ((READ <y>) (WRITE cheese))
         (
-            (READ  l (VAR <a>) (VAR <b>))
-            (WRITE <a> likes <b>        )
+            (VAR <a>) (VAR <b>)
+            (READ  l <a> <b>)
+            (WRITE <a> likes <b>    )
         )
     )
     
@@ -102,17 +104,19 @@
         (
             // commutativity: `a /\ b` |- `b /\ a`
             
-            (READ  comm: (VAR <a>) /\ (VAR <b>))
+            (VAR <a>) (VAR <b>)
+            (READ  comm: <a> /\ <b>)
             (WRITE <b> /\ <a>)
         ) (
             // modus ponens: `(a -> b) /\ a` |- `b`
             
-            (READ  mp: ((VAR <a>) -> (VAR <b>)) /\ (VAR <a>))
+            (VAR <a>) (VAR <b>)
+            (READ  mp: (<a> -> <b>) /\ <a>)
             (WRITE <b>)
         ) (
             // quod erat demonstrandum: `a` |- `a`
-            
-            (READ qed: (VAR <a>))
+            (VAR <a>)
+            (READ qed: <a>)
             (WRITE <a>)
         )
     )
@@ -219,28 +223,28 @@
         REWRITE
         
         // both numbers single digits
-        ((READ +             0             0) (WRITE                   0))
-        ((READ +             0             1) (WRITE                   1))
-        ((READ +             1             0) (WRITE                   1))
-        ((READ +             1             1) (WRITE                 1 0))
+        (                    (READ +       0       0) (WRITE                   0))
+        (                    (READ +       0       1) (WRITE                   1))
+        (                    (READ +       1       0) (WRITE                   1))
+        (                    (READ +       1       1) (WRITE                 1 0))
         
         // first number multiple digits, second number single digit
-        ((READ + ((VAR <a>) 0)             0) (WRITE               <a> 0))
-        ((READ + ((VAR <a>) 0)             1) (WRITE               <a> 1))
-        ((READ + ((VAR <a>) 1)             0) (WRITE               <a> 1))
-        ((READ + ((VAR <a>) 1)             1) (WRITE         (+ 1 <a>) 0))
+        (          (VAR <a>) (READ + (<a> 0)       0) (WRITE               <a> 0))
+        (          (VAR <a>) (READ + (<a> 0)       1) (WRITE               <a> 1))
+        (          (VAR <a>) (READ + (<a> 1)       0) (WRITE               <a> 1))
+        (          (VAR <a>) (READ + (<a> 1)       1) (WRITE         (+ 1 <a>) 0))
         
         // first number single digit, second number multiple digits
-        ((READ +             0 ((VAR <b>) 0)) (WRITE               <b> 0))
-        ((READ +             0 ((VAR <b>) 1)) (WRITE               <b> 1))
-        ((READ +             1 ((VAR <b>) 0)) (WRITE               <b> 1))
-        ((READ +             1 ((VAR <b>) 1)) (WRITE         (+ 1 <b>) 0))
+        (          (VAR <b>) (READ +       0 (<b> 0)) (WRITE               <b> 0))
+        (          (VAR <b>) (READ +       0 (<b> 1)) (WRITE               <b> 1))
+        (          (VAR <b>) (READ +       1 (<b> 0)) (WRITE               <b> 1))
+        (          (VAR <b>) (READ +       1 (<b> 1)) (WRITE         (+ 1 <b>) 0))
         
         // both numbers multiple digits
-        ((READ + ((VAR <a>) 0) ((VAR <b>) 0)) (WRITE       (+ <a> <b>) 0))
-        ((READ + ((VAR <a>) 0) ((VAR <b>) 1)) (WRITE       (+ <a> <b>) 1))
-        ((READ + ((VAR <a>) 1) ((VAR <b>) 0)) (WRITE       (+ <a> <b>) 1))
-        ((READ + ((VAR <a>) 1) ((VAR <b>) 1)) (WRITE (+ 1 (+ <a> <b>)) 0))
+        ((VAR <a>) (VAR <b>) (READ + (<a> 0) (<b> 0)) (WRITE       (+ <a> <b>) 0))
+        ((VAR <a>) (VAR <b>) (READ + (<a> 0) (<b> 1)) (WRITE       (+ <a> <b>) 1))
+        ((VAR <a>) (VAR <b>) (READ + (<a> 1) (<b> 0)) (WRITE       (+ <a> <b>) 1))
+        ((VAR <a>) (VAR <b>) (READ + (<a> 1) (<b> 1)) (WRITE (+ 1 (+ <a> <b>)) 0))
     )
 
     +
@@ -257,8 +261,8 @@
 (
     (
         REWRITE
-        ((READ (VAR <x>) == (VAR <x>)) (WRITE true))
-        ((READ (VAR <x>) == (VAR <y>)) (WRITE false))
+        (          (VAR <x>) (READ <x> == <x>) (WRITE true))
+        ((VAR <x>) (VAR <y>) (READ <x> == <y>) (WRITE false))
     )
   
     ((x + 1) == (x + 1))
