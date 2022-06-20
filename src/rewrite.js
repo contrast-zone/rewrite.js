@@ -221,7 +221,8 @@ var rewrite = (
                         tmpvar = tmpvar[1];
                     }
                     
-                    thisrwrt.push ([vars, tmpvar]);
+                    if (tmpvar[0][0] === "READ")
+                        thisrwrt.push ([vars, tmpvar]);
                 }
             }
 
@@ -231,8 +232,8 @@ var rewrite = (
         var matches = function (exp0, exp1, vars) {
             var thisvar = -1;
             
-            //if ((exp0 === undefined || exp1 === undefined) && exp0 !== null  && exp1 !== null)
-            //    return true;
+            if ((exp0 === undefined || exp1 === undefined) && exp0 !== null  && exp1 !== null)
+                return false;
             
             if ((new Date().getTime()) - startTime > timeout)
                 throw "timeout of " + timeout + "ms expired";
