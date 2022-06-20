@@ -176,7 +176,7 @@ var rewrite = (
                         while (nodearr.length > 0) {
                             back = nodearr.pop ();
                             
-                            if (back[0][0] !== undefined || back[0][1] !== null)
+                            if (back[0] !== undefined && Array.isArray (back[0]) && back[0][0] !== undefined || back[0][1] !== null)
                                 if (applyRules (back[0], JSON.parse(JSON.stringify(back[1])))) {
                                     normalize (back[0]);
                                     changed = true;
@@ -229,39 +229,42 @@ var rewrite = (
             return thisrwrt;
         }
         
-        var matches = function (exp0, exp1, vars) {
+        var matches = function (exp0, exp1, vars, fromVar) {
             var thisvar = -1;
-            
-            if ((exp0 === undefined || exp1 === undefined) && exp0 !== null  && exp1 !== null)
-                return false;
-            
+                        
             if ((new Date().getTime()) - startTime > timeout)
                 throw "timeout of " + timeout + "ms expired";
 
+            if (fromVar && exp0 === undefined)
+                return true;
+
+            if (exp1 === undefined)
+                return true;
+                
             for (var i = vars.length - 1; i >= 0; i--)
                 if (vars[i][0][0] === exp1)
                     thisvar = i;
             
             if (thisvar >= 0) {
                 if (vars[thisvar][1] !== undefined)
-                    return matches (exp0, vars[thisvar][1], []);
+                    return matches (exp0, vars[thisvar][1], [], true);
                         
                 vars[thisvar][1] = exp0;
                     
                 return true
 
             } else if (Array.isArray (exp0) && exp0[1] === null) {
-                return matches (exp0[0], exp1, vars);
+                return matches (exp0[0], exp1, vars, fromVar);
                 
             } else if (Array.isArray (exp1) && exp1[1] === null) {
-                return matches (exp0, exp1[0], vars);
+                return matches (exp0, exp1[0], vars, fromVar);
             
             } else if (Array.isArray (exp0) && Array.isArray (exp1)) {
                 if (exp0.length === 1 && exp1.length === 1)
-                    return matches (exp0[0], exp1[0], vars);
+                    return matches (exp0[0], exp1[0], vars, fromVar);
                 
                 else if (exp0.length === 2 && exp1.length === 2)
-                    return matches (exp0[0], exp1[0], vars) && matches (exp0[1], exp1[1], vars);
+                    return matches (exp0[0], exp1[0], vars, fromVar) && matches (exp0[1], exp1[1], vars, fromVar);
                 
                 else
                     return false;

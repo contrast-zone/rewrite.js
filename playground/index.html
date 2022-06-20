@@ -93,6 +93,7 @@
 </script>
 
 <script id="exmpl-proof" type="text/plain">
+
 /*
     proof checker
 */
@@ -138,16 +139,16 @@
         ((READ   f F1    ) (WRITE [->Intro] (f 1) ... (f 10)                        )) // (A /\ B) -> (~ ((~ A) \/ (~ B)))
         
         // ~(~A \/ ~B) -> (A /\ B)
-        ((READ f 11      ) (WRITE [Assume] ~ ((~ A) /\ (~ B))                       ))
+        ((READ f 11      ) (WRITE [Assume] ~ ((~ A) \/ (~ B))                       ))
         ((READ   f 12    ) (WRITE [Assume] ~ A                                      ))
         ((READ     f 13  ) (WRITE [\/Intro1] (f 12)                                 )) // (~ A) \/ (~ B)
         ((READ     f 14  ) (WRITE [~Elim] (f 11) (f 13)                             )) // False
-        ((READ   f 15    ) (WRITE [IP] (f 12) .. (f 14)                             )) // A
+        ((READ   f 15    ) (WRITE [IP] (f 12) ... (f 14)                             )) // A
         ((READ     f 16  ) (WRITE [Assume] ~ B                                      ))
         ((READ       f 17) (WRITE [\/Intro2] (f 16)                                 )) // (~ A) \/ (~ B)
         ((READ       f 18) (WRITE [~Elim] (f 11) (f 17)                             )) // False
-        ((READ   f 19    ) (WRITE [IP] (f 16) .. (f 18)                             )) // B
-        ((READ   f 20    ) (WRITE [/\intro] (f 15) (f 19)                           )) // A /\ B
+        ((READ   f 19    ) (WRITE [IP] (f 16) ... (f 18)                             )) // B
+        ((READ   f 20    ) (WRITE [/\Intro] (f 15) (f 19)                           )) // A /\ B
         ((READ   f F2    ) (WRITE [->Intro] (f 11) ... (f 20)                       )) //(~ ((~ A) \/ (~ B))) -> (A /\ B)
         
         // (A /\ B) <-> ~(~A \/ ~B)
@@ -162,10 +163,10 @@
     (1 f 1) (2 f 2) (3 f 3) (4 f 4) (5 f 5) (6 f 6) (7 f 7) (8 f 8) (9 f 9) (10 f 10) (F1 f F1)
     
     // ~(~A \/ ~B) -> (A /\ B)
-    // (11 f 11) (12 f 12) (13 f 13) (14 f 14) (15 f 15) (16 f 16) (17 f 17) (18 f 18) (19 f 19) (20 f 20) (F2 f F2)
+     (11 f 11) (12 f 12) (13 f 13) (14 f 14) (15 f 15) (16 f 16) (17 f 17) (18 f 18) (19 f 19) (20 f 20) (F2 f F2)
     
     // (A /\ B) <-> ~(~A \/ ~B)
-    // (QED f QED)
+    (QED f QED)
 )
 </script>
 
@@ -544,7 +545,7 @@
         <a href="javascript:populate('exmpl-eqpred');">&nbsp;&nbsp;&nbsp; equality predicate</a>
         <a href="javascript:populate('exmpl-bool');">&nbsp;&nbsp;&nbsp; Boolean operations</a>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
-        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof checking // under construction //</a>
+        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof checking</a>
     </div>
 </div>
                 </b>
@@ -719,7 +720,7 @@
     }
     
     function compile () {
-        var p = rewrite (input1.value, 10000);
+        var p = rewrite (input1.value, 20000);
         if (p.err) {
             var c = getCoords (input1.value, p.pos)
             output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
