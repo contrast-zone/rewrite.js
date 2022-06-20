@@ -166,25 +166,26 @@ var rewrite = (
                                     continue;
                                 }
 
-                        nodearr.push ([node, thisrwrt]);                            
+                        nodearr.push ([node, thisrwrt]);
+                            
                         node = node[1];
-                        
-                        if (!node)
+                        if (node === null)
                              back = true;
                     
                     } else {
                         while (nodearr.length > 0) {
                             back = nodearr.pop ();
-
-                            if (applyRules (back[0], JSON.parse(JSON.stringify(back[1])))) {
-                                normalize (back[0]);
-                                changed = true;
-                                node = top;
-                                thisrwrt = rwrt;
-                                back = false;
-                                nodearr = [];
-                                continue label1;
-                            }
+                            
+                            if (back[0][0] !== undefined || back[0][1] !== null)
+                                if (applyRules (back[0], JSON.parse(JSON.stringify(back[1])))) {
+                                    normalize (back[0]);
+                                    changed = true;
+                                    node = top;
+                                    thisrwrt = rwrt;
+                                    back = false;
+                                    nodearr = [];
+                                    continue label1;
+                                }
                         }
                         
                         break;
@@ -227,39 +228,11 @@ var rewrite = (
             return thisrwrt;
         }
         
-        var applyRules = function (node, rwrt) {
-            var vars;
-            
-            for (var i = 0; i < rwrt.length; i++) {
-                vars = [];
-                
-                vars = makeVars (rwrt[i][0]);
-                if (matches (node, rwrt[i][1][0][1], vars)) {
-                    replaceVars (node, rwrt[i][1][1][1], vars);
-                    return true;
-                }
-
-                if (isString (node[0])) {
-                    vars = makeVars (rwrt[i][0]);
-                    if (matches (node[0], rwrt[i][1][0][1], vars)) {
-                        node[0] = replaceVar (rwrt[i][1][1][1], vars);
-                        return true;
-                    }
-                }
-            }
-        }
-        
-        var makeVars = function (ruleVars) {
-            var vars = [];
-            
-            for (var i = 0; i < ruleVars.length; i++)
-                vars.push ([ruleVars[i], undefined]);
-            
-            return vars
-        }
-        
         var matches = function (exp0, exp1, vars) {
             var thisvar = -1;
+            
+            //if ((exp0 === undefined || exp1 === undefined) && exp0 !== null  && exp1 !== null)
+            //    return true;
             
             if ((new Date().getTime()) - startTime > timeout)
                 throw "timeout of " + timeout + "ms expired";
@@ -270,16 +243,16 @@ var rewrite = (
             
             if (thisvar >= 0) {
                 if (vars[thisvar][1] !== undefined)
-                    return matches (exp0, vars[thisvar][1], vars);
+                    return matches (exp0, vars[thisvar][1], []);
                         
                 vars[thisvar][1] = exp0;
                     
                 return true
 
-            } else if (Array.isArray (exp0) && !exp0[1]) {
+            } else if (Array.isArray (exp0) && exp0[1] === null) {
                 return matches (exp0[0], exp1, vars);
                 
-            } else if (Array.isArray (exp1) && !exp1[1]) {
+            } else if (Array.isArray (exp1) && exp1[1] === null) {
                 return matches (exp0, exp1[0], vars);
             
             } else if (Array.isArray (exp0) && Array.isArray (exp1)) {
@@ -303,23 +276,53 @@ var rewrite = (
             }
         }
         
-        var replaceVars = function (srch, repl, vars) {
-            while (Array.isArray (repl)) {
-                srch[0] = repl[0];
-                if (repl[1] === null || repl[1])
-                    srch[1] = repl[1];
+        var applyRules = function (node, rwrt) {
+            var vars;
+            
+            for (var i = 0; i < rwrt.length; i++) {
                 
-                if (isString (srch[0]))
-                    srch[0] = replaceVar (srch[0], vars);
+                if (isString (node[0])) {
+                    vars = makeVars (rwrt[i][0]);
+                    if (matches (node[0], rwrt[i][1][0][1], vars)) {
+                        replaceVars (rwrt[i][1][1][1], vars);
+                        node[0] = rwrt[i][1][1][1];
+                        
+                        return true;
+                    }
+                }
+
+                vars = makeVars (rwrt[i][0]);
+                if (matches (node, rwrt[i][1][0][1], vars)) {
+                    replaceVars (rwrt[i][1][1][1], vars);
+                    node[0] = rwrt[i][1][1][1][0];
+                    node[1] = rwrt[i][1][1][1][1];
                     
-                if (Array.isArray (srch[0]) && srch[0][0] !== "REWRITE")
-                    replaceVars (srch[0], repl[0], vars);
-                
-                repl = repl[1];
-                srch = srch[1];
+                    return true;
+                }
             }
         }
-        
+
+        var makeVars = function (ruleVars) {
+            var vars = [];
+            
+            for (var i = 0; i < ruleVars.length; i++)
+                vars.push ([ruleVars[i], undefined]);
+            
+            return vars
+        }
+
+        var replaceVars = function (range, vars) {
+            while (Array.isArray (range)) {
+                if (isString (range[0]))
+                    range[0] = replaceVar (range[0], vars);
+                    
+                if (Array.isArray (range[0]) && range[0][0] !== "REWRITE")
+                    replaceVars (range[0], vars);
+
+                range = range[1];
+            }
+        }
+
         var replaceVar = function (exp, vars) {
             for (var i = vars.length - 1; i >= 0; i--)
                 if (exp === vars[i][0][0])
@@ -340,14 +343,14 @@ var rewrite = (
                     stripRules (node[0], node);
                 
                 parentNode = null;
-                if (node)
+                if (Array.isArray (node))
                     node = node[1];
             }
         }
         
         var normalize = function (node, parentNode) {
             while (Array.isArray (node)) {
-                while (node && parentNode && Array.isArray (node) && !parentNode[1]) {
+                while (node && parentNode && Array.isArray (node) && parentNode[1] === null) {
                     parentNode[0] = node[0];
                     parentNode[1] = node[1];
                     node = parentNode[0];
@@ -356,13 +359,13 @@ var rewrite = (
                 if (node && Array.isArray (node[0]))
                     normalize (node[0], node);
                 
-                if (node && parentNode && (isString (node[0]) || node[0] === null) && !node[1]) {
+                if (node && parentNode && (isString (node[0]) || node[0] === null || node[0] === undefined) && node[1] === null) {
                     parentNode[0] = node[0];
                     node = parentNode[0];
                 }
 
                 parentNode = null;
-                if (node)
+                if (Array.isArray (node))
                     node = node[1];
             }
         }

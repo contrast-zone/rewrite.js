@@ -94,42 +94,101 @@
 
 <script id="exmpl-proof" type="text/plain">
 /*
-    Theorem verifying by substitution,
-    featuring proof of: `x /\ (x -> y)` |- `y`
+    proof checker
 */
 
 (
     (
         REWRITE
+        
+        // logic rules
+        ((VAR a) (VAR b) (READ                                 [/\Intro] a b) (WRITE a /\ b ))
+        ((VAR a) (VAR b) (READ                              [/\Elim1] a /\ b) (WRITE a      ))
+        ((VAR a) (VAR b) (READ                              [/\Elim2] a /\ b) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                                  [\/Intro1] a) (WRITE a \/ b ))
+        ((VAR a) (VAR b) (READ                                  [\/Intro2] b) (WRITE a \/ b ))
+        ((VAR a) (VAR b) (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  ))
+        ((VAR a) (VAR b) (READ                             [->Intro] a ... b) (WRITE a -> b ))
+        ((VAR a) (VAR b) (READ                     [->Elim] (a -> b) (VAR a)) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b))
+        ((VAR a) (VAR b) (READ                        [<->Elim1] (a <-> b) a) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                        [<->Elim2] (a <-> b) b) (WRITE a      ))
+        (        (VAR a) (READ                          [~Intro] a ... False) (WRITE ~ a    ))
+        (        (VAR a) (READ                               [~Elim] (~ a) a) (WRITE False  ))
+        (        (VAR a) (READ                                     [X] False) (WRITE a      ))
+        (        (VAR a) (READ                          [IP] (~ a) ... False) (WRITE a      ))
+            
+        // input and output rules
+        ((VAR a) (READ [Assume] a) (WRITE a))
+        ((VAR a) (VAR b) (READ [Check] a b) (WRITE [Checking] a == b fail))
+        ((VAR a) (READ [Checking] a == a fail) (WRITE a))
+        
+        // proof checking meta-statements
         (
-            // commutativity: `a /\ b` |- `b /\ a`
-            
-            (VAR <a>) (VAR <b>)
-            (READ  comm: <a> /\ <b>)
-            (WRITE <b> /\ <a>)
-        ) (
-            // modus ponens: `(a -> b) /\ a` |- `b`
-            
-            (VAR <a>) (VAR <b>)
-            (READ  mp: (<a> -> <b>) /\ <a>)
-            (WRITE <b>)
-        ) (
-            // quod erat demonstrandum: `a` |- `a`
-            (VAR <a>)
-            (READ qed: <a>)
-            (WRITE <a>)
+            (VAR <num>) (VAR <formula>)
+            (
+                READ
+                <num> : <formula>
+            )
+            (
+                WRITE
+                (
+                    'REWRITE
+                    ((READ f <num>) (WRITE <formula>))
+                )
+            )
         )
+        
+        // rearrange and execute meta-statements
+        (
+            (VAR <num>) (VAR <x>) (VAR <y>)
+            (READ  ('REWRITE ((READ f <num>) <x>)) <y>) 
+            (WRITE ((''REWRITE ((READ f <num>) <x>))) (<num> (f <num>)) <y>)
+        )
+        
+        ((READ ''REWRITE) (WRITE REWRITE))
     )
+    
+    // a proof for De Morgan's law: (A /\ B) <-> ~(~A \/ ~B)
+    
+    ( 1 : ([Assume] A /\ B)                                                          )
+    (   2 : ([Assume] (~ A) \/ (~ B))                                                )
+    (     3 : ([Assume] ~ A)                                                         )
+    (       4 : ([Check] ([/\Elim1] (f 1)) A)                                        )
+    (       5 : ([Check] ([~Elim] (f 3) (f 4)) False)                                )
+    
+    (     6 : ([Assume] ~ B)                                                         )
+    (       7 : ([Check] ([/\Elim2] (f 1)) B)                                        )
+    (       8 : ([Check] ([~Elim] (f 6) (f 7)) False)                                )
+    
+    (     9 : ([Check] ([\/Elim] (f 2) ((f 3) ... (f 5)) ((f 6) ... (f 8))) False)   )
+    
+    (  10 : ([Check] ([~Intro] (f 2) ... (f 9)) ~ ((~ A) \/ (~ B)))                  )
+    
+    (  F1 : ([Check] ([->Intro] (f 1) ... (f 10)) (A /\ B) -> (~ ((~ A) \/ (~ B)))) )
+    
+    (11 : ([Assume] ~ ((~ A) /\ (~ B)))                                              )
+    (  12 : ([Assume] ~ A)                                                           )
+    (    13 : ([Check] ([\/Intro1] (f 12)) ((~ A) \/ (~ B)))                         )
+    (    14 : ([Check] ([~Elim] (f 11) (f 13)) False)                                )
+    
+    (  15 : ([Check] ([IP] (f12) .. (f14)) A)                                        )
+    
+    (    16 : ([Assume] ~ B)                                                         )
+    (      17 : ([Check] ([\/Intro2] (f 16)) ((~ A) \/ (~ B)))                       )
+    (      18 : ([Check] ([~Elim] (f 11) (f 17)) False)                              )
+    
+    (  19 : ([Check] ([IP] (f16) .. (f18)) B))
 
-    // applying rules in reverse order
-    qed:
-    mp:
-    comm:
+    (  20 : ([Check] ([/\intro] (f 15) (f 19)) (A /\ B))                             )
+    
+    (  20 : ([Check] ([~Intro] (f 2) ... (f 9)) ~ ((~ A) \/ (~ B)))                  )
+    
+    (  F2 : ([Check] ([->Intro] (f 11) ... (f 20)) (~ ((~ A) \/ (~ B))) -> (A /\ B)))
+    
+    ( 21: ([Check] ([<->Intro] (f F1) (f F2)) (A /\ B) <-> (~ ((~ A) \/ (~ B))))   )
 
-    // assumption
-    x /\ (x -> y)
-                
-    // conclusion after applying rules: `y`    
+    (qed (f 21))
 )
 </script>
 
@@ -562,8 +621,19 @@
             if (Array.isArray (node[i]))
                 str += stringify (node[i], indent + "    ");
                 
-            else
-                str += indent + "    " + (node[i]?node[i].replaceAll("\n", "\\n"):"null") + "\n";
+            else {
+                var part
+                if (node [i] === undefined)
+                    part = "undefined";
+                    
+                else if (node [i] === null)
+                    part = "null";
+                    
+                else
+                    part = node[i].replaceAll("\n", "\\n");
+                 
+                 str += indent + "    " + part + "\n";
+            }
         }
         
         str += indent + ")\n";
@@ -572,7 +642,7 @@
     }
     
     function compile () {
-        var p = rewrite (input1.value, 5000);
+        var p = rewrite (input1.value, 20000);
         if (p.err) {
             var c = getCoords (input1.value, p.pos)
             output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
