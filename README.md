@@ -64,7 +64,7 @@ also evaluates to:
 
 ## further examples
 
-Please refer to the *Rewrite Playground* from the above link for more thorough examples exposure. Available examples contain equality predicate, Boolean operations, binary number addition, proof checking, and meta-rules.
+Please refer to the *Rewrite Playground* from the above link for more thorough examples exposure. Available examples include equality predicate, Boolean operations, binary number addition, proof checking, and meta-rules.
 
 ## how does it work
 
