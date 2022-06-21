@@ -323,33 +323,6 @@
 )
 </script>
 
-<script id="exmpl8" type="text/plain">
-/*
-    metarules
-*/
-
-(
-    (
-       REWRITE
-       (
-           (READ  var (VAR <x>))
-           (WRITE VAR <x>      )
-       ) (
-           (READ  rule (VAR <x>) -> (VAR <y>)     )
-           (WRITE REWRITE ((READ <x>) (WRITE <y>)))
-       )
-    )
-    (
-        (
-            rule
-            ((var a) + (var a)) -> (2 * a)
-        )
-        
-        (N + N) + (N + N)
-    )
-)
-</script>
-
 <script id="exmpl-binadd" type="text/plain">
 /*
     binary addition
@@ -423,7 +396,7 @@
             (WRITE
                 REWRITE
                 (
-                    (VAR a) (VAR b) (VAR c) (VAR d) (VAR e) (VAR f)
+                    (VAR a) (VAR b) (VAR c) (VAR d) (VAR e)
                     (READ  <a>)
                     (WRITE <b>)
                 )

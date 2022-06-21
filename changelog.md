@@ -7,5 +7,4 @@
 - added timeout
 - deeper s-exprs rewritten first
 - expelled VAR keyword to its own braces
-- vars unbinded in READ tag stand for any expression in WRITE tag
-
+- vars unbound in READ tag stand for undefined expression in WRITE tag

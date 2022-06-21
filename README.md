@@ -3,15 +3,19 @@
 
 # rewrite
 
-*Rewrite* is estimated to be a Turing complete, s-expression based term rewriting system. Its intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users. *Rewrite* is designed as a creation with only one kind of rules: substitution rules. Being such a minimalist creation, complete *Rewrite* implementation takes about 400 Javascript lines of code.
+*Rewrite* is estimated to be a Turing complete, s-expression based term rewriting system. Its original intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users.
+
+Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* operates on s-expressions, and it can transform any s-expression to any other s-expression using its rule based computing system. It may be used as a curiosity computing platform, problem solver, theorem prover, parser generator, compiler compiler, and pretty much everywhere where any kind of computation is required, as long as its slower performance on intensive computations doesn't exceed user patience.
+
+*Rewrite* is designed as a creation with only one kind of rules: substitution rules. Being such a minimalist creation, complete *Rewrite* implementation takes about 400 Javascript lines of code.
 
 ---
 
-To try *Rewrite* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html).
+To try *Rewrite* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html). The playground also may be run locally, after downloading this package.
 
 ---
 
-## declaring and expanding templates
+## basic template expansion
 
 *Rewrite* brings only four keywords for declaring templates: `REWRITE`, `READ`, `WRITE`, and `VAR`. Templates are declared by the following patern:
 
@@ -56,74 +60,17 @@ also evaluates to:
 
     (hello world)
 
-`READ` keyword, in fact takes a tree of parenthesis-structured constants and variables in any order. Later, in operating s-expression, every occurence of that tree is replaced with relevant `WRITE` s-expression tree while *Rewrite* takes care of variable shadowing. Templates may be even nested, scoping their operation to s-expressions they belong to. *Rewrite* also supports recursive template expansions, in which case we have to take care of recursion stopping conditions.
+`REWRITE` templates may be nested in deeper areas of the whole s-expression, scoping their operation to s-expression parts they belong to. *Rewrite* also supports recursive template expansions, in which case we have to be careful, and to take care of recursion stopping conditions if we don't want to form an infinite loop.
 
+## how does it work
 
-## some examples
+*Rewrite* looks deep down the whole s-expression for nodes containing `REWRITE` keyword, and extracts contained rules in noted order. Then it applies the ordered rules from the deepest nodes to the right towards shallower nodes to the left. During such node visiting, if the first available rule `READ` matches a node, then `WRITE` counterpart replacement is being made, and the rewriting procedure for the current node is triggered again (again from deep to shallow), seeking to again apply the set of rules. When there are no more rule matches, rewriting is done for the current node, and rewriting continues to the parent node, marching towards top node. When the top node is done, the rewriting is done, and the output expression is being reported.
 
-To get familiar with *Rewrite* we bring a few illustrative examples:
+During rewriting, some helper node normalizations are being made. Firstly, all the `(a (b (c (...))))` expressions are considered equal to `(a b c ...)`, and vice versa. Secondly, if there are parenthesis containing only a single pair of inner parenthesis, the outer parenhesis are left out. Thirdly, if any parenthesis contain only a single identifier, the parenthesis are also being left out. These normalizations make the pattern matching flexible enough to tame the possible parenthesis accumulation that would otherwise appear on repeatable read-write cycles.
 
-- example 1 - constants
-    
-    input:
-    
-        (
-            (
-                REWRITE
-                ((READ <x>) (WRITE Venus))
-                ((READ <y>) (WRITE milk ))
-            )
-            
-            <x> likes <y>
-        )
-    
-    output:
-    
-        (Venus likes milk)
+## further examples
 
-- example 2 - variables
-    
-    input:
-    
-        (
-            (
-                REWRITE
-                (
-                    (VAR <a>) (VAR <b>)
-                    (READ  l <a> <b>)
-                    (WRITE <a> likes <b>    )
-                )
-            )
-            
-            l Pluto bones
-        )
-    
-    output:
-        
-        (Pluto likes bones)
-
-- example3 - composition
-    
-    input:
-    
-        (
-            (
-                REWRITE
-                ((READ <x>) (WRITE Nikki ))
-                ((READ <y>) (WRITE cheese))
-                (
-                    (VAR <a>) (VAR <b>)
-                    (READ  l <a> <b>)
-                    (WRITE <a> likes <b>)
-                )
-            )
-            
-            l <x> <y>
-        )
-
-    output:
-    
-        (Nikki likes cheese)
+Please refer to the [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html) for more thorough example exhibition.
 
 ## using rewrite
 
