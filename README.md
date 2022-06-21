@@ -5,7 +5,7 @@
 
 *Rewrite* is estimated to be a Turing complete, s-expression based term rewriting system. Its original intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users.
 
-Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* operates on s-expressions, and it can transform any s-expression to any other s-expression using its rule based computing system. It may be used as a curiosity computing platform, problem solver, theorem prover, parser generator, compiler compiler, and pretty much everywhere where any kind of computation is required, as long as its slower performance on intensive computations doesn't exceed user patience.
+Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* operates on s-expressions, and it can transform any s-expression to any other s-expression using its rule based computing system. It may be used as a curiosity computing platform, problem solver, theorem prover, compiler compiler, and pretty much everywhere where any kind of computation is required, as long as its slower performance on intensive computations doesn't exceed user patience.
 
 *Rewrite* is designed as a creation with only one kind of rules: substitution rules. Being such a minimalist creation, complete *Rewrite* implementation takes about 400 Javascript lines of code.
 
@@ -64,13 +64,13 @@ also evaluates to:
 
 ## how does it work
 
-*Rewrite* looks deep down the whole s-expression for nodes containing `REWRITE` keyword, and extracts contained rules in noted order. Then it applies the ordered rules from the deepest nodes to the right towards shallower nodes to the left. During such node visiting, if the first available rule `READ` matches a node, then `WRITE` counterpart replacement is being made, and the rewriting procedure for the current node is triggered again (again from deep to shallow), seeking to again apply the set of rules. When there are no more rule matches, rewriting is done for the current node, and rewriting continues to the parent node, marching towards top node. When the top node is done, the rewriting is done, and the output expression is being reported.
+*Rewrite* looks deep down the whole s-expression for nodes containing `REWRITE` keyword, and takes contained rules in noted order. Then it applies the ordered rules from the deepest nodes to the right towards the shallowest nodes to the left. During such node visiting, if the first available rule `READ` matches a node, then `WRITE` counterpart replacement is being made, and the rewriting procedure for the current node is triggered from the start (from deep to shallow), seeking to again apply the same set of rules. When there are no more rule matches, rewriting is done for the current node, and rewriting continues to the parent node, lifting the executiom up, towards the top node. When the top node is done, then rewriting is done, and the output expression is being reported.
 
-During rewriting, some helper node normalizations are being made. Firstly, all the `(a (b (c (...))))` expressions are considered equal to `(a b c ...)`, and vice versa. Secondly, if there are parenthesis containing only a single pair of inner parenthesis, the outer parenhesis are left out. Thirdly, if any parenthesis contain only a single identifier, the parenthesis are also being left out. These normalizations make the pattern matching flexible enough to tame the possible parenthesis accumulation that would otherwise appear on repeatable read-write cycles.
+During rewriting, some helper parenthesis normalizations are being made. Firstly, all the `(a (b (c (...))))` expressions are considered equal to `(a b c ...)`. Secondly, if there are parenthesis containing only a single pair of inner parenthesis, the outer parenhesis are left out. Thirdly, if any parenthesis contain only a single identifier, the parenthesis are also being left out. These normalizations make the pattern matching flexible enough to tame the possible parenthesis accumulation that would otherwise appear on repeatable read-write cycles.
 
 ## further examples
 
-Please refer to the [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html) for more thorough example exhibition.
+Please refer to the [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html) for more thorough examples exposure. The examples contain equality predicate, Boolean operations, binary number addition, proof checking, and meta-rules.
 
 ## using rewrite
 
