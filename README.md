@@ -114,7 +114,7 @@ To get familiar with *Rewrite* we bring a few illustrative examples:
                 (
                     (VAR <a>) (VAR <b>)
                     (READ  l <a> <b>)
-                    (WRITE <a> likes <b>    )
+                    (WRITE <a> likes <b>)
                 )
             )
             

@@ -319,7 +319,7 @@ var rewrite = (
                         if (range[0] === vars[i][0][0])
                             range[0] = vars[i][1];
                     
-                if (Array.isArray (range[0]) && range[0][0] !== "REWRITE")
+                if (Array.isArray (range[0])/* && range[0][0] !== "REWRITE"*/)
                     applyVars (range[0], vars);
 
                 range = range[1];

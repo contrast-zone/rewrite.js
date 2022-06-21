@@ -409,6 +409,35 @@
 )
 </script>
 
+<script id="exmpl-meta1" type="text/plain">
+/*
+    meta-rules
+*/
+
+(
+    (
+        REWRITE
+        (
+            (VAR <a>) (VAR <b>)
+            (READ <a> -> <b>)
+            (WRITE
+                REWRITE
+                (
+                    (VAR a) (VAR b) (VAR c) (VAR d) (VAR e) (VAR f)
+                    (READ  <a>)
+                    (WRITE <b>)
+                )
+            )
+        )
+    )
+
+    ((a + a) -> (2 * a))
+    ((a * a) -> (a ^ 2))
+    
+    (x + x) * (x + x)
+)
+</script>
+
 <style type="text/css" media="screen">
     /*
     @font-face {
@@ -546,6 +575,8 @@
         <a href="javascript:populate('exmpl-bool');">&nbsp;&nbsp;&nbsp; Boolean operations</a>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
         <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof checking</a>
+        <hr/>
+        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a>
     </div>
 </div>
                 </b>
