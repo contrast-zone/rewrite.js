@@ -147,24 +147,28 @@ var rewrite = (
 
             if (Array.isArray (node)) {
                 label1: while (true) {
-                    if (!back) {
+                    if (!back && node) {
                         do {
                             rules = pickRules (node);
                             if (rules.length > 0){
                                 node = node[1];
-                                thisrwrt = rules.concat (thisrwrt);
+                                //thisrwrt = rules.concat (thisrwrt);
+                                thisrwrt = [...thisrwrt];
+                                for (var i = rules.length - 1; i >= 0 ; i--)
+                                    if (thisrwrt.indexOf (rules[i] === -1))
+                                        thisrwrt.unshift (rules[i]);
                             }
                         } while (rules.length > 0);
                             
                         if (Array.isArray (node[0]))
-                                if (reduce (node[0], thisrwrt)) {
-                                    normalize (node[0]);
-                                    changed = true;
-                                    node = top;
-                                    thisrwrt = rwrt;
-                                    nodearr = [];
-                                    continue;
-                                }
+                            if (reduce (node[0], thisrwrt)) {
+                                normalize (node[0]);
+                                changed = true;
+                                //node = top;
+                                //thisrwrt = rwrt;
+                                //nodearr = [];
+                                continue;
+                            }
 
                         nodearr.push ([node, thisrwrt]);
                             
@@ -175,15 +179,18 @@ var rewrite = (
                     } else {
                         while (nodearr.length > 0) {
                             back = nodearr.pop ();
-                            
                             if (back[0] !== undefined && Array.isArray (back[0]) && back[0][0] !== undefined || back[0][1] !== null)
                                 if (applyRules (back[0], JSON.parse(JSON.stringify(back[1])))) {
                                     normalize (back[0]);
-                                    changed = true;
-                                    node = top;
-                                    thisrwrt = rwrt;
+                                    //changed = true;
+                                    //node = top;
+                                    //thisrwrt = rwrt;
+                                    //back = false;
+                                    //nodearr = [];
+                                    node = back[0];
+                                    thisrwrt = back[1];
                                     back = false;
-                                    nodearr = [];
+                                    changed = true;
                                     continue label1;
                                 }
                         }

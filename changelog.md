@@ -7,4 +7,5 @@
 - added timeout
 - deeper s-exprs rewritten first
 - expelled VAR keyword to its own braces
-- unsaturated vars take any expression
+- vars unbinded in READ tag stand for any expression in WRITE tag
+- speedup 1
