@@ -127,45 +127,45 @@
         
         // (A /\ B) -> ~((~ A) \/ (~ B))
         ((READ f 1       ) (WRITE [Assume] A /\ B                                   ))
-        ((READ    f 2    ) (WRITE [Assume] (~ A) \/ (~ B)                           ))
-        ((READ      f 3  ) (WRITE [Assume] ~ A                                      ))
-        ((READ        f 4) (WRITE [/\Elim1] (f 1)                                   )) // A
-        ((READ        f 5) (WRITE [~Elim] (f 3) (f 4)                               )) // False
-        ((READ      f 6  ) (WRITE [Assume] ~ B                                      ))
-        ((READ        f 7) (WRITE [/\Elim2] (f 1)                                   )) // B
-        ((READ        f 8) (WRITE [~Elim] (f 6) (f 7)                               )) // False
-        ((READ      f 9  ) (WRITE [\/Elim] (f 2) ((f 3) ... (f 5)) ((f 6) ... (f 8)))) // False
+        ((READ   f 2     ) (WRITE [Assume] (~ A) \/ (~ B)                           ))
+        ((READ     f 3   ) (WRITE [Assume] ~ A                                      ))
+        ((READ       f 4 ) (WRITE [/\Elim1] (f 1)                                   )) // A
+        ((READ       f 5 ) (WRITE [~Elim] (f 3) (f 4)                               )) // False
+        ((READ     f 6   ) (WRITE [Assume] ~ B                                      ))
+        ((READ       f 7 ) (WRITE [/\Elim2] (f 1)                                   )) // B
+        ((READ       f 8 ) (WRITE [~Elim] (f 6) (f 7)                               )) // False
+        ((READ     f 9   ) (WRITE [\/Elim] (f 2) ((f 3) ... (f 5)) ((f 6) ... (f 8)))) // False
         ((READ   f 10    ) (WRITE [~Intro] (f 2) ... (f 9)                          )) // ~ ((~ A) \/ (~ B))
-        ((READ   f F1    ) (WRITE [->Intro] (f 1) ... (f 10)                        )) // (A /\ B) -> (~ ((~ A) \/ (~ B)))
+        ((READ f F1      ) (WRITE [->Intro] (f 1) ... (f 10)                        )) // (A /\ B) -> (~ ((~ A) \/ (~ B)))
         
         // ~(~A \/ ~B) -> (A /\ B)
         ((READ f 11      ) (WRITE [Assume] ~ ((~ A) \/ (~ B))                       ))
         ((READ   f 12    ) (WRITE [Assume] ~ A                                      ))
-        ((READ     f 13  ) (WRITE [\/Intro1] (f 12)                                 )) // (~ A) \/ (~ B)
+        ((READ     f 13  ) (WRITE [\/Intro1] (f 12)                                 )) // (~ A) \/ UNDEFINED
         ((READ     f 14  ) (WRITE [~Elim] (f 11) (f 13)                             )) // False
-        ((READ   f 15    ) (WRITE [IP] (f 12) ... (f 14)                             )) // A
-        ((READ     f 16  ) (WRITE [Assume] ~ B                                      ))
-        ((READ       f 17) (WRITE [\/Intro2] (f 16)                                 )) // (~ A) \/ (~ B)
-        ((READ       f 18) (WRITE [~Elim] (f 11) (f 17)                             )) // False
-        ((READ   f 19    ) (WRITE [IP] (f 16) ... (f 18)                             )) // B
+        ((READ   f 15    ) (WRITE [IP] (f 12) ... (f 14)                            )) // A
+        ((READ   f 16    ) (WRITE [Assume] ~ B                                      ))
+        ((READ     f 17  ) (WRITE [\/Intro2] (f 16)                                 )) // UNDEFINED \/ (~ B)
+        ((READ     f 18  ) (WRITE [~Elim] (f 11) (f 17)                             )) // False
+        ((READ   f 19    ) (WRITE [IP] (f 16) ... (f 18)                            )) // B
         ((READ   f 20    ) (WRITE [/\Intro] (f 15) (f 19)                           )) // A /\ B
-        ((READ   f F2    ) (WRITE [->Intro] (f 11) ... (f 20)                       )) //(~ ((~ A) \/ (~ B))) -> (A /\ B)
+        ((READ f F2      ) (WRITE [->Intro] (f 11) ... (f 20)                       )) //(~ ((~ A) \/ (~ B))) -> (A /\ B)
         
         // (A /\ B) <-> ~(~A \/ ~B)
-        ((READ f QED     ) (WRITE [<->Intro] (f F1) (f F2)                          )) // (A /\ B) <-> ~((~ A) \/ (~ B))
+        ((READ f QED     ) (WRITE [<->Intro] (f F1) (f F2)                          )) // (A /\ B) <-> (~ ((~ A) \/ (~ B)))
     )
 
     /*
         proof listing
     */
     
-    // (A /\ B) -> ~((~ A) \/ (~ B))
+    // elaborating F1 (A /\ B) -> (~ ((~ A) \/ (~ B)))
     (1 f 1) (2 f 2) (3 f 3) (4 f 4) (5 f 5) (6 f 6) (7 f 7) (8 f 8) (9 f 9) (10 f 10) (F1 f F1)
     
-    // ~(~A \/ ~B) -> (A /\ B)
-     (11 f 11) (12 f 12) (13 f 13) (14 f 14) (15 f 15) (16 f 16) (17 f 17) (18 f 18) (19 f 19) (20 f 20) (F2 f F2)
+    // elaborating F2 (~ (~A \/ ~B)) -> (A /\ B)
+    (11 f 11) (12 f 12) (13 f 13) (14 f 14) (15 f 15) (16 f 16) (17 f 17) (18 f 18) (19 f 19) (20 f 20) (F2 f F2)
     
-    // (A /\ B) <-> ~(~A \/ ~B)
+    // deriving QED (A /\ B) <-> (~ ((~ A) \/ (~ B)))
     (QED f QED)
 )
 </script>
@@ -702,10 +702,10 @@
             else {
                 var part
                 if (node [i] === undefined)
-                    part = "undefined";
+                    part = "UNDEFINED";
                     
                 else if (node [i] === null)
-                    part = "null";
+                    part = "()";
                     
                 else
                     part = node[i].replaceAll("\n", "\\n");
