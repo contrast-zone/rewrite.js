@@ -41,7 +41,7 @@ evaluates to:
 
     (hello world)
 
-If we want to use template variables, we assert them with keyword `VAR` bwfore `READ` and `WRITE` tags. For example, code:
+If we want to use template variables, we assert them with keyword `VAR` before `READ` and `WRITE` tags. For example, code:
 
     (
         (
