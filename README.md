@@ -11,7 +11,7 @@ Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* 
 
 ---
 
-To try *Rewrite* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html). The playground also may be run locally, after downloading this package.
+To try *Rewrite* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html). The playground may also be run locally, after downloading this package.
 
 ---
 
