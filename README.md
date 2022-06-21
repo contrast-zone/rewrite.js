@@ -70,7 +70,7 @@ During rewriting, some helper parenthesis normalizations are being made. Firstly
 
 ## further examples
 
-Please refer to the [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html) for more thorough examples exposure. The examples contain equality predicate, Boolean operations, binary number addition, proof checking, and meta-rules.
+Please refer to the *Rewrite Playground* from the above link for more thorough examples exposure. Available examples contain equality predicate, Boolean operations, binary number addition, proof checking, and meta-rules.
 
 ## using rewrite
 
