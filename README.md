@@ -30,7 +30,7 @@ To try *Rewrite* within browser, please refer to [Rewrite Playground](https://co
         ...s-expression which rules operate on...
     )
 
-`REWRITE` keyword declares a list of rules. `READ` keyword declares s-expression match for triggering rule rewriting. `WRITE` keyword declares s-expression replacement in rule rewriting. This is called *reduction*, even if it looks more like expansion than like reduction. For example, code:
+`REWRITE` keyword declares a list of rules. `READ` keyword declares s-expression match for triggering rule rewriting. `WRITE` keyword declares s-expression replacement in rule rewriting. This is called *reduction*, even if it sometimes looks more like expansion than like reduction. For example, code:
 
     (
         (
