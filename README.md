@@ -5,13 +5,21 @@
 
 *Rewrite* is estimated to be a Turing complete, s-expression based term rewriting system. Its original intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users.
 
-Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* operates on s-expressions, and it can reshape any s-expression to any other s-expression using its rule based computing system. It may be used as a curiosity computing platform, formula application system, theorem prover, compiler compiler, and pretty much anywhere where any kind of computation is required, as long as its slower performance on intensive computations doesn't exceed user patience.
+Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* operates on s-expressions, and it can reshape any s-expression to any other s-expression using its rule based computing system. It may be used as a curiosity computing platform, formula application system, theorem prover, compiler compiler, and pretty much anywhere where any kind of computation is required, as long as slower performance on intensive computations doesn't exceed user patience.
 
 ---
 
 To try *Rewrite* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html). The playground may also be run locally, after downloading this package.
 
 ---
+
+## table of contents
+
+- [1. introductory examples](#1-introductory-examples)
+- [2. further examples](#2-further-examples)
+- [3. how does it work](#3-how-does-it-work)
+- [4. speed performance](#4-speed-performance)
+- [5. using rewrite](#5-using-rewrite)
 
 ## 1. introductory examples
 
