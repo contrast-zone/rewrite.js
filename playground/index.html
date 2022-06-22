@@ -12,6 +12,16 @@
 */
 
 (
+    hello world
+)
+</script>
+
+<script id="exmpl2" type="text/plain">
+/*
+    hello world 2
+*/
+
+(
     (
         REWRITE
         ((READ greet) (WRITE hello world))
@@ -21,9 +31,9 @@
 )
 </script>
 
-<script id="exmpl2" type="text/plain">
+<script id="exmpl3" type="text/plain">
 /*
-    hello world 2
+    hello world 3
 */
 
 (
@@ -36,7 +46,7 @@
 )
 </script>
 
-<script id="exmpl3" type="text/plain">
+<script id="exmpl11" type="text/plain">
 /*
     example: `Venus likes milk`
 */
@@ -52,7 +62,7 @@
 )
 </script>
 
-<script id="exmpl4" type="text/plain">
+<script id="exmpl12" type="text/plain">
 /*
     example: `Pluto likes bones`
 */
@@ -71,7 +81,7 @@
 )
 </script>
 
-<script id="exmpl5" type="text/plain">
+<script id="exmpl13" type="text/plain">
 /*
     example: `Nikki likes cheese`
 */
@@ -92,181 +102,38 @@
 )
 </script>
 
-<script id="exmpl-proof" type="text/plain">
-
+<script id="exmpl-eqpred" type="text/plain">
 /*
-    proof checker
+    equality predicate
 */
 
 (
     (
         REWRITE
-        
-        // logic rules
-        ((VAR a) (VAR b) (READ                                 [/\Intro] a b) (WRITE a /\ b ))
-        ((VAR a) (VAR b) (READ                              [/\Elim1] a /\ b) (WRITE a      ))
-        ((VAR a) (VAR b) (READ                              [/\Elim2] a /\ b) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                                  [\/Intro1] a) (WRITE a \/ b ))
-        ((VAR a) (VAR b) (READ                                  [\/Intro2] b) (WRITE a \/ b ))
-        ((VAR a) (VAR b) (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  ))
-        ((VAR a) (VAR b) (READ                             [->Intro] a ... b) (WRITE a -> b ))
-        ((VAR a) (VAR b) (READ                     [->Elim] (a -> b) (VAR a)) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b))
-        ((VAR a) (VAR b) (READ                        [<->Elim1] (a <-> b) a) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                        [<->Elim2] (a <-> b) b) (WRITE a      ))
-        (        (VAR a) (READ                          [~Intro] a ... False) (WRITE ~ a    ))
-        (        (VAR a) (READ                               [~Elim] (~ a) a) (WRITE False  ))
-        (        (VAR a) (READ                                     [X] False) (WRITE a      ))
-        (        (VAR a) (READ                          [IP] (~ a) ... False) (WRITE a      ))
-    
-        ((VAR a) (READ [Assume] a) (WRITE a))
-
-        /*
-            a proof for De Morgan's law
-        */
-        
-        // (A /\ B) -> ~((~ A) \/ (~ B))
-        ((READ f 1       ) (WRITE [Assume] A /\ B                                   ))
-        ((READ   f 2     ) (WRITE [Assume] (~ A) \/ (~ B)                           ))
-        ((READ     f 3   ) (WRITE [Assume] ~ A                                      ))
-        ((READ       f 4 ) (WRITE [/\Elim1] (f 1)                                   )) // A
-        ((READ       f 5 ) (WRITE [~Elim] (f 3) (f 4)                               )) // False
-        ((READ     f 6   ) (WRITE [Assume] ~ B                                      ))
-        ((READ       f 7 ) (WRITE [/\Elim2] (f 1)                                   )) // B
-        ((READ       f 8 ) (WRITE [~Elim] (f 6) (f 7)                               )) // False
-        ((READ     f 9   ) (WRITE [\/Elim] (f 2) ((f 3) ... (f 5)) ((f 6) ... (f 8)))) // False
-        ((READ   f 10    ) (WRITE [~Intro] (f 2) ... (f 9)                          )) // ~ ((~ A) \/ (~ B))
-        ((READ f F1      ) (WRITE [->Intro] (f 1) ... (f 10)                        )) // (A /\ B) -> (~ ((~ A) \/ (~ B)))
-        
-        // ~(~A \/ ~B) -> (A /\ B)
-        ((READ f 11      ) (WRITE [Assume] ~ ((~ A) \/ (~ B))                       ))
-        ((READ   f 12    ) (WRITE [Assume] ~ A                                      ))
-        ((READ     f 13  ) (WRITE [\/Intro1] (f 12)                                 )) // (~ A) \/ UNDEFINED
-        ((READ     f 14  ) (WRITE [~Elim] (f 11) (f 13)                             )) // False
-        ((READ   f 15    ) (WRITE [IP] (f 12) ... (f 14)                            )) // A
-        ((READ   f 16    ) (WRITE [Assume] ~ B                                      ))
-        ((READ     f 17  ) (WRITE [\/Intro2] (f 16)                                 )) // UNDEFINED \/ (~ B)
-        ((READ     f 18  ) (WRITE [~Elim] (f 11) (f 17)                             )) // False
-        ((READ   f 19    ) (WRITE [IP] (f 16) ... (f 18)                            )) // B
-        ((READ   f 20    ) (WRITE [/\Intro] (f 15) (f 19)                           )) // A /\ B
-        ((READ f F2      ) (WRITE [->Intro] (f 11) ... (f 20)                       )) //(~ ((~ A) \/ (~ B))) -> (A /\ B)
-        
-        // (A /\ B) <-> ~(~A \/ ~B)
-        ((READ f QED     ) (WRITE [<->Intro] (f F1) (f F2)                          )) // (A /\ B) <-> (~ ((~ A) \/ (~ B)))
+        (          (VAR <x>) (READ <x> == <x>) (WRITE true))
+        ((VAR <x>) (VAR <y>) (READ <x> == <y>) (WRITE false))
     )
-
-    /*
-        proof listing
-    */
-    
-    // elaborating F1 (A /\ B) -> (~ ((~ A) \/ (~ B)))
-    (1 f 1) (2 f 2) (3 f 3) (4 f 4) (5 f 5) (6 f 6) (7 f 7) (8 f 8) (9 f 9) (10 f 10) (F1 f F1)
-    
-    // elaborating F2 (~ (~A \/ ~B)) -> (A /\ B)
-    (11 f 11) (12 f 12) (13 f 13) (14 f 14) (15 f 15) (16 f 16) (17 f 17) (18 f 18) (19 f 19) (20 f 20) (F2 f F2)
-    
-    // deriving QED (A /\ B) <-> (~ ((~ A) \/ (~ B)))
-    (QED f QED)
+  
+    ((x + 1) == (x + 1))
+    ((x + y) == (x - y))
+    ((a b c d) == (a (b (c (d)))))
+    ((a b c d) == ((((a) b) c) d))
 )
 </script>
 
-<script id="exmpl-proof2" type="text/plain">
+<script id="exmpl-if" type="text/plain">
 /*
-    proof checker
+    branching choice
 */
 
 (
     (
         REWRITE
-        
-        // logic rules
-        ((VAR a) (VAR b) (READ                                 [/\Intro] a b) (WRITE a /\ b ))
-        ((VAR a) (VAR b) (READ                              [/\Elim1] a /\ b) (WRITE a      ))
-        ((VAR a) (VAR b) (READ                              [/\Elim2] a /\ b) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                                  [\/Intro1] a) (WRITE a \/ b ))
-        ((VAR a) (VAR b) (READ                                  [\/Intro2] b) (WRITE a \/ b ))
-        ((VAR a) (VAR b) (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  ))
-        ((VAR a) (VAR b) (READ                             [->Intro] a ... b) (WRITE a -> b ))
-        ((VAR a) (VAR b) (READ                     [->Elim] (a -> b) (VAR a)) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b))
-        ((VAR a) (VAR b) (READ                        [<->Elim1] (a <-> b) a) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                        [<->Elim2] (a <-> b) b) (WRITE a      ))
-        (        (VAR a) (READ                          [~Intro] a ... False) (WRITE ~ a    ))
-        (        (VAR a) (READ                               [~Elim] (~ a) a) (WRITE False  ))
-        (        (VAR a) (READ                                     [X] False) (WRITE a      ))
-        (        (VAR a) (READ                          [IP] (~ a) ... False) (WRITE a      ))
-            
-        // input and output rules
-        ((VAR a) (READ [Assume] a) (WRITE a))
-        ((VAR a) (VAR b) (READ [Check] a b) (WRITE [Checking] a == b fail))
-        ((VAR a) (READ [Checking] a == a fail) (WRITE a))
-        
-        // proof checking meta-statements
-        (
-            (VAR <num>) (VAR <formula>)
-            (
-                READ
-                <num> : <formula>
-            )
-            (
-                WRITE
-                (
-                    'REWRITE
-                    ((READ f <num>) (WRITE <formula>))
-                )
-            )
-        )
-        
-        // rearrange and execute meta-statements
-        (
-            (VAR <num>) (VAR <x>) (VAR <y>)
-            (READ  ('REWRITE ((READ f <num>) <x>)) <y>) 
-            (WRITE ((''REWRITE ((READ f <num>) <x>))) (<num> (f <num>)) <y>)
-        )
-        
-        ((READ ''REWRITE) (WRITE REWRITE))
+        ((VAR <x>) (VAR <y>) (READ if true then <x> else <y> ) (WRITE <x>))
+        ((VAR <x>) (VAR <y>) (READ if false then <x> else <y>) (WRITE <y>))
     )
-    
-    // a proof for De Morgan's law: (A /\ B) <-> ~(~A \/ ~B)
-    
-    ( 1 : ([Assume] A /\ B)                                                          )
-    (   2 : ([Assume] (~ A) \/ (~ B))                                                )
-    (     3 : ([Assume] ~ A)                                                         )
-    (       4 : ([Check] ([/\Elim1] (f 1)) A)                                        )
-    (       5 : ([Check] ([~Elim] (f 3) (f 4)) False)                                )
-    
-    (     6 : ([Assume] ~ B)                                                         )
-    (       7 : ([Check] ([/\Elim2] (f 1)) B)                                        )
-    (       8 : ([Check] ([~Elim] (f 6) (f 7)) False)                                )
-    
-    (     9 : ([Check] ([\/Elim] (f 2) ((f 3) ... (f 5)) ((f 6) ... (f 8))) False)   )
-    
-    (  10 : ([Check] ([~Intro] (f 2) ... (f 9)) ~ ((~ A) \/ (~ B)))                  )
-    
-    (  F1 : ([Check] ([->Intro] (f 1) ... (f 10)) (A /\ B) -> (~ ((~ A) \/ (~ B)))) )
-    
-    (11 : ([Assume] ~ ((~ A) /\ (~ B)))                                              )
-    (  12 : ([Assume] ~ A)                                                           )
-    (    13 : ([Check] ([\/Intro1] (f 12)) ((~ A) \/ (~ B)))                         )
-    (    14 : ([Check] ([~Elim] (f 11) (f 13)) False)                                )
-    
-    (  15 : ([Check] ([IP] (f12) .. (f14)) A)                                        )
-    
-    (    16 : ([Assume] ~ B)                                                         )
-    (      17 : ([Check] ([\/Intro2] (f 16)) ((~ A) \/ (~ B)))                       )
-    (      18 : ([Check] ([~Elim] (f 11) (f 17)) False)                              )
-    
-    (  19 : ([Check] ([IP] (f16) .. (f18)) B))
-
-    (  20 : ([Check] ([/\intro] (f 15) (f 19)) (A /\ B))                             )
-    
-    (  20 : ([Check] ([~Intro] (f 2) ... (f 9)) ~ ((~ A) \/ (~ B)))                  )
-    
-    (  F2 : ([Check] ([->Intro] (f 11) ... (f 20)) (~ ((~ A) \/ (~ B))) -> (A /\ B)))
-    
-    ( 21: ([Check] ([<->Intro] (f F1) (f F2)) (A /\ B) <-> (~ ((~ A) \/ (~ B))))   )
-
-    (qed (f 21))
+  
+    if true then (Yes, it's true.) else (No, it's false.)
 )
 </script>
 
@@ -363,22 +230,181 @@
 )
 </script>
 
-<script id="exmpl-eqpred" type="text/plain">
+<script id="exmpl-proof" type="text/plain">
+
 /*
-    equality predicate
+    proof checker
 */
 
 (
     (
         REWRITE
-        (          (VAR <x>) (READ <x> == <x>) (WRITE true))
-        ((VAR <x>) (VAR <y>) (READ <x> == <y>) (WRITE false))
+        
+        // logic rules
+        ((VAR a) (VAR b) (READ                                 [/\Intro] a b) (WRITE a /\ b ))
+        ((VAR a) (VAR b) (READ                              [/\Elim1] a /\ b) (WRITE a      ))
+        ((VAR a) (VAR b) (READ                              [/\Elim2] a /\ b) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                                  [\/Intro1] a) (WRITE a \/ b ))
+        ((VAR a) (VAR b) (READ                                  [\/Intro2] b) (WRITE a \/ b ))
+        ((VAR a) (VAR b) (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  ))
+        ((VAR a) (VAR b) (READ                             [->Intro] a ... b) (WRITE a -> b ))
+        ((VAR a) (VAR b) (READ                     [->Elim] (a -> b) (VAR a)) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b))
+        ((VAR a) (VAR b) (READ                        [<->Elim1] (a <-> b) a) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                        [<->Elim2] (a <-> b) b) (WRITE a      ))
+        (        (VAR a) (READ                          [~Intro] a ... False) (WRITE ~ a    ))
+        (        (VAR a) (READ                               [~Elim] (~ a) a) (WRITE False  ))
+        (        (VAR a) (READ                                     [X] False) (WRITE a      ))
+        (        (VAR a) (READ                          [IP] (~ a) ... False) (WRITE a      ))
+    
+        ((VAR a) (READ [Assume] a) (WRITE a))
+
+        /*
+            a proof for De Morgan's law
+        */
+        
+        // (A /\ B) -> ~((~ A) \/ (~ B))
+        ((READ f 1       ) (WRITE [Assume] A /\ B                                   ))
+        ((READ   f 2     ) (WRITE [Assume] (~ A) \/ (~ B)                           ))
+        ((READ     f 3   ) (WRITE [Assume] ~ A                                      ))
+        ((READ       f 4 ) (WRITE [/\Elim1] (f 1)                                   )) // A
+        ((READ       f 5 ) (WRITE [~Elim] (f 3) (f 4)                               )) // False
+        ((READ     f 6   ) (WRITE [Assume] ~ B                                      ))
+        ((READ       f 7 ) (WRITE [/\Elim2] (f 1)                                   )) // B
+        ((READ       f 8 ) (WRITE [~Elim] (f 6) (f 7)                               )) // False
+        ((READ     f 9   ) (WRITE [\/Elim] (f 2) ((f 3) ... (f 5)) ((f 6) ... (f 8)))) // False
+        ((READ   f 10    ) (WRITE [~Intro] (f 2) ... (f 9)                          )) // ~ ((~ A) \/ (~ B))
+        ((READ f F1      ) (WRITE [->Intro] (f 1) ... (f 10)                        )) // (A /\ B) -> (~ ((~ A) \/ (~ B)))
+        
+        // ~(~A \/ ~B) -> (A /\ B)
+        ((READ f 11      ) (WRITE [Assume] ~ ((~ A) \/ (~ B))                       ))
+        ((READ   f 12    ) (WRITE [Assume] ~ A                                      ))
+        ((READ     f 13  ) (WRITE [\/Intro1] (f 12)                                 )) // (~ A) \/ UNDEFINED
+        ((READ     f 14  ) (WRITE [~Elim] (f 11) (f 13)                             )) // False
+        ((READ   f 15    ) (WRITE [IP] (f 12) ... (f 14)                            )) // A
+        ((READ   f 16    ) (WRITE [Assume] ~ B                                      ))
+        ((READ     f 17  ) (WRITE [\/Intro2] (f 16)                                 )) // UNDEFINED \/ (~ B)
+        ((READ     f 18  ) (WRITE [~Elim] (f 11) (f 17)                             )) // False
+        ((READ   f 19    ) (WRITE [IP] (f 16) ... (f 18)                            )) // B
+        ((READ   f 20    ) (WRITE [/\Intro] (f 15) (f 19)                           )) // A /\ B
+        ((READ f F2      ) (WRITE [->Intro] (f 11) ... (f 20)                       )) //(~ ((~ A) \/ (~ B))) -> (A /\ B)
+        
+        // (A /\ B) <-> ~(~A \/ ~B)
+        ((READ f QED     ) (WRITE [<->Intro] (f F1) (f F2)                          )) // (A /\ B) <-> (~ ((~ A) \/ (~ B)))
     )
-  
-    ((x + 1) == (x + 1))
-    ((x + y) == (x - y))
-    ((a b c d) == (a (b (c (d)))))
-    ((a b c d) == ((((a) b) c) d))
+
+    /*
+        proof listing
+    */
+    
+    // elaborating F1 (A /\ B) -> (~ ((~ A) \/ (~ B)))
+    (1 f 1) (2 f 2) (3 f 3) (4 f 4) (5 f 5) (6 f 6) (7 f 7) (8 f 8) (9 f 9) (10 f 10) (F1 f F1)
+    
+    // elaborating F2 (~ (~A \/ ~B)) -> (A /\ B)
+    (11 f 11) (12 f 12) (13 f 13) (14 f 14) (15 f 15) (16 f 16) (17 f 17) (18 f 18) (19 f 19) (20 f 20) (F2 f F2)
+    
+    // deriving QED (A /\ B) <-> (~ ((~ A) \/ (~ B)))
+    (QED f QED)
+)
+</script>
+
+<script id="exmpl-proof-ugly" type="text/plain">
+/*
+    proof checker
+*/
+
+(
+    (
+        REWRITE
+        
+        // logic rules
+        ((VAR a) (VAR b) (READ                                 [/\Intro] a b) (WRITE a /\ b ))
+        ((VAR a) (VAR b) (READ                              [/\Elim1] a /\ b) (WRITE a      ))
+        ((VAR a) (VAR b) (READ                              [/\Elim2] a /\ b) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                                  [\/Intro1] a) (WRITE a \/ b ))
+        ((VAR a) (VAR b) (READ                                  [\/Intro2] b) (WRITE a \/ b ))
+        ((VAR a) (VAR b) (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  ))
+        ((VAR a) (VAR b) (READ                             [->Intro] a ... b) (WRITE a -> b ))
+        ((VAR a) (VAR b) (READ                     [->Elim] (a -> b) (VAR a)) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b))
+        ((VAR a) (VAR b) (READ                        [<->Elim1] (a <-> b) a) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                        [<->Elim2] (a <-> b) b) (WRITE a      ))
+        (        (VAR a) (READ                          [~Intro] a ... False) (WRITE ~ a    ))
+        (        (VAR a) (READ                               [~Elim] (~ a) a) (WRITE False  ))
+        (        (VAR a) (READ                                     [X] False) (WRITE a      ))
+        (        (VAR a) (READ                          [IP] (~ a) ... False) (WRITE a      ))
+            
+        // input and output rules
+        ((VAR a) (READ [Assume] a) (WRITE a))
+        ((VAR a) (VAR b) (READ [Check] a b) (WRITE [Checking] a == b fail))
+        ((VAR a) (READ [Checking] a == a fail) (WRITE a))
+        
+        // proof checking meta-statements
+        (
+            (VAR <num>) (VAR <formula>)
+            (
+                READ
+                <num> : <formula>
+            )
+            (
+                WRITE
+                (
+                    'REWRITE
+                    ((READ f <num>) (WRITE <formula>))
+                )
+            )
+        )
+        
+        // rearrange and execute meta-statements
+        (
+            (VAR <num>) (VAR <x>) (VAR <y>)
+            (READ  ('REWRITE ((READ f <num>) <x>)) <y>) 
+            (WRITE ((''REWRITE ((READ f <num>) <x>))) (<num> (f <num>)) <y>)
+        )
+        
+        ((READ ''REWRITE) (WRITE REWRITE))
+    )
+    
+    // a proof for De Morgan's law: (A /\ B) <-> ~(~A \/ ~B)
+    
+    ( 1 : ([Assume] A /\ B)                                                          )
+    (   2 : ([Assume] (~ A) \/ (~ B))                                                )
+    (     3 : ([Assume] ~ A)                                                         )
+    (       4 : ([Check] ([/\Elim1] (f 1)) A)                                        )
+    (       5 : ([Check] ([~Elim] (f 3) (f 4)) False)                                )
+    
+    (     6 : ([Assume] ~ B)                                                         )
+    (       7 : ([Check] ([/\Elim2] (f 1)) B)                                        )
+    (       8 : ([Check] ([~Elim] (f 6) (f 7)) False)                                )
+    
+    (     9 : ([Check] ([\/Elim] (f 2) ((f 3) ... (f 5)) ((f 6) ... (f 8))) False)   )
+    
+    (  10 : ([Check] ([~Intro] (f 2) ... (f 9)) ~ ((~ A) \/ (~ B)))                  )
+    
+    (  F1 : ([Check] ([->Intro] (f 1) ... (f 10)) (A /\ B) -> (~ ((~ A) \/ (~ B)))) )
+    
+    (11 : ([Assume] ~ ((~ A) /\ (~ B)))                                              )
+    (  12 : ([Assume] ~ A)                                                           )
+    (    13 : ([Check] ([\/Intro1] (f 12)) ((~ A) \/ (~ B)))                         )
+    (    14 : ([Check] ([~Elim] (f 11) (f 13)) False)                                )
+    
+    (  15 : ([Check] ([IP] (f12) .. (f14)) A)                                        )
+    
+    (    16 : ([Assume] ~ B)                                                         )
+    (      17 : ([Check] ([\/Intro2] (f 16)) ((~ A) \/ (~ B)))                       )
+    (      18 : ([Check] ([~Elim] (f 11) (f 17)) False)                              )
+    
+    (  19 : ([Check] ([IP] (f16) .. (f18)) B))
+
+    (  20 : ([Check] ([/\intro] (f 15) (f 19)) (A /\ B))                             )
+    
+    (  20 : ([Check] ([~Intro] (f 2) ... (f 9)) ~ ((~ A) \/ (~ B)))                  )
+    
+    (  F2 : ([Check] ([->Intro] (f 11) ... (f 20)) (~ ((~ A) \/ (~ B))) -> (A /\ B)))
+    
+    ( 21: ([Check] ([<->Intro] (f F1) (f F2)) (A /\ B) <-> (~ ((~ A) \/ (~ B))))   )
+
+    (qed (f 21))
 )
 </script>
 
@@ -493,7 +519,7 @@
     .dropdown-content a {
       text-align: left;
       color: #EEEEEE;
-      padding: 12px 12px;
+      padding: 8px 8px;
       text-decoration: none;
       display: block;
     }
@@ -501,7 +527,7 @@
     .dropdown-content div {
       text-align: left;
       color: #AAAAAA;
-      padding: 12px 12px;
+      padding: 8px 8px;
       text-decoration: none;
       display: block;
     }
@@ -536,19 +562,26 @@
                     &nbsp; examples &nbsp;
                   </a> &nbsp;
     <div id="myDropdown" class="dropdown-content">
-        <!--div class="droplbl">descr</div-->
+        <div class="droplbl">basic 1</div>
         <a href="javascript:populate('exmpl1');">&nbsp;&nbsp;&nbsp; hello world 1</a>
         <a href="javascript:populate('exmpl2');">&nbsp;&nbsp;&nbsp; hello world 2</a>
-        <hr/>
-        <a href="javascript:populate('exmpl3');">&nbsp;&nbsp;&nbsp; Venus likes milk</a>
-        <a href="javascript:populate('exmpl4');">&nbsp;&nbsp;&nbsp; Pluto likes bones</a>
-        <a href="javascript:populate('exmpl5');">&nbsp;&nbsp;&nbsp; Nikki likes cheese</a>
-        <hr/>
+        <a href="javascript:populate('exmpl3');">&nbsp;&nbsp;&nbsp; hello world 3</a>
+        
+        <div class="droplbl"><hr/> basic 2</div>
+        <a href="javascript:populate('exmpl11');">&nbsp;&nbsp;&nbsp; Venus likes milk</a>
+        <a href="javascript:populate('exmpl12');">&nbsp;&nbsp;&nbsp; Pluto likes bones</a>
+        <a href="javascript:populate('exmpl13');">&nbsp;&nbsp;&nbsp; Nikki likes cheese</a>
+        
+        <div class="droplbl"><hr/>advanced 1</div>
         <a href="javascript:populate('exmpl-eqpred');">&nbsp;&nbsp;&nbsp; equality predicate</a>
-        <a href="javascript:populate('exmpl-bool');">&nbsp;&nbsp;&nbsp; Boolean operations</a>
+        <a href="javascript:populate('exmpl-if');">&nbsp;&nbsp;&nbsp; branching choice</a>
+        <a href="javascript:populate('exmpl-bool');">&nbsp;&nbsp;&nbsp; Boolean calculator</a>
+
+        <div class="droplbl"><hr/>advanced 2</div>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
         <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof checking</a>
-        <hr/>
+
+        <div class="droplbl"><hr/>meta section</div>
         <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a>
     </div>
 </div>

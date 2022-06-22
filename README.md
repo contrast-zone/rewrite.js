@@ -70,7 +70,7 @@ also evaluates to:
 
 ## 2. further examples
 
-Please refer to the *Rewrite Playground* from the above link for more thorough examples exposure. Available examples include equality predicate, Boolean operations, binary number addition, proof checking, and meta-rules.
+Please refer to the *Rewrite Playground* from the above link for more thorough examples exposure. Available examples include some basic term rewriting setups, as well as equality predicate, branching choice, Boolean operations, binary number addition, proof checking, and meta-rules reduction use.
 
 ## 3. how does it work
 
@@ -80,13 +80,13 @@ During rewriting, some helper parenthesis normalizations are being made. Firstly
 
 ## 4. speed performance
 
-Being such a minimalist creation with only one kind of built-in constructs, the complete *Rewrite* implementation takes less than 400 Javascript lines of code. However, without some optimizations, time complexity for processing s-expressions is `O(|R|*n²)` where `|R|` is a total number of rules (including generated meta-rules), and `n` is an output length. Once that the project reaches a stable state, beside possible optimizations, there may be future plans to recompile *Rewrite* to Webasssembly to gain better speed performance.
+Being such a minimalist creation with only one kind of built-in constructs, the complete *Rewrite* implementation takes about 400 Javascript lines of code. However, without further optimizations, time complexity for processing s-expressions is `O(|R|*n²)` where `|R|` is a total number of rules (including generated meta-rules), and `n` is an output length. Once that the project reaches a stable state, beside possible optimizations, there may be future plans to target *Rewrite* to Webasssembly to gain better speed performance.
 
 ## 5. using rewrite
 
-This package contains a Javascript implementation of *Rewrite*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite(...s-expression string..., ...timeout...)` function to return an output s-expression packed within an array.
+This package contains a naive Javascript implementation of *Rewrite*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite(...s-expression string..., ...timeout...)` function to return an output s-expression packed within an array.
 
-In a case of any bugs, please open a new issue on [the project home page](https://github.com/contrast-zone/rewrite).
+In a case of any bugs, please open a new issue on the [project home page](https://github.com/contrast-zone/rewrite).
 
     // under construction //
 
