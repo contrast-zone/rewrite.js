@@ -562,7 +562,7 @@
                     &nbsp; examples &nbsp;
                   </a> &nbsp;
     <div id="myDropdown" class="dropdown-content">
-        <div class="droplbl">introductory</div>
+        <div class="droplbl">intro</div>
         <a href="javascript:populate('exmpl1');">&nbsp;&nbsp;&nbsp; hello world 1</a>
         <a href="javascript:populate('exmpl2');">&nbsp;&nbsp;&nbsp; hello world 2</a>
         <a href="javascript:populate('exmpl3');">&nbsp;&nbsp;&nbsp; hello world 3</a>
@@ -757,16 +757,19 @@
     }
     
     function compile () {
-        var p = rewrite (input1.value, 20000);
-        if (p.err) {
-            var c = getCoords (input1.value, p.pos)
-            output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
-        } else {
-            output1.value = stringify (p, "");
-            //output1.value = JSON.stringify (p, null, 4);
-        }
-        output1.selectionStart = 0;
-        output1.selectionEnd = 0;
+        output.value = "";
+        setTimeout (function (){
+            var p = rewrite (input1.value, 20000);
+            if (p.err) {
+                var c = getCoords (input1.value, p.pos)
+                output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
+            } else {
+                output1.value = stringify (p, "");
+                //output1.value = JSON.stringify (p, null, 4);
+            }
+            output1.selectionStart = 0;
+            output1.selectionEnd = 0;
+        }, 0);
     }
 
     input1.addEventListener("keyup", onkd, false);
