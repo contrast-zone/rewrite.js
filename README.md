@@ -78,5 +78,7 @@ Being such a minimalist creation with only one kind of built-in constructs, the 
 
 This package contains a Javascript implementation of *Rewrite*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite(...s-expression string..., ...timeout...)` function to return an output s-expression packed within an array.
 
+In a case of any bugs, please open a new issue on [the project home page](https://github.com/contrast-zone/rewrite).
+
     // under construction //
 
