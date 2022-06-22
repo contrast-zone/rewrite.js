@@ -72,9 +72,7 @@ During rewriting, some helper parenthesis normalizations are being made. Firstly
 
 ## speed performance
 
-Being such a minimalist creation with only one kind of built-in constructs, the complete *Rewrite* implementation takes less than 400 Javascript lines of code. However, without some optimizations, time complexity for processing s-expressions is `O(|R|*n^2)` where `|R|` is a total number of rules (including generated meta-rules), and `n` is an output length.
-
-Beside possible optimizations, there may be future plans to recompile *Rewrite* to Webasssembly to gain better speed performance.
+Being such a minimalist creation with only one kind of built-in constructs, the complete *Rewrite* implementation takes less than 400 Javascript lines of code. However, without some optimizations, time complexity for processing s-expressions is `O(|R|*n^2)` where `|R|` is a total number of rules (including generated meta-rules), and `n` is an output length. Beside possible optimizations, there may be future plans to recompile *Rewrite* to Webasssembly to gain better speed performance.
 
 ## using rewrite
 
