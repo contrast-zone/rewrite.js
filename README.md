@@ -15,7 +15,7 @@ To try *Rewrite* within browser, please refer to [Rewrite Playground](https://co
 
 ---
 
-## basic rewriting
+## introductory examples
 
 *Rewrite* brings only four keywords for declaring rewriting rules: `REWRITE`, `READ`, `WRITE`, and `VAR`. Rules are declared and applied by the following patern:
 
@@ -70,7 +70,7 @@ Please refer to the *Rewrite Playground* from the above link for more thorough e
 
 *Rewrite* looks deep down the whole s-expression for nodes containing `REWRITE` keyword, and takes contained rules in noted order. Then it applies the ordered rules from the deepest nodes to the right towards the shallowest nodes to the left. During such node visiting, if the first available rule `READ` tag expression matches a node, then `WRITE` tag counterpart replacement is being made. When the replacement takes place, the rewriting procedure for the current node is triggered from the start (from deep to shallow), seeking to again apply the same set of rules. When there are no more rule matches, rewriting is considered done for the current node, and rewriting continues to the parent node, lifting the rewriting executiom to upper level, towards the top node. Finally, when the top node is done, the output expression is being reported to the calling system.
 
-During rewriting, some helper parenthesis normalizations are being made. Firstly, all the `(a (b (c (...))))` expressions are considered equal to `(a b c ...)`. Secondly, if a pair of parenthesis contain only a single pair of inner parenthesis, the outer parenhesis pair is left out. Thirdly, if any parenthesis contain only a single identifier, the parenthesis are also being left out. These normalizations make the pattern matching flexible enough to tame the possible parenthesis accumulation that would otherwise appear on repeatable read-write cycles.
+During rewriting, some helper parenthesis normalizations are being made. Firstly, all the `(a (b (c (...))))` expressions are considered equal to `(a b c ...)`. Secondly, if a pair of outer parenthesis contains only a single pair of inner parenthesis, the outer parenhesis pair is left out. Thirdly, if any parenthesis contain only a single identifier, the parenthesis are also being left out. These normalizations make the pattern matching flexible enough to tame the possible parenthesis accumulation that would otherwise appear on repeatable read-write cycles.
 
 ## using rewrite
 
