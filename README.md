@@ -7,6 +7,8 @@
 
 Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* operates on s-expressions, and it can reshape any s-expression to any other s-expression using its rule based computing system. It may be used as a curiosity computing platform, formula application system, proof checker, problem solver, and pretty much anywhere where any kind of computation is required, as long as slower performance on intensive computations doesn't go beyond limits of user patience.
 
+Homoiconic appearance of *Rewrite* rules makes meta-programming seamlessly fit into the picture where higher level meta-rules are used to construct lower level rules. This setup is desirable when we want free form rules to be adopted as the interpretation of s-expression rewriting proceeds. Adopted rules are then applied in a manner completely equal to any other hand-written rules. Level of abstraction gained by *Rewrite* meta-rules may encourage a development of logical solutions to posed problems of considerable complexity.
+
 ---
 
 To try *Rewrite* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html). The playground may also be run locally, after downloading this package.
