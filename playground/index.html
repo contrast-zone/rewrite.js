@@ -408,6 +408,210 @@
 )
 </script>
 
+<script id="exmpl-kk" type="text/plain">
+/*
+    solving famous knights and knaves puzzle
+*/
+
+(
+    (
+        REWRITE
+        
+        // AND
+        (
+            (READ  true /\ true)
+            (WRITE true)
+        ) (
+            (READ  true /\ false)
+            (WRITE false)
+        ) (
+            (READ  false /\ true)
+            (WRITE false)
+        ) (
+            (READ  false /\ false)
+            (WRITE false)
+        )
+        
+        // OR
+        (
+            (READ  true \/ true)
+            (WRITE true)
+        ) (
+            (READ  true \/ false)
+            (WRITE true)
+        ) (
+            (READ  false \/ true)
+            (WRITE true)
+        ) (
+            (READ  false \/ false)
+            (WRITE false)
+        )
+        
+        // NOT
+        (
+            (READ  ~ true)
+            (WRITE false)
+        ) (
+            (READ  ~ false)
+            (WRITE true)
+        )
+        
+        // build the truth table
+        (
+            (VAR <a>) (VAR <b>)
+            (READ (A says <a>) (B says <b>))
+            (
+                WRITE
+                TruthTable
+                (
+                    (
+                        REWRITE
+                        ((READ A) (WRITE true))
+                        ((READ B) (WRITE true))
+                    )
+                    row A B <a> <b>
+                )
+                (
+                    (
+                        REWRITE
+                        ((READ A) (WRITE true))
+                        ((READ B) (WRITE false))
+                    )
+                    row A B <a> <b>
+                )
+                (
+                    (
+                        REWRITE
+                        ((READ A) (WRITE false))
+                        ((READ B) (WRITE true))
+                    )
+                    row A B <a> <b>
+                )
+                (
+                    (
+                        REWRITE
+                        ((READ A) (WRITE false))
+                        ((READ B) (WRITE false))
+                    )
+                    row A B <a> <b>
+                )
+            )
+        )
+        
+        // deduce consistency
+        (
+            (VAR b) (VAR c) (VAR d) (VAR x) (VAR y)
+            (READ TruthTable (row x y x y) b c d)
+            (WRITE (A is personality x) (B is personality y))
+        ) (
+            (VAR a) (VAR c) (VAR d) (VAR x) (VAR y)
+            (READ TruthTable a (row x y x y) c d)
+            (WRITE (A is personality x) (B is personality y))
+        ) (
+            (VAR a) (VAR b) (VAR d) (VAR x) (VAR y)
+            (READ TruthTable a b (row x y x y) d)
+            (WRITE (A is personality x) (B is personality y))
+        ) (
+            (VAR a) (VAR b) (VAR c) (VAR x) (VAR y)
+            (READ TruthTable a b c (row x y x y))
+            (WRITE (A is personality x) (B is personality y))
+        )
+
+
+        ((READ personality true) (WRITE Knight))
+        ((READ personality false) (WRITE Knave))
+    )
+
+    (
+        A says (A /\ B)
+    ) (
+        B says (~ A)
+    )
+)
+</script>
+
+<script id="exmpl-wgc" type="text/plain">
+/*
+    the wolf, the goat, the cabbage
+*/
+(
+    (
+        REWRITE
+        
+        // success
+        ((READ x e e e e) (WRITE x success))
+
+        // failures
+        ((VAR a) (VAR b) (VAR x) (READ x w b b a) (WRITE fail))
+        ((VAR a) (VAR b) (VAR x) (READ x w a b b) (WRITE fail))
+
+        // move to east
+        ((VAR a) (VAR b) (VAR c) (VAR x) (READ (x (w a b c)) move nothing) (WRITE (x nothing) e a b c))
+        ((VAR a) (VAR b) (VAR x) (READ (x (w w a b)) move wolf) (WRITE (x wolf) e e a b))
+        ((VAR a) (VAR b) (VAR x) (READ (x (w a w b)) move goat) (WRITE (x goat) e a e b))
+        ((VAR a) (VAR b) (VAR x) (READ (x (w a b w)) move cabb) (WRITE (x cabb) e a b e))
+        
+        // move to west
+        ((VAR a) (VAR b) (VAR c) (VAR x) (READ (x (e a b c)) move nothing) (WRITE (x nothing) w a b c))
+        ((VAR a) (VAR b) (VAR x) (READ (x (e e a b)) move wolf) (WRITE (x wolf) w w a b))
+        ((VAR a) (VAR b) (VAR x) (READ (x (e a e b)) move goat) (WRITE (x goat) w a w b))
+        ((VAR a) (VAR b) (VAR x) (READ (x (e a b e)) move cabb) (WRITE (x cabb) w a b w))
+        
+        // develop all possible moves
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x a b c d) (WRITE (x (a b c d)) move nothing))
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x a b c d) (WRITE (x (a b c d)) move wolf))
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x a b c d) (WRITE (x (a b c d)) move goat))
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x a b c d) (WRITE (x (a b c d)) move cabb))
+    )
+    start w w w w
+)
+
+
+/*
+    the wolf, the goat, the cabbage
+*/
+(
+    (
+        REWRITE
+
+        // flipping east/west
+        (        (READ flip e)      (WRITE w))
+        (        (READ flip w)      (WRITE e))
+        ((var a) (READ flip flip a) (WRITE a))
+        
+        // success
+        ((READ x e e e e) (WRITE x success))
+
+        // failures
+        //((VAR a) (VAR b) (VAR x) (READ x w e e a) (WRITE fail))
+        //((VAR a) (VAR b) (VAR x) (READ x w a e e) (WRITE fail))
+
+        // avoid failures
+        ((VAR a) (VAR b) (VAR x) (READ x (w w e a) move wolf) (WRITE x (w w e a) move cabb))
+        ((VAR a) (VAR b) (VAR x) (READ x (w w e a) move goat) (WRITE x (w w e a) move cabb))
+        ((VAR a) (VAR b) (VAR x) (READ x (w e w a) move wolf) (WRITE x (w w e a) move cabb))
+        ((VAR a) (VAR b) (VAR x) (READ x (w e w a) move goat) (WRITE x (w w e a) move cabb))
+        ((VAR a) (VAR b) (VAR x) (READ x (w a w e) move goat) (WRITE x (w a w e) move wolf))
+        ((VAR a) (VAR b) (VAR x) (READ x (w a w e) move cabb) (WRITE x (w a w e) move wolf))
+        ((VAR a) (VAR b) (VAR x) (READ x (w a e w) move goat) (WRITE x (w a w e) move wolf))
+        ((VAR a) (VAR b) (VAR x) (READ x (w a e w) move cabb) (WRITE x (w a w e) move wolf))
+
+        // move to east/west
+        ((VAR a) (VAR b) (VAR d) (VAR x) (READ (x (d d a b)) move wolf) (WRITE (x wolf) ((flip d) (flip d) a b)))
+        ((VAR a) (VAR b) (VAR d) (VAR x) (READ (x (d a d b)) move goat) (WRITE (x goat) ((flip d) a (flip d) b)))
+        ((VAR a) (VAR b) (VAR d) (VAR x) (READ (x (d a b d)) move cabb) (WRITE (x cabb) ((flip d) a b (flip d))))
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ (x (d a b c)) move nothing) (WRITE ((x nothing) (flip d) a b c)))
+        
+        // develop all possible moves
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x (a b c d)) (WRITE (x (a b c d)) move nothing))
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x (a b c d)) (WRITE (x (a b c d)) move wolf))
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x (a b c d)) (WRITE (x (a b c d)) move goat))
+        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x (a b c d)) (WRITE (x (a b c d)) move cabb))
+    )
+    start w w w w
+)
+</script>
+
 <script id="exmpl-meta1" type="text/plain">
 /*
     meta-rules
@@ -583,6 +787,7 @@
 
         <div class="droplbl"><hr/>meta section</div>
         <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a>
+        <a href="javascript:populate('exmpl-kk');">&nbsp;&nbsp;&nbsp; knights and knaves</a>
     </div>
 </div>
                 </b>
@@ -759,7 +964,7 @@
     function compile () {
         output.value = "";
         setTimeout (function (){
-            var p = rewrite (input1.value, 20000);
+            var p = rewrite (input1.value, 0000);
             if (p.err) {
                 var c = getCoords (input1.value, p.pos)
                 output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");

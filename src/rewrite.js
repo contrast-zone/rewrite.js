@@ -14,15 +14,15 @@ var rewrite = (
             timeout = tmout? tmout: Infinity;
             ret = deepParse (text, 0);
 
-            try {
+            //try {
                 normalize (ret.arr);
                 reduce (ret.arr, []);
                 stripRules (ret.arr);
                 normalize (ret.arr);
                 ret.arr = flatten (ret.arr);
-            } catch (e) {
-                ret = {err: e, pos: -1};
-            }
+            //} catch (e) {
+            //    ret = {err: e, pos: -1};
+            //}
             
             if (ret.err)
                 return ret;
@@ -93,7 +93,7 @@ var rewrite = (
                         arr = insert (arr, text.substring (lastToken, i));
                 }
                 
-                if (arr[0] === null & arr[1] === null) arr = [null];
+//                if (arr[0] === null & arr[1] === null) arr = [null];
                 if (!array)                            array = arr;
 
             } while (i > lastToken);
@@ -144,6 +144,12 @@ var rewrite = (
         
         var matches = function (exp0, exp1, vars, fromVar) {
             var thisvar = -1;
+            
+            if (Array.isArray (exp0) && Array.isArray (exp0[0]) && exp0[0][0] === "REWRITE")
+                return matches (exp0[1], exp1, vars, fromVar);
+
+            if (Array.isArray (exp1) && Array.isArray (exp1[0]) && exp1[0][0] === "REWRITE")
+                return matches (exp0, exp[1], vars, fromVar);
                         
             if ((new Date().getTime()) - startTime > timeout)
                 throw "timeout of " + timeout + "ms expired";
@@ -164,7 +170,7 @@ var rewrite = (
                         
                 vars[thisvar][1] = exp0;
                     
-                return true
+                return true;
 
             } else if (Array.isArray (exp0) && exp0[1] === null) {
                 return matches (exp0[0], exp1, vars, fromVar);
@@ -207,6 +213,7 @@ var rewrite = (
                                 for (var i = rules.length - 1; i >= 0 ; i--)
                                     if (thisrwrt.indexOf (rules[i] === -1))
                                         thisrwrt.unshift (rules[i]);
+                                
                             }
                         } while (rules.length > 0);
                             
@@ -317,7 +324,10 @@ var rewrite = (
                 if (isString (range[0]))
                     for (var i = vars.length - 1; i >= 0; i--)
                         if (range[0] === vars[i][0][0])
-                            range[0] = vars[i][1];
+                            if (vars[i][1] === undefined)
+                                range[0] = undefined;
+                            else
+                                range[0] = JSON.parse(JSON.stringify(vars[i][1]));
                     
                 if (Array.isArray (range[0])/* && range[0][0] !== "REWRITE"*/)
                     applyVars (range[0], vars);
