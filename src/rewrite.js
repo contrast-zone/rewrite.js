@@ -14,15 +14,15 @@ var rewrite = (
             timeout = tmout? tmout: Infinity;
             ret = deepParse (text, 0);
 
-            //try {
+            try {
                 normalize (ret.arr);
                 reduce (ret.arr, []);
                 stripRules (ret.arr);
                 normalize (ret.arr);
                 ret.arr = flatten (ret.arr);
-            //} catch (e) {
-            //    ret = {err: e, pos: -1};
-            //}
+            } catch (e) {
+                ret = {err: e, pos: -1};
+            }
             
             if (ret.err)
                 return ret;
@@ -144,7 +144,7 @@ var rewrite = (
         
         var matches = function (exp0, exp1, vars, fromVar) {
             var thisvar = -1;
-            
+
             if (Array.isArray (exp0) && Array.isArray (exp0[0]) && exp0[0][0] === "REWRITE")
                 return matches (exp0[1], exp1, vars, fromVar);
 
@@ -154,10 +154,10 @@ var rewrite = (
             if ((new Date().getTime()) - startTime > timeout)
                 throw "timeout of " + timeout + "ms expired";
 
-            if (fromVar && exp0 === undefined)
+            if (fromVar && exp0 === "UNDEFINED")
                 return true;
 
-            if (exp1 === undefined)
+            if (exp1 === "UNDEFINED")
                 return true;
                 
             for (var i = vars.length - 1; i >= 0; i--)
@@ -165,7 +165,7 @@ var rewrite = (
                     thisvar = i;
             
             if (thisvar >= 0) {
-                if (vars[thisvar][1] !== undefined)
+                if (vars[thisvar][1] !== "UNDEFINED")
                     return matches (exp0, vars[thisvar][1], [], true);
                         
                 vars[thisvar][1] = exp0;
@@ -233,7 +233,7 @@ var rewrite = (
                     } else {
                         while (nodearr.length > 0) {
                             back = nodearr.pop ();
-                            if (back[0] !== undefined && Array.isArray (back[0]) && back[0][0] !== undefined || back[0][1] !== null)
+                            if (back[0] !== "UNDEFINED" && Array.isArray (back[0]) && back[0][0] !== "UNDEFINED" || back[0][1] !== null)
                                 if (applyRules (back[0], JSON.parse(JSON.stringify(back[1])))) {
                                     normalize (back[0]);
                                     node = back[0];
@@ -314,7 +314,7 @@ var rewrite = (
             var vars = [];
             
             for (var i = 0; i < ruleVars.length; i++)
-                vars.push ([ruleVars[i], undefined]);
+                vars.push ([ruleVars[i], "UNDEFINED"]);
             
             return vars
         }
@@ -324,10 +324,7 @@ var rewrite = (
                 if (isString (range[0]))
                     for (var i = vars.length - 1; i >= 0; i--)
                         if (range[0] === vars[i][0][0])
-                            if (vars[i][1] === undefined)
-                                range[0] = undefined;
-                            else
-                                range[0] = JSON.parse(JSON.stringify(vars[i][1]));
+                            range[0] = JSON.parse (JSON.stringify(vars[i][1]));
                     
                 if (Array.isArray (range[0])/* && range[0][0] !== "REWRITE"*/)
                     applyVars (range[0], vars);
@@ -364,7 +361,7 @@ var rewrite = (
                 if (node && Array.isArray (node[0]))
                     normalize (node[0], node);
                 
-                if (node && parentNode && (isString (node[0]) || node[0] === null || node[0] === undefined) && node[1] === null) {
+                if (node && parentNode && (isString (node[0]) || node[0] === null || node[0] === "UNDEFINED") && node[1] === null) {
                     parentNode[0] = node[0];
                     node = parentNode[0];
                 }
