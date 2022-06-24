@@ -1,6 +1,3 @@
-
-    // under construction //
-
 # rewrite
 
 *Rewrite* is estimated to be a Turing complete, s-expression based term rewriting system. Its original intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users.
@@ -70,7 +67,7 @@ also evaluates to:
 
 ## 2. further examples
 
-Please refer to the *Rewrite Playground* from the above link for more thorough examples exposure. Available examples include some basic term rewriting setups, as well as equality predicate, branching choice, Boolean operations, binary number addition, proof checking, and meta-rules reduction use.
+Please refer to the *Rewrite Playground* from the above link for more thorough examples exposure. Available examples include some basic term rewriting setups, as well as equality predicate, branching choice, Boolean operations, proof checking, SAT solver, and action planning use.
 
 ## 3. how does it work
 
@@ -87,6 +84,4 @@ Being such a minimalist creation with only one kind of built-in constructs, the 
 This package contains a naive Javascript implementation of *Rewrite*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite(...s-expression string..., ...timeout...)` function to return an output s-expression packed within an array.
 
 In a case of any bugs, please open a new issue on the [project home page](https://github.com/contrast-zone/rewrite).
-
-    // under construction //
 
