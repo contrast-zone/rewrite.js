@@ -8,4 +8,4 @@
 - deeper s-exprs rewritten first
 - expelled VAR keyword to its own braces
 - vars unbound in READ tag stand for undefined expression in WRITE tag
-- finalizing zeroth production version
+- finalizing zeroth production use version
