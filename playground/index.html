@@ -93,8 +93,8 @@
         ((READ <y>) (WRITE cheese))
         (
             (VAR <a>) (VAR <b>)
-            (READ  l <a> <b>)
-            (WRITE <a> likes <b>    )
+            (READ  l <a> <b>    )
+            (WRITE <a> likes <b>)
         )
     )
     
@@ -110,7 +110,7 @@
 (
     (
         REWRITE
-        (          (VAR <x>) (READ <x> == <x>) (WRITE true))
+        (          (VAR <x>) (READ <x> == <x>) (WRITE true ))
         ((VAR <x>) (VAR <y>) (READ <x> == <y>) (WRITE false))
     )
   
@@ -190,50 +190,10 @@
 )
 </script>
 
-<script id="exmpl-binadd" type="text/plain">
-/*
-    binary number addition
-*/
-
-(
-    (
-        REWRITE
-        
-        // both numbers single digits
-        (                    (READ +       0       0) (WRITE                   0))
-        (                    (READ +       0       1) (WRITE                   1))
-        (                    (READ +       1       0) (WRITE                   1))
-        (                    (READ +       1       1) (WRITE                 1 0))
-        
-        // first number multiple digits, second number single digit
-        (          (VAR <a>) (READ + (<a> 0)       0) (WRITE               <a> 0))
-        (          (VAR <a>) (READ + (<a> 0)       1) (WRITE               <a> 1))
-        (          (VAR <a>) (READ + (<a> 1)       0) (WRITE               <a> 1))
-        (          (VAR <a>) (READ + (<a> 1)       1) (WRITE         (+ 1 <a>) 0))
-        
-        // first number single digit, second number multiple digits
-        (          (VAR <b>) (READ +       0 (<b> 0)) (WRITE               <b> 0))
-        (          (VAR <b>) (READ +       0 (<b> 1)) (WRITE               <b> 1))
-        (          (VAR <b>) (READ +       1 (<b> 0)) (WRITE               <b> 1))
-        (          (VAR <b>) (READ +       1 (<b> 1)) (WRITE         (+ 1 <b>) 0))
-        
-        // both numbers multiple digits
-        ((VAR <a>) (VAR <b>) (READ + (<a> 0) (<b> 0)) (WRITE       (+ <a> <b>) 0))
-        ((VAR <a>) (VAR <b>) (READ + (<a> 0) (<b> 1)) (WRITE       (+ <a> <b>) 1))
-        ((VAR <a>) (VAR <b>) (READ + (<a> 1) (<b> 0)) (WRITE       (+ <a> <b>) 1))
-        ((VAR <a>) (VAR <b>) (READ + (<a> 1) (<b> 1)) (WRITE (+ 1 (+ <a> <b>)) 0))
-    )
-
-    +
-    (((1 1) 0) 0)
-    (((0 1) 0) 1)
-)
-</script>
-
 <script id="exmpl-proof" type="text/plain">
 
 /*
-    proof checker
+    proof verifyer, exhibiting a proof for De Morgan's law
 */
 
 (
@@ -305,106 +265,6 @@
     
     // deriving QED (A /\ B) <-> (~ ((~ A) \/ (~ B)))
     (QED f QED)
-)
-</script>
-
-<script id="exmpl-proof-ugly" type="text/plain">
-/*
-    proof checker
-*/
-
-(
-    (
-        REWRITE
-        
-        // logic rules
-        ((VAR a) (VAR b) (READ                                 [/\Intro] a b) (WRITE a /\ b ))
-        ((VAR a) (VAR b) (READ                              [/\Elim1] a /\ b) (WRITE a      ))
-        ((VAR a) (VAR b) (READ                              [/\Elim2] a /\ b) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                                  [\/Intro1] a) (WRITE a \/ b ))
-        ((VAR a) (VAR b) (READ                                  [\/Intro2] b) (WRITE a \/ b ))
-        ((VAR a) (VAR b) (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  ))
-        ((VAR a) (VAR b) (READ                             [->Intro] a ... b) (WRITE a -> b ))
-        ((VAR a) (VAR b) (READ                     [->Elim] (a -> b) (VAR a)) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b))
-        ((VAR a) (VAR b) (READ                        [<->Elim1] (a <-> b) a) (WRITE b      ))
-        ((VAR a) (VAR b) (READ                        [<->Elim2] (a <-> b) b) (WRITE a      ))
-        (        (VAR a) (READ                          [~Intro] a ... False) (WRITE ~ a    ))
-        (        (VAR a) (READ                               [~Elim] (~ a) a) (WRITE False  ))
-        (        (VAR a) (READ                                     [X] False) (WRITE a      ))
-        (        (VAR a) (READ                          [IP] (~ a) ... False) (WRITE a      ))
-            
-        // input and output rules
-        ((VAR a) (READ [Assume] a) (WRITE a))
-        ((VAR a) (VAR b) (READ [Check] a b) (WRITE [Checking] a == b fail))
-        ((VAR a) (READ [Checking] a == a fail) (WRITE a))
-        
-        // proof checking meta-statements
-        (
-            (VAR <num>) (VAR <formula>)
-            (
-                READ
-                <num> : <formula>
-            )
-            (
-                WRITE
-                (
-                    'REWRITE
-                    ((READ f <num>) (WRITE <formula>))
-                )
-            )
-        )
-        
-        // rearrange and execute meta-statements
-        (
-            (VAR <num>) (VAR <x>) (VAR <y>)
-            (READ  ('REWRITE ((READ f <num>) <x>)) <y>) 
-            (WRITE ((''REWRITE ((READ f <num>) <x>))) (<num> (f <num>)) <y>)
-        )
-        
-        ((READ ''REWRITE) (WRITE REWRITE))
-    )
-    
-    // a proof for De Morgan's law: (A /\ B) <-> ~(~A \/ ~B)
-    
-    ( 1 : ([Assume] A /\ B)                                                          )
-    (   2 : ([Assume] (~ A) \/ (~ B))                                                )
-    (     3 : ([Assume] ~ A)                                                         )
-    (       4 : ([Check] ([/\Elim1] (f 1)) A)                                        )
-    (       5 : ([Check] ([~Elim] (f 3) (f 4)) False)                                )
-    
-    (     6 : ([Assume] ~ B)                                                         )
-    (       7 : ([Check] ([/\Elim2] (f 1)) B)                                        )
-    (       8 : ([Check] ([~Elim] (f 6) (f 7)) False)                                )
-    
-    (     9 : ([Check] ([\/Elim] (f 2) ((f 3) ... (f 5)) ((f 6) ... (f 8))) False)   )
-    
-    (  10 : ([Check] ([~Intro] (f 2) ... (f 9)) ~ ((~ A) \/ (~ B)))                  )
-    
-    (  F1 : ([Check] ([->Intro] (f 1) ... (f 10)) (A /\ B) -> (~ ((~ A) \/ (~ B)))) )
-    
-    (11 : ([Assume] ~ ((~ A) /\ (~ B)))                                              )
-    (  12 : ([Assume] ~ A)                                                           )
-    (    13 : ([Check] ([\/Intro1] (f 12)) ((~ A) \/ (~ B)))                         )
-    (    14 : ([Check] ([~Elim] (f 11) (f 13)) False)                                )
-    
-    (  15 : ([Check] ([IP] (f12) .. (f14)) A)                                        )
-    
-    (    16 : ([Assume] ~ B)                                                         )
-    (      17 : ([Check] ([\/Intro2] (f 16)) ((~ A) \/ (~ B)))                       )
-    (      18 : ([Check] ([~Elim] (f 11) (f 17)) False)                              )
-    
-    (  19 : ([Check] ([IP] (f16) .. (f18)) B))
-
-    (  20 : ([Check] ([/\intro] (f 15) (f 19)) (A /\ B))                             )
-    
-    (  20 : ([Check] ([~Intro] (f 2) ... (f 9)) ~ ((~ A) \/ (~ B)))                  )
-    
-    (  F2 : ([Check] ([->Intro] (f 11) ... (f 20)) (~ ((~ A) \/ (~ B))) -> (A /\ B)))
-    
-    ( 21: ([Check] ([<->Intro] (f F1) (f F2)) (A /\ B) <-> (~ ((~ A) \/ (~ B))))   )
-
-    (qed (f 21))
 )
 </script>
 
@@ -532,83 +392,111 @@
 
 <script id="exmpl-wgc" type="text/plain">
 /*
-    the wolf, the goat, the cabbage
+    solving famous the wolf, the goat, the cabbage puzzle
 */
-(
-    (
-        REWRITE
-        
-        // success
-        ((READ x e e e e) (WRITE x success))
 
-        // failures
-        ((VAR a) (VAR b) (VAR x) (READ x w b b a) (WRITE fail))
-        ((VAR a) (VAR b) (VAR x) (READ x w a b b) (WRITE fail))
-
-        // move to east
-        ((VAR a) (VAR b) (VAR c) (VAR x) (READ (x (w a b c)) move nothing) (WRITE (x nothing) e a b c))
-        ((VAR a) (VAR b) (VAR x) (READ (x (w w a b)) move wolf) (WRITE (x wolf) e e a b))
-        ((VAR a) (VAR b) (VAR x) (READ (x (w a w b)) move goat) (WRITE (x goat) e a e b))
-        ((VAR a) (VAR b) (VAR x) (READ (x (w a b w)) move cabb) (WRITE (x cabb) e a b e))
-        
-        // move to west
-        ((VAR a) (VAR b) (VAR c) (VAR x) (READ (x (e a b c)) move nothing) (WRITE (x nothing) w a b c))
-        ((VAR a) (VAR b) (VAR x) (READ (x (e e a b)) move wolf) (WRITE (x wolf) w w a b))
-        ((VAR a) (VAR b) (VAR x) (READ (x (e a e b)) move goat) (WRITE (x goat) w a w b))
-        ((VAR a) (VAR b) (VAR x) (READ (x (e a b e)) move cabb) (WRITE (x cabb) w a b w))
-        
-        // develop all possible moves
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x a b c d) (WRITE (x (a b c d)) move nothing))
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x a b c d) (WRITE (x (a b c d)) move wolf))
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x a b c d) (WRITE (x (a b c d)) move goat))
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x a b c d) (WRITE (x (a b c d)) move cabb))
-    )
-    start w w w w
-)
-
-
-/*
-    the wolf, the goat, the cabbage
-*/
 (
     (
         REWRITE
 
         // flipping east/west
-        (        (READ flip e)      (WRITE w))
-        (        (READ flip w)      (WRITE e))
-        ((var a) (READ flip flip a) (WRITE a))
+        (        (READ flip e     ) (WRITE w))
+        (        (READ flip w     ) (WRITE e))
+        ((VAR a) (READ flip flip a) (WRITE a))
         
         // success
-        ((READ x e e e e) (WRITE x success))
+        ((VAR x) (READ states x (e e e e)) (WRITE states x succ))
 
         // failures
-        //((VAR a) (VAR b) (VAR x) (READ x w e e a) (WRITE fail))
-        //((VAR a) (VAR b) (VAR x) (READ x w a e e) (WRITE fail))
+        ((VAR a) (VAR x) (READ states x (w e e a)) (WRITE states x fail))
+        ((VAR a) (VAR x) (READ states x (w a e e)) (WRITE states x fail))
+        ((VAR a) (VAR x) (READ states x (e w w a)) (WRITE states x fail))
+        ((VAR a) (VAR x) (READ states x (e a w w)) (WRITE states x fail))
 
-        // avoid failures
-        ((VAR a) (VAR b) (VAR x) (READ x (w w e a) move wolf) (WRITE x (w w e a) move cabb))
-        ((VAR a) (VAR b) (VAR x) (READ x (w w e a) move goat) (WRITE x (w w e a) move cabb))
-        ((VAR a) (VAR b) (VAR x) (READ x (w e w a) move wolf) (WRITE x (w w e a) move cabb))
-        ((VAR a) (VAR b) (VAR x) (READ x (w e w a) move goat) (WRITE x (w w e a) move cabb))
-        ((VAR a) (VAR b) (VAR x) (READ x (w a w e) move goat) (WRITE x (w a w e) move wolf))
-        ((VAR a) (VAR b) (VAR x) (READ x (w a w e) move cabb) (WRITE x (w a w e) move wolf))
-        ((VAR a) (VAR b) (VAR x) (READ x (w a e w) move goat) (WRITE x (w a w e) move wolf))
-        ((VAR a) (VAR b) (VAR x) (READ x (w a e w) move cabb) (WRITE x (w a w e) move wolf))
+        // avoid repeating
+        ((VAR x) (VAR y) (READ (move wolf) (steps x wolf) (states y)) (WRITE (move goat) (steps x wolf) (states y)))
+        ((VAR x) (VAR y) (READ (move goat) (steps x goat) (states y)) (WRITE (move cabb) (steps x goat) (states y)))
+        ((VAR x) (VAR y) (READ (move cabb) (steps x cabb) (states y)) (WRITE (move noth) (steps x cabb) (states y)))
+        ((VAR x) (VAR y) (READ (move noth) (steps x noth) (states y)) (WRITE (move wolf) (steps x noth) (states y)))
 
         // move to east/west
-        ((VAR a) (VAR b) (VAR d) (VAR x) (READ (x (d d a b)) move wolf) (WRITE (x wolf) ((flip d) (flip d) a b)))
-        ((VAR a) (VAR b) (VAR d) (VAR x) (READ (x (d a d b)) move goat) (WRITE (x goat) ((flip d) a (flip d) b)))
-        ((VAR a) (VAR b) (VAR d) (VAR x) (READ (x (d a b d)) move cabb) (WRITE (x cabb) ((flip d) a b (flip d))))
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ (x (d a b c)) move nothing) (WRITE ((x nothing) (flip d) a b c)))
+        (        (VAR a) (VAR b) (VAR f) (VAR x) (VAR y) (READ (move wolf) (steps x) (states y (f f a b))) (WRITE (steps (x wolf)) (states ((y (f f a b)) ((flip f) (flip f) a b)))))
+        (        (VAR a) (VAR b) (VAR f) (VAR x) (VAR y) (READ (move goat) (steps x) (states y (f a f b))) (WRITE (steps (x goat)) (states ((y (f a f b)) ((flip f) a (flip f) b)))))
+        (        (VAR a) (VAR b) (VAR f) (VAR x) (VAR y) (READ (move cabb) (steps x) (states y (f a b f))) (WRITE (steps (x cabb)) (states ((y (f a b f)) ((flip f) a b (flip f))))))
+        ((VAR a) (VAR b) (VAR c) (VAR f) (VAR x) (VAR y) (READ (move noth) (steps x) (states y (f a b c))) (WRITE (steps (x noth)) (states ((y (f a b c)) ((flip f) a b c)))))
         
-        // develop all possible moves
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x (a b c d)) (WRITE (x (a b c d)) move nothing))
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x (a b c d)) (WRITE (x (a b c d)) move wolf))
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x (a b c d)) (WRITE (x (a b c d)) move goat))
-        ((VAR a) (VAR b) (VAR c) (VAR d) (VAR x) (READ x (a b c d)) (WRITE (x (a b c d)) move cabb))
+        // fall down to valid moves
+        ((VAR x) (VAR y) (READ (move wolf) (steps x) (states y)) (WRITE (move goat) (steps x) (states y)))
+        ((VAR x) (VAR y) (READ (move goat) (steps x) (states y)) (WRITE (move cabb) (steps x) (states y)))
+        ((VAR x) (VAR y) (READ (move cabb) (steps x) (states y)) (WRITE (move noth) (steps x) (states y)))
+
+        // vertical loop progression
+        ((READ progress wolf) (WRITE goat))
+        ((READ progress goat) (WRITE cabb))
+        ((READ progress cabb) (WRITE noth))
+        ((READ progress noth) (WRITE wolf))
+
+        // search for move steps
+        (
+            (VAR r) (VAR x) (VAR y) (VAR a) (VAR b)
+            (READ  loop (1 r) ((steps x y) (states a b)))
+            (WRITE loop (r) ((steps x y) (states a fail)))
+        ) (
+            (VAR r) (VAR x) (VAR y) (VAR a) (VAR b)
+            (READ  loop r ((steps x y) (states a succ)))
+            (WRITE solution: x y)
+        ) (
+            (VAR r) (VAR x) (VAR y) (VAR a) (VAR b)
+            (READ  loop r ((steps x y) (states a fail)))
+            (WRITE loop r ((move (progress y)) (steps x) (states a)))
+        ) (
+            (VAR r) (VAR x) (VAR y) (VAR a) (VAR b)
+            (READ  loop r ((steps x y) (states a b)))
+            (WRITE loop (1 r) ((move wolf) (steps x y) (states a b)))
+        )
     )
-    start w w w w
+
+    loop 1 ((steps () ()) (states () (w w w w)))
+)
+</script>
+
+<script id="exmpl-binadd" type="text/plain">
+/*
+    binary number addition
+*/
+
+(
+    (
+        REWRITE
+        
+        // both numbers single digits
+        (                    (READ +       0       0) (WRITE                   0))
+        (                    (READ +       0       1) (WRITE                   1))
+        (                    (READ +       1       0) (WRITE                   1))
+        (                    (READ +       1       1) (WRITE                 1 0))
+        
+        // first number multiple digits, second number single digit
+        (          (VAR <a>) (READ + (<a> 0)       0) (WRITE               <a> 0))
+        (          (VAR <a>) (READ + (<a> 0)       1) (WRITE               <a> 1))
+        (          (VAR <a>) (READ + (<a> 1)       0) (WRITE               <a> 1))
+        (          (VAR <a>) (READ + (<a> 1)       1) (WRITE         (+ 1 <a>) 0))
+        
+        // first number single digit, second number multiple digits
+        (          (VAR <b>) (READ +       0 (<b> 0)) (WRITE               <b> 0))
+        (          (VAR <b>) (READ +       0 (<b> 1)) (WRITE               <b> 1))
+        (          (VAR <b>) (READ +       1 (<b> 0)) (WRITE               <b> 1))
+        (          (VAR <b>) (READ +       1 (<b> 1)) (WRITE         (+ 1 <b>) 0))
+        
+        // both numbers multiple digits
+        ((VAR <a>) (VAR <b>) (READ + (<a> 0) (<b> 0)) (WRITE       (+ <a> <b>) 0))
+        ((VAR <a>) (VAR <b>) (READ + (<a> 0) (<b> 1)) (WRITE       (+ <a> <b>) 1))
+        ((VAR <a>) (VAR <b>) (READ + (<a> 1) (<b> 0)) (WRITE       (+ <a> <b>) 1))
+        ((VAR <a>) (VAR <b>) (READ + (<a> 1) (<b> 1)) (WRITE (+ 1 (+ <a> <b>)) 0))
+    )
+
+    +
+    (((1 1) 0) 0)
+    (((0 1) 0) 1)
 )
 </script>
 
@@ -776,18 +664,15 @@
         <a href="javascript:populate('exmpl12');">&nbsp;&nbsp;&nbsp; Pluto likes bones</a>
         <a href="javascript:populate('exmpl13');">&nbsp;&nbsp;&nbsp; Nikki likes cheese</a>
         
-        <div class="droplbl"><hr/>advanced</div>
+        <div class="droplbl"><hr/>intermediate</div>
         <a href="javascript:populate('exmpl-eqpred');">&nbsp;&nbsp;&nbsp; equality predicate</a>
         <a href="javascript:populate('exmpl-if');">&nbsp;&nbsp;&nbsp; branching choice</a>
         <a href="javascript:populate('exmpl-bool');">&nbsp;&nbsp;&nbsp; Boolean calculator</a>
 
-        <div class="droplbl"><hr/>complex</div>
-        <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
-        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof checking</a>
-        <a href="javascript:populate('exmpl-kk');">&nbsp;&nbsp;&nbsp; knights and knaves</a>
-
-        <div class="droplbl"><hr/>meta section</div>
-        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a>
+        <div class="droplbl"><hr/>advanced</div>
+        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; De Morgan's law - proof verifying</a>
+        <a href="javascript:populate('exmpl-kk');">&nbsp;&nbsp;&nbsp; knights and knaves - sat solver</a>
+        <a href="javascript:populate('exmpl-wgc');">&nbsp;&nbsp;&nbsp; wolf, goat, cabbage - planning</a>
     </div>
 </div>
                 </b>
@@ -964,7 +849,7 @@
     function compile () {
         output.value = "";
         setTimeout (function (){
-            var p = rewrite (input1.value, 0000);
+            var p = rewrite (input1.value, 10000);
             if (p.err) {
                 var c = getCoords (input1.value, p.pos)
                 output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
