@@ -2,7 +2,7 @@
 
 *Rewrite* is estimated to be a Turing complete, s-expression based term rewriting system. Its original intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users.
 
-Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* operates on s-expressions, and it can reshape any s-expression to any other s-expression using its rule based computing system. It may be used as a curiosity computing platform, formula application system, proof checker, problem solver, and pretty much anywhere where any kind of computation is required, as long as slower performance on intensive computations doesn't go beyond limits of user patience.
+Nevertheless, its potential capabilities reach far beyond templating. *Rewrite* operates on s-expressions, and it can reshape any s-expression to any other s-expression using its rule based computing system. Although it has abilities to be used pretty much anywhere where any kind of computation is required (as long as slower performance on intensive computations doesn't go beyond limits of user patience), it will only stand out at tasks naturally involving formula applications such as proof construction for different kinds of logic, truth table calculations, or combinatorial problem solving.
 
 ---
 
@@ -77,7 +77,7 @@ During rewriting, some helper parenthesis normalizations are being made. Firstly
 
 ## 4. speed performance
 
-Being such a minimalist creation with only one kind of built-in constructs, the complete *Rewrite* implementation takes about 400 Javascript lines of code. However, without further optimizations, time complexity for processing s-expressions is `O(|R|*n²)` where `|R|` is a total number of rules (including generated meta-rules), and `n` is an output length. Once that the project reaches a stable state, beside possible optimizations, there may be future plans to target *Rewrite* to Webasssembly to gain better speed performance.
+Being such a minimalist creation with only one kind of built-in constructs, the complete *Rewrite* implementation takes about 400 Javascript lines of code. However, without further optimizations, time complexity for processing s-expressions is `O(|R|*n²)` where `|R|` is a total number of rules, and `n` is an output length. Once that the project reaches a stable state, beside possible optimizations, there may be future plans to target *Rewrite* to Webasssembly to gain better speed performance.
 
 ## 5. using rewrite
 
