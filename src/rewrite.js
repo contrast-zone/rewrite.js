@@ -93,7 +93,7 @@ var rewrite = (
                         arr = insert (arr, text.substring (lastToken, i));
                 }
                 
-//                if (arr[0] === null & arr[1] === null) arr = [null];
+                // if (arr[0] === null & arr[1] === null) arr = [null];
                 if (!array)                            array = arr;
 
             } while (i > lastToken);

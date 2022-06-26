@@ -77,7 +77,7 @@ During rewriting, some helper parenthesis normalizations are being made. Firstly
 
 ## 4. speed performance
 
-Being such a minimalist creation with only one kind of built-in constructs, the complete *Rewrite* implementation takes about 400 Javascript lines of code. However, without further optimizations, time complexity for processing s-expressions is `O(|R|*n²)` where `|R|` is a total number of rules, and `n` is an output length. Once that the project reaches a stable state, beside possible optimizations, there may be future plans to target *Rewrite* to Webasssembly to gain better speed performance.
+Being such a minimalist creation with only one kind of built-in constructs, the complete *Rewrite* implementation takes about 400 Javascript lines of code. Despite the implementation small size, and since it covers Turing complete class of computations, worst case scenario time complexity for processing input may reach `O(∞)`. Nevertheless, further optimizations of the search-replace algorithm are possible, and once that the project reaches a stable state, beside possible optimizations, there may be future plans to target *Rewrite* to Webasssembly to gain better speed performance, depending on the final speed marks.
 
 ## 5. using rewrite
 
