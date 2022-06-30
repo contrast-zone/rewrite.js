@@ -27,7 +27,7 @@ var edit = function (node, options) {
         <div id="hilights${rndid}" style="wrap: none; font: ${options.font}; padding:5px; white-space: pre; color: ${options.colorText}; background-color: ${options.colorTextBack}; width: inherit; height: inherit; overflow: hidden;">
         </div>
       </div>
-      <textarea id="input${rndid}" spellcheck="false" wrap="off" oninput="" style="width: inherit; height: inherit; border-radius: 0; outline: none; box-sizing: border-box; resize: none; display: block; border-style: none; /*background-color: black;*/ background-color: transparent; color: transparent; caret-color: white; font: ${options.font}; margin: 0; padding:5px; position: absolute; top: 0; left: 0; z-index: 0;">
+      <textarea id="input${rndid}" spellcheck="false" wrap="off" style="width: inherit; height: inherit; border-radius: 0; outline: none; box-sizing: border-box; resize: none; display: block; border-style: none; /*background-color: black;*/ background-color: transparent; color: transparent; caret-color: white; font: ${options.font}; margin: 0; padding:5px; position: absolute; top: 0; left: 0; z-index: 0;">
       </textarea>
     </div>
     `
@@ -62,8 +62,8 @@ var edit = function (node, options) {
             
             // scroll fix
             text = text
-            .replace(/\n$/g, '\n\n')
-            .replace(/\n/g, '     \n');
+            .replace(/\n$/g, '<br/>')
+            .replace(/\n/g, '     <br/>');
 
             text += "<br/><br/><br/><br/><br/> ";
 
