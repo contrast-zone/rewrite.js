@@ -264,13 +264,14 @@ var edit = function (node, options) {
                 }
             } else {
                 var lineStarts = [];
+                
                 for (i = input.selectionStart - 1; i >= -1; i--)
                     if (input.value.charAt(i) === "\n") {
                         lineStarts.push (i + 1);
                         break;
                     }
                     
-                if (i = -1)
+                if (i === -1)
                     lineStarts.push (0);
                     
                 for (i = input.selectionStart; i < input.selectionEnd - 1; i++)
