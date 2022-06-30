@@ -361,23 +361,23 @@
         // deduce consistency
         (
             (VAR b) (VAR c) (VAR d) (VAR x) (VAR y)
-            (READ TruthTable (row x y x y) b c d)
+            (READ  TruthTable (row x y x y) b c d)
             (WRITE (A is personality x) (B is personality y))
         ) (
             (VAR a) (VAR c) (VAR d) (VAR x) (VAR y)
-            (READ TruthTable a (row x y x y) c d)
+            (READ  TruthTable a (row x y x y) c d)
             (WRITE (A is personality x) (B is personality y))
         ) (
             (VAR a) (VAR b) (VAR d) (VAR x) (VAR y)
-            (READ TruthTable a b (row x y x y) d)
+            (READ  TruthTable a b (row x y x y) d)
             (WRITE (A is personality x) (B is personality y))
         ) (
             (VAR a) (VAR b) (VAR c) (VAR x) (VAR y)
-            (READ TruthTable a b c (row x y x y))
+            (READ  TruthTable a b c (row x y x y))
             (WRITE (A is personality x) (B is personality y))
         ) (
             (VAR a) (VAR b) (VAR c) (VAR d)
-            (READ TruthTable a b c d)
+            (READ  TruthTable a b c d)
             (WRITE no solution)
         )
 
