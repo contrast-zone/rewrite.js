@@ -9,4 +9,4 @@
 - expelled VAR keyword to its own braces
 - vars unbound in READ tag stand for undefined expression in WRITE tag
 - finalizing zeroth production version
-- a decent editor for playgroung
+- a decent editor with syntax hilighting for playground
