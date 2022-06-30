@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Rewrite</title>
 <script src="../src/rewrite.js"></script>
+<script src="rwedit.js"></script>
 
 <script id="exmpl1" type="text/plain">
 /*
@@ -191,7 +192,6 @@
 </script>
 
 <script id="exmpl-proof" type="text/plain">
-
 /*
     proof verifyer, exhibiting a proof for De Morgan's law
 */
@@ -208,7 +208,7 @@
         ((VAR a) (VAR b) (READ                                  [\/Intro2] b) (WRITE a \/ b ))
         ((VAR a) (VAR b) (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  ))
         ((VAR a) (VAR b) (READ                             [->Intro] a ... b) (WRITE a -> b ))
-        ((VAR a) (VAR b) (READ                     [->Elim] (a -> b) (VAR a)) (WRITE b      ))
+        ((VAR a) (VAR b) (READ                         [->Elim] (a -> b) (a)) (WRITE b      ))
         ((VAR a) (VAR b) (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b))
         ((VAR a) (VAR b) (READ                        [<->Elim1] (a <-> b) a) (WRITE b      ))
         ((VAR a) (VAR b) (READ                        [<->Elim2] (a <-> b) b) (WRITE a      ))
@@ -270,7 +270,7 @@
 
 <script id="exmpl-kk" type="text/plain">
 /*
-    solving famous knights and knaves puzzle
+    solving the famous knights and knaves puzzle
 */
 
 (
@@ -396,7 +396,7 @@
 
 <script id="exmpl-wgc" type="text/plain">
 /*
-    solving famous the wolf, the goat, the cabbage puzzle
+    solving the famous wolf, goat, cabbage puzzle
 */
 
 (
@@ -543,13 +543,17 @@
     
     html, body
     {
-        overflow: hidden;
         height: 100%;
         width: 100%;
         margin-top: 0px;
         margin-left: 0px;
         background-color: white;
     }
+    
+    body {
+        overflow: hidden;
+    }
+
     #ruleset1 {
         position:relative;
         width: 100%;
@@ -632,6 +636,13 @@
     .dropdown a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none;}
 
     .show {display: block;}
+
+
+mark {
+  color: 0;/*transparent;*/
+  background-color: rgb(75,75,75);/*#d4e9ab; /* or whatever */
+}
+
 </style>
 </head>
 <body style="font-family: Arial, Helvetica, sans-serif;">
@@ -677,6 +688,10 @@
         <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; De Morgan's law - proof verifying</a>
         <a href="javascript:populate('exmpl-kk');">&nbsp;&nbsp;&nbsp; knights and knaves - sat solver</a>
         <a href="javascript:populate('exmpl-wgc');">&nbsp;&nbsp;&nbsp; wolf, goat, cabbage - planning</a>
+
+        <!--div class="droplbl"><hr/>unsorted</div>
+        <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
+        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a-->
     </div>
 </div>
                 </b>
@@ -685,10 +700,11 @@
             </tr>
             <tr height="100%">
              <!-- style="margin-top:-8px;"-->
-             <td class="exRound" id="in" valign="top">
-                <textarea id="input" spellcheck="false" wrap="off" style="outline: none; box-sizing: border-box; width: 100%; height:100%; resize: none; display: block; border-style: none; background-color: black; color: white; font: 8pt monospace; margin: 0; padding:5px;"></textarea>
+             <td class="exRound" id="in" valign="top" style="">
+                <div id="container" class="container" style="position: relative; width: 100%; height: 100%; overflow: auto;/*; max-height: 100%;*/">
+                </div>
                 <script>
-                    input1 = document.getElementById('input');
+                    var input1 = rwedit ("container");
                 </script>
              </td>
             </tr>
@@ -716,8 +732,8 @@
              </td>
             </tr>
             <tr height="100%">
-             <td class="exRound" id="in" style="border-radius: 0px 0px 15px 15px;">
-              <textarea readonly wrap="off" spellcheck="false" id="output" style="outline: none; box-sizing: border-box; width: 100%; height:100%; resize: none; display: block; border-style: none; background-color: black; color: white; font: 8pt monospace; border-radius: 0px 0px 14px 14px; margin: 0; padding:5px;"></textarea>
+             <td class="exRound" id="out" style="border-radius: 0px 0px 15px 15px;">
+              <textarea id="output" readonly wrap="off" spellcheck="false" id="output" style="outline: none; box-sizing: border-box; width: 100%; height:100%; resize: none; display: block; border-style: none; background-color: black; color: white; font: 8pt monospace; border-radius: 0px 0px 14px 14px; margin: 0; padding:5px;"></textarea>
                 <script>
                     output1 = document.getElementById('output');
                 </script>
@@ -802,20 +818,20 @@
     }
 
     function onkd () {
-        var c = getCoords (input1.value, input1.selectionStart)
+        var c = getCoords (input1.getValue (), input1.getSelectionStart ())
         document.getElementById("lblGrammarCaret").innerHTML = "(" + c.row + ", " + c.column + ")";
     }
     
     function populate (param) {
-        input1.value = document.getElementById(param).innerHTML;
+        input1.setValue (document.getElementById(param).innerHTML);
         output1.value = "";
         setTimeout(function() {
-            input1.selectionStart = 0;
-            input1.selectionEnd = 0;
+            input1.setSelectionStart (0);
+            input1.setSelectionEnd (0);
             output1.selectionStart = 0;
             output1.selectionEnd = 0;
             onkd ();
-            input1.focus();
+            input1.setFocus ();
         }, 0);
     }
     
@@ -851,12 +867,12 @@
     }
     
     function compile () {
-        output.value = "";
+        output1.value = "";
         setTimeout (function (){
-            var p = rewrite (input1.value, 10000);
+            var p = rewrite (input1.getValue (), 10000);
             if (p.err) {
-                var c = getCoords (input1.value, p.pos)
-                output.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
+                var c = getCoords (input1.getValue (), p.pos)
+                output1.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
             } else {
                 output1.value = stringify (p, "");
                 //output1.value = JSON.stringify (p, null, 4);
@@ -866,10 +882,12 @@
         }, 0);
     }
 
+    /*
     input1.addEventListener("keyup", onkd, false);
     input1.addEventListener("input", onkd, false);
     input1.addEventListener("mousedown", onkd, false);
     input1.addEventListener("mouseup", onkd, false);
+    */
 
     populate ('exmpl1');
 </script>
