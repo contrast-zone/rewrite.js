@@ -1,4 +1,4 @@
-var rwedit = function (node, options) {
+var edit = function (node, options) {
     "use strict";
     if (!options)
         options = {
@@ -238,7 +238,7 @@ var rwedit = function (node, options) {
             var i = c;
             while (i >= 0) {
                 i--;
-                if (input.value.substr (i, 1) === "\n") {
+                if (input.value.substr (i, 1) === "\n" || i === -1) {
                     var pre = "";
                     var j = i + 1;
                     while (j < c && j < input.value.length && " \t\v".indexOf (input.value.substr (j, 1)) > -1) {
@@ -264,12 +264,15 @@ var rwedit = function (node, options) {
                 }
             } else {
                 var lineStarts = [];
-                for (i = input.selectionStart - 1; i > -1; i--)
+                for (i = input.selectionStart - 1; i >= -1; i--)
                     if (input.value.charAt(i) === "\n") {
                         lineStarts.push (i + 1);
                         break;
                     }
-                
+                    
+                if (i = -1)
+                    lineStarts.push (0);
+                    
                 for (i = input.selectionStart; i < input.selectionEnd - 1; i++)
                     if (input.value.charAt(i) === "\n")
                         lineStarts.push (i + 1);
