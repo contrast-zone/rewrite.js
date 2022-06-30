@@ -3,6 +3,7 @@ var rwedit = function (node, options) {
     if (!options)
         options = {
             font: "8pt monospace",
+            tabWidth: 4,
             colorText: "rgb(208,208,208)",
             colorTextBack: "black",
             colorKeyword: "rgb(104,104,104)",
@@ -185,7 +186,7 @@ var rwedit = function (node, options) {
                 i--;
                 if (input.value.substr (i, 1) === "\n" || i === -1) {
                     i++
-                    var n = 4 - ((c - i) % 4);
+                    var n = options.tabWidth - ((c - i) % options.tabWidth);
 
                     document.execCommand("insertText", false, " ".repeat (n));
 
@@ -208,7 +209,7 @@ var rwedit = function (node, options) {
 
                     input.selectionStart = i;
 
-                    for (var j = 0; j < 4 && i + j < input.value.length; j++)
+                    for (var j = 0; j < options.tabWidth && i + j < input.value.length; j++)
                         if (" \t\v".indexOf (input.value.substr (i + j, 1)) === -1)
                             break;
                             
@@ -284,20 +285,43 @@ var rwedit = function (node, options) {
                     lineStarts.push (i);
                 }
 
-                for (var i = 0; i < lineStarts.length - 1; i++) {
-                    input.selectionStart = lineStarts[i];
-                    input.selectionEnd = input.selectionStart;
-                    if (e.shiftKey)
-                        var end = tabLeft (lineStarts[i]);
+                if (e.shiftKey) {
+                    var ins = "";
+                    for (var i = 0; i < lineStarts.length - 1; i++) {
+                        input.selectionStart = lineStarts[i];
+                        input.selectionEnd = lineStarts[i + 1];
+                        
+                        for (var j = 0; j < options.tabWidth && lineStarts[i] + j < input.value.length; j++)
+                            if (" \t\v".indexOf (input.value.substr (lineStarts[i] + j, 1)) === -1)
+                                break;
+                                
+                        ins += input.value.substring (input.selectionStart + j, input.selectionEnd)
+                    }
+
+                    input.selectionStart = lineStarts[0];
+                    input.selectionEnd = lineStarts[lineStarts.length - 1];
+
+                    document.execCommand("insertText", false, ins);
                     
-                    else
-                        var end = tabRight (lineStarts[i]);
+                    input.selectionStart = lineStarts[0];
+                    input.selectionEnd = lineStarts[0] + ins.length;
+                
+                } else {
+                    var ins = "";
+                    for (var i = 0; i < lineStarts.length - 1; i++) {
+                        input.selectionStart = lineStarts[i];
+                        input.selectionEnd = lineStarts[i + 1];
+                        ins += " ".repeat (options.tabWidth) + input.value.substring (input.selectionStart, input.selectionEnd)
+                    }
+
+                    input.selectionStart = lineStarts[0];
+                    input.selectionEnd = lineStarts[lineStarts.length - 1];
+
+                    document.execCommand("insertText", false, ins);
                     
-                    lineStarts[i + 1] = end;
+                    input.selectionStart = lineStarts[0];
+                    input.selectionEnd = lineStarts[0] + ins.length;
                 }
-                    
-                input.selectionStart = lineStarts[0];
-                input.selectionEnd = lineStarts[lineStarts.length - 1] - (farEnd? 0: 1);
             }
         }
     }
