@@ -12,7 +12,7 @@ var edit = function (node, options) {
             colorBracketMatchBack: "rgb(75,75,75)",
             colorStringAndComment: "rgb(128,128,128)",
             keywords: ["REWRITE", "READ", "WRITE", "VAR"],
-            stringsAndComments: "(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
+            stringsAndComments: "(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
         }
 
     var ww, hh;
@@ -22,12 +22,12 @@ var edit = function (node, options) {
     ed.innerHTML = 
 
     `
-    <div id="container${rndid}" style="position: relative; width: inherit; height: inherit;">
-      <div id="backdrop${rndid}" style = "width: inherit; height: inherit; overflow: hidden;">
-        <div id="hilights${rndid}" style="wrap: none; font: ${options.font}; padding:5px; white-space: pre; color: ${options.colorText}; background-color: ${options.colorTextBack}; width: inherit; height: inherit; overflow: hidden;">
+    <div id="container${rndid}" style="position: relative; width: inherit; height: inherit; overflow: auto;">
+      <div id="backdrop${rndid}" style = "z-index: 1; width: inherit; height: inherit; overflow: hidden;">
+        <div id="hilights${rndid}" style="wrap: none; font: ${options.font}; white-space: pre; color: ${options.colorText}; background-color: ${options.colorTextBack}; width: inherit; height: inherit; overflow: hidden; margin: 0; padding:5px;">
         </div>
       </div>
-      <textarea id="input${rndid}" spellcheck="false" wrap="off" style="width: inherit; height: inherit; border-radius: 0; outline: none; box-sizing: border-box; resize: none; display: block; border-style: none; /*background-color: black;*/ background-color: transparent; color: transparent; caret-color: white; font: ${options.font}; margin: 0; padding:5px; position: absolute; top: 0; left: 0; z-index: 0;">
+      <textarea id="input${rndid}" spellcheck="false" wrap="off" style="z-index: 0; width: inherit; height: inherit; border-style: none; border-radius: 0; outline: none; resize: none; box-sizing: border-box; display: block; background-color: transparent; color: transparent; caret-color: white; font: ${options.font}; margin: 0; padding:5px; position: absolute; top: 0; left: 0;">
       </textarea>
     </div>
     `
@@ -41,44 +41,31 @@ var edit = function (node, options) {
     container.style.height = "inherit";
     
     function hilightAll() {
-        const activeElement = document.activeElement
-        if (activeElement && activeElement.id === `input${rndid}`) {
-            var text = input.value;
+        var text = input.value;
 
-            text = prepareBraces (text, "(", ")");
-            text = prepareBraces (text, "[", "]");
-            text = prepareBraces (text, "{", "}");
-            
-            text = text
-            .replaceAll(/&/g, '&amp;')
-            .replaceAll(/</g, '&lt;')
-            .replaceAll(/>/g, '&gt;');
+        text = prepareBraces (text, "(", ")");
+        text = prepareBraces (text, "[", "]");
+        text = prepareBraces (text, "{", "}");
+        
+        text = text
+        .replaceAll(/&/g, '&amp;')
+        .replaceAll(/</g, '&lt;')
+        .replaceAll(/>/g, '&gt;');
 
-            text = hilightContents (text);
+        text = hilightContents (text);
 
-            text = hilightBraces (text, "(", ")");
-            text = hilightBraces (text, "[", "]");
-            text = hilightBraces (text, "{", "}");
-            
-            // scroll fix
-            text = text
-            .replace(/\n$/g, '<br/>')
-            .replace(/\n/g, '     <br/>');
+        text = hilightBraces (text, "(", ")");
+        text = hilightBraces (text, "[", "]");
+        text = hilightBraces (text, "{", "}");
+        
+        // scroll fix
+        text = text
+        .replace(/\n$/g, '<br/>')
+        .replace(/\n/g, '     <br/>');
 
-            text += "<br/><br/><br/><br/><br/> ";
+        text += "<br/><br/><br/><br/><br/> ";
 
-            hilights.innerHTML = text;
-
-            hilights.style.height = hh + "px";
-            backdrop.style.height = hh + "px";
-            container.style.height = hh + "px";
-            input.style.height = hh + "px";
-          
-            hilights.style.width = ww + "px";
-            backdrop.style.width = ww + "px";
-            container.style.width = ww + "px";
-            input.style.width = ww + "px";
-        }
+        hilights.innerHTML = text;
         
         handleScroll ();
     }
@@ -113,7 +100,7 @@ var edit = function (node, options) {
         var found, i1, i2;
         
         if (st === en) {
-            if ("({[".indexOf (text.substr(st, 1)) === -1 && "}])".indexOf (text.substr(st, 1)) === -1)
+            if (st === text.length || ("({[".indexOf (text.substr(st, 1)) === -1 && "}])".indexOf (text.substr(st, 1)) === -1))
                 st--;
               
             if (text.substr(st, 1) === open) {
@@ -247,6 +234,9 @@ var edit = function (node, options) {
                     }
                             
                     document.execCommand("insertText", false, '\n' + pre);
+                    input.blur ();
+                    input.focus ();
+
                     return;
                 }
             }
@@ -330,33 +320,57 @@ var edit = function (node, options) {
         }
     }
 
-    onresize = function () {
+    function handleResize () {
+        
         container.style.width = "0px";
         container.style.height = "0px";
         
         setTimeout (function () {
             hh = ed.clientHeight;
             ww = ed.clientWidth;
-            handleInput ();
+
+            /*
+            hilights.style.height = hh + "px";
+            backdrop.style.height = hh + "px";
+            input.style.height = hh + "px";
+            container.style.height = hh + "px";
+          
+            hilights.style.width = ww + "px";
+            backdrop.style.width = ww + "px";
+            input.style.width = ww + "px";
+            container.style.width = ww + "px";
+            */
+            container.style.height = hh + "px";
+            container.style.width = ww + "px";
         }, 0);
+        
     }
     
-    document.addEventListener('selectionchange', hilightAll);
+    function handleSelectionChange () {
+        const activeElement = document.activeElement
+        if (activeElement && activeElement.id === `input${rndid}`) {
+            hilightAll ();
+        }
+    }
+    
+    document.addEventListener('selectionchange', handleSelectionChange);
 
     input.addEventListener('input', handleInput);
 
     input.addEventListener('keydown', handleKeyPress);
 
-    input.onscroll = handleScroll;
+    input.addEventListener('scroll', handleScroll);
+
+    ed.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize);
 
     setTimeout (function () {
-        handleInput();
+        handleResize();
+        hilightAll ();
     }, 0);
-    
-    ed.addEventListener('resize', onresize);
-    
-    onresize();
-    
+            
+    input.value = "";
+
     return {
         getValue: function () {
             return input.value;

@@ -701,10 +701,15 @@ mark {
             <tr height="100%">
              <!-- style="margin-top:-8px;"-->
              <td class="exRound" id="in" valign="top" style="">
-                <div id="container" class="container" style="position: relative; width: 100%; height: 100%; overflow: auto;/*; max-height: 100%;*/">
+                <div id="container" class="container" style="position: relative; width: 100%; height: 100%;">
                 </div>
                 <script>
                     var input1 = edit ("container");
+
+                    document.getElementById('container').addEventListener('selectionchange', function(e) {
+                        var pos = getCoords(input1.getValue(), input1.getSelectionStart());
+                        document.getElementById('lblGrammarCaret').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;";
+                    });
                 </script>
              </td>
             </tr>
