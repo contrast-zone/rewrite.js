@@ -329,17 +329,6 @@ var edit = function (node, options) {
             hh = ed.clientHeight;
             ww = ed.clientWidth;
 
-            /*
-            hilights.style.height = hh + "px";
-            backdrop.style.height = hh + "px";
-            input.style.height = hh + "px";
-            container.style.height = hh + "px";
-          
-            hilights.style.width = ww + "px";
-            backdrop.style.width = ww + "px";
-            input.style.width = ww + "px";
-            container.style.width = ww + "px";
-            */
             container.style.height = hh + "px";
             container.style.width = ww + "px";
         }, 0);
@@ -377,6 +366,7 @@ var edit = function (node, options) {
         },
         setValue: function (value) {
             input.value = value;
+            hilightAll ();
         },
         getSelectionStart () {
             return input.selectionStart;
