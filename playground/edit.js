@@ -63,7 +63,7 @@ var edit = function (node, options) {
         .replace(/\n$/g, '<br/>')
         .replace(/\n/g, '     <br/>');
 
-        text += "<br/><br/><br/><br/><br/> ";
+        text += "     <br/><br/><br/><br/><br/> ";
 
         hilights.innerHTML = text;
         

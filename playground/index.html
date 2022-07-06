@@ -55,11 +55,11 @@
 (
     (
         REWRITE
-        ((READ <x>) (WRITE Venus))
-        ((READ <y>) (WRITE milk ))
+        ((READ x) (WRITE Venus))
+        ((READ y) (WRITE milk ))
     )
 
-    <x> likes <y>
+    x likes y
 )
 </script>
 
@@ -90,8 +90,8 @@
 (
     (
         REWRITE
-        ((READ <x>) (WRITE Nikki ))
-        ((READ <y>) (WRITE cheese))
+        ((READ x) (WRITE Nikki ))
+        ((READ y) (WRITE cheese))
         (
             (VAR <a>) (VAR <b>)
             (READ  l <a> <b>    )
@@ -99,7 +99,7 @@
         )
     )
     
-    l <x> <y>
+    l x y
 )
 </script>
 
@@ -148,46 +148,25 @@
         REWRITE
         
         // AND
-        (
-            (READ  true && true)
-            (WRITE true)
-        ) (
-            (READ  true && false)
-            (WRITE false)
-        ) (
-            (READ  false && true)
-            (WRITE false)
-        ) (
-            (READ  false && false)
-            (WRITE false)
-        )
+        ((READ  true && true ) (WRITE true ))
+        ((READ  true && false) (WRITE false))
+        ((READ false && true ) (WRITE false))
+        ((READ false && false) (WRITE false))
         
         // OR
-        (
-            (READ  true || true)
-            (WRITE true)
-        ) (
-            (READ  true || false)
-            (WRITE true)
-        ) (
-            (READ  false || true)
-            (WRITE true)
-        ) (
-            (READ  false || false)
-            (WRITE false)
-        )
+        ((READ  true || true ) (WRITE true ))
+        ((READ  true || false) (WRITE true ))
+        ((READ false || true ) (WRITE true ))
+        ((READ false || false) (WRITE false))
         
         // NOT
-        (
-            (READ  ! true)
-            (WRITE false)
-        ) (
-            (READ  ! false)
-            (WRITE true)
-        )
+        ((READ ! true) (WRITE false))
+        ((READ ! false) (WRITE true))
     )
 
-    !((false && true) || false)
+    (true && false)
+    (!((false && true) || false))
+    (false || true && (! false))
 )
 </script>
 
@@ -258,13 +237,13 @@
     */
     
     // elaborating F1 (A /\ B) -> (~ ((~ A) \/ (~ B)))
-    (1 f 1) (2 f 2) (3 f 3) (4 f 4) (5 f 5) (6 f 6) (7 f 7) (8 f 8) (9 f 9) (10 f 10) (F1 f F1)
+    ("### formula set 1 ###" (#1 f 1) (#2 f 2) (#3 f 3) (#4 f 4) (#5 f 5) (#6 f 6) (#7 f 7) (#8 f 8) (#9 f 9) (#10 f 10) (#F1 f F1))
     
     // elaborating F2 (~ (~A \/ ~B)) -> (A /\ B)
-    (11 f 11) (12 f 12) (13 f 13) (14 f 14) (15 f 15) (16 f 16) (17 f 17) (18 f 18) (19 f 19) (20 f 20) (F2 f F2)
+    ("### formula set 2 ###" (#11 f 11) (#12 f 12) (#13 f 13) (#14 f 14) (#15 f 15) (#16 f 16) (#17 f 17) (#18 f 18) (#19 f 19) (#20 f 20) (F2 f F2))
     
     // deriving QED (A /\ B) <-> (~ ((~ A) \/ (~ B)))
-    (QED f QED)
+    ("### final formula ###" (#QED f QED))
 )
 </script>
 
@@ -277,44 +256,21 @@
     (
         REWRITE
         
-        // AND
-        (
-            (READ  true /\ true)
-            (WRITE true)
-        ) (
-            (READ  true /\ false)
-            (WRITE false)
-        ) (
-            (READ  false /\ true)
-            (WRITE false)
-        ) (
-            (READ  false /\ false)
-            (WRITE false)
-        )
+        // logical and connective
+        ((READ  true /\ true ) (WRITE true ))
+        ((READ  true /\ false) (WRITE false))
+        ((READ false /\ true ) (WRITE false))
+        ((READ false /\ false) (WRITE false))
         
-        // OR
-        (
-            (READ  true \/ true)
-            (WRITE true)
-        ) (
-            (READ  true \/ false)
-            (WRITE true)
-        ) (
-            (READ  false \/ true)
-            (WRITE true)
-        ) (
-            (READ  false \/ false)
-            (WRITE false)
-        )
+        // logical or connective
+        ((READ  true \/ true ) (WRITE true ))
+        ((READ  true \/ false) (WRITE true ))
+        ((READ false \/ true ) (WRITE true ))
+        ((READ false \/ false) (WRITE false))
         
-        // NOT
-        (
-            (READ  ~ true)
-            (WRITE false)
-        ) (
-            (READ  ~ false)
-            (WRITE true)
-        )
+        // logical not connective
+        ((READ ~ true ) (WRITE false))
+        ((READ ~ false) (WRITE true ))
         
         // build the truth table
         (
@@ -382,8 +338,8 @@
         )
 
 
-        ((READ personality true) (WRITE Knight))
-        ((READ personality false) (WRITE Knave))
+        ((READ personality true ) (WRITE Knight))
+        ((READ personality false) (WRITE Knave ))
     )
 
     (
@@ -685,9 +641,9 @@ mark {
         <a href="javascript:populate('exmpl-bool');">&nbsp;&nbsp;&nbsp; Boolean calculator</a>
 
         <div class="droplbl"><hr/>advanced</div>
-        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; De Morgan's law - proof verifying</a>
-        <a href="javascript:populate('exmpl-kk');">&nbsp;&nbsp;&nbsp; knights and knaves - sat solver</a>
-        <a href="javascript:populate('exmpl-wgc');">&nbsp;&nbsp;&nbsp; wolf, goat, cabbage - planning</a>
+        <a href="javascript:populate('exmpl-proof');">&nbsp;&nbsp;&nbsp; proof verifying: De Morgan's law</a>
+        <a href="javascript:populate('exmpl-kk');">&nbsp;&nbsp;&nbsp; sat solver: knights and knaves</a>
+        <a href="javascript:populate('exmpl-wgc');">&nbsp;&nbsp;&nbsp; planning: wolf, goat, cabbage</a>
 
         <!--div class="droplbl"><hr/>unsorted</div>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
