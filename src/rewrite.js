@@ -254,34 +254,40 @@ var rewrite = (
         
         var makeRules = function (node) {
             var vars, tmprwrt, tmpvar, thisrwrt = [];
-
+            
             if (Array.isArray (node)) {
                 if (Array.isArray (node[0]) && node[0][0] === "REWRITE") {
                     tmprwrt = node[0][1];
-                    //while (tmprwrt[0][0][0] === "VAR" || tmprwrt[0][0][0] === "READ") {
                     while (tmprwrt[0][0][0] === "VAR" || tmprwrt[0][0] === "RULE") {
-                        tmpvar = tmprwrt[0];
-                        vars = [];
-                        while (tmpvar[0][0] === "VAR") {
-                            vars.push (tmpvar[0][1]);
-                            tmpvar = tmpvar[1];
-                        }
-                        
-                        if (tmpvar[0] === "RULE")
-                            thisrwrt.push ([vars, tmpvar[1]]);
+                        if (tmprwrt[0][0][0] === "VAR") {
+                            tmpvar = tmprwrt[0][0];
+                            vars = [];
+                            while (tmpvar[1]) {
+                                vars.push ([tmpvar[1][0], null]);
+                                tmpvar = tmpvar[1];
+                            }
+
+                            thisrwrt.push ([vars, tmprwrt[0][1][1]]);
+
+                        } else
+                            thisrwrt.push ([[], tmprwrt[0][1]]);
 
                         tmprwrt = tmprwrt[1];
                     }
+                    
+                    if (tmprwrt[0][0] === "VAR") {
+                        tmpvar = tmprwrt[0];
+                        vars = [];
+                        while (tmpvar[1]) {
+                            vars.push ([tmpvar[1][0], null]);
+                            tmpvar = tmpvar[1];
+                        }
 
-                    tmpvar = tmprwrt;
-                    vars = [];
-                    while (tmpvar[0][0] === "VAR") {
-                        vars.push (tmpvar[0][1]);
-                        tmpvar = tmpvar[1];
-                    }
+                        thisrwrt.push ([vars, tmprwrt[1][1]]);
 
-                    if (tmpvar[0] === "RULE")
-                        thisrwrt.push ([vars, tmpvar[1]]);
+                    } else
+                        thisrwrt.push ([[], tmprwrt[1]]);
+                    
                 }
             }
 

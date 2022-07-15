@@ -72,7 +72,7 @@
     (
         REWRITE
         (
-            (VAR <a>) (VAR <b>)
+            (VAR <a> <b>)
             (RULE (READ l <a> <b>) (WRITE <a> likes <b>))
         )
     )
@@ -92,8 +92,8 @@
         (RULE (READ x) (WRITE Nikki ))
         (RULE (READ y) (WRITE cheese))
         (
-            (VAR <a>) (VAR <b>)
-            (RULE (READ  l <a> <b>) (WRITE <a> likes <b>))
+            (VAR <a> <b>)
+            (RULE (READ l <a> <b>) (WRITE <a> likes <b>))
         )
     )
     
@@ -113,7 +113,7 @@
             (VAR <x>)
             (RULE (READ <x> == <x>) (WRITE true ))
         ) (
-            (VAR <x>) (VAR <y>)
+            (VAR <x> <y>)
             (RULE (READ <x> == <y>) (WRITE false))
         )
     )
@@ -134,10 +134,10 @@
     (
         REWRITE
         (
-            (VAR <x>) (VAR <y>)
+            (VAR <x> <y>)
             (RULE (READ if true then <x> else <y> ) (WRITE <x>))
         ) (
-            (VAR <x>) (VAR <y>)
+            (VAR <x> <y>)
             (RULE (READ if false then <x> else <y>) (WRITE <y>))
         )
     )
@@ -188,21 +188,21 @@
         REWRITE
         
         // logic rules
-        ((VAR a) (VAR b) (RULE (READ                                 [/\Intro] a b) (WRITE a /\ b )))
-        ((VAR a) (VAR b) (RULE (READ                              [/\Elim1] a /\ b) (WRITE a      )))
-        ((VAR a) (VAR b) (RULE (READ                              [/\Elim2] a /\ b) (WRITE b      )))
-        ((VAR a) (VAR b) (RULE (READ                                  [\/Intro1] a) (WRITE a \/ b )))
-        ((VAR a) (VAR b) (RULE (READ                                  [\/Intro2] b) (WRITE a \/ b )))
-        ((VAR a) (VAR b) (RULE (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  )))
-        ((VAR a) (VAR b) (RULE (READ                             [->Intro] a ... b) (WRITE a -> b )))
-        ((VAR a) (VAR b) (RULE (READ                           [->Elim] (a -> b) a) (WRITE b      )))
-        ((VAR a) (VAR b) (RULE (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b)))
-        ((VAR a) (VAR b) (RULE (READ                        [<->Elim1] (a <-> b) a) (WRITE b      )))
-        ((VAR a) (VAR b) (RULE (READ                        [<->Elim2] (a <-> b) b) (WRITE a      )))
-        (        (VAR a) (RULE (READ                          [~Intro] a ... False) (WRITE ~ a    )))
-        (        (VAR a) (RULE (READ                               [~Elim] (~ a) a) (WRITE False  )))
-        (        (VAR a) (RULE (READ                                     [X] False) (WRITE a      )))
-        (        (VAR a) (RULE (READ                          [IP] (~ a) ... False) (WRITE a      )))
+        ((VAR a b) (RULE (READ                                 [/\Intro] a b) (WRITE a /\ b )))
+        ((VAR a b) (RULE (READ                              [/\Elim1] a /\ b) (WRITE a      )))
+        ((VAR a b) (RULE (READ                              [/\Elim2] a /\ b) (WRITE b      )))
+        ((VAR a b) (RULE (READ                                  [\/Intro1] a) (WRITE a \/ b )))
+        ((VAR a b) (RULE (READ                                  [\/Intro2] b) (WRITE a \/ b )))
+        ((VAR a b) (RULE (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  )))
+        ((VAR a b) (RULE (READ                             [->Intro] a ... b) (WRITE a -> b )))
+        ((VAR a b) (RULE (READ                           [->Elim] (a -> b) a) (WRITE b      )))
+        ((VAR a b) (RULE (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b)))
+        ((VAR a b) (RULE (READ                        [<->Elim1] (a <-> b) a) (WRITE b      )))
+        ((VAR a b) (RULE (READ                        [<->Elim2] (a <-> b) b) (WRITE a      )))
+        (  (VAR a) (RULE (READ                          [~Intro] a ... False) (WRITE ~ a    )))
+        (  (VAR a) (RULE (READ                               [~Elim] (~ a) a) (WRITE False  )))
+        (  (VAR a) (RULE (READ                                     [X] False) (WRITE a      )))
+        (  (VAR a) (RULE (READ                          [IP] (~ a) ... False) (WRITE a      )))
     
         ((VAR a) (RULE (READ [Assume] a) (WRITE a)))
 
@@ -282,7 +282,7 @@
         
         // build the truth table
         (
-            (VAR <a>) (VAR <b>)
+            (VAR <a> <b>)
             (
                 RULE
                 (
@@ -328,35 +328,35 @@
         
         // deduce consistency
         (
-            (VAR b) (VAR c) (VAR d) (VAR x) (VAR y)
+            (VAR b c d x y)
             (
                 RULE
                 (READ  TruthTable (row x y x y) b c d)
                 (WRITE (A is personality x) (B is personality y))
             )
         ) (
-            (VAR a) (VAR c) (VAR d) (VAR x) (VAR y)
+            (VAR a c d x y)
             (
                 RULE
                 (READ  TruthTable a (row x y x y) c d)
                 (WRITE (A is personality x) (B is personality y))
             )
         ) (
-            (VAR a) (VAR b) (VAR d) (VAR x) (VAR y)
+            (VAR a b d x y)
             (
                 RULE
                 (READ  TruthTable a b (row x y x y) d)
                 (WRITE (A is personality x) (B is personality y))
             )
         ) (
-            (VAR a) (VAR b) (VAR c) (VAR x) (VAR y)
+            (VAR a b c x y)
             (
                 RULE
                 (READ  TruthTable a b c (row x y x y))
                 (WRITE (A is personality x) (B is personality y))
             )
         ) (
-            (VAR a) (VAR b) (VAR c) (VAR d)
+            (VAR a b c d)
             (
                 RULE
                 (READ  TruthTable a b c d)
@@ -395,27 +395,27 @@
         ((VAR x) (RULE (READ states x (e e e e)) (WRITE states x succ)))
 
         // failures
-        ((VAR a) (VAR x) (RULE (READ states x (w e e a)) (WRITE states x fail)))
-        ((VAR a) (VAR x) (RULE (READ states x (w a e e)) (WRITE states x fail)))
-        ((VAR a) (VAR x) (RULE (READ states x (e w w a)) (WRITE states x fail)))
-        ((VAR a) (VAR x) (RULE (READ states x (e a w w)) (WRITE states x fail)))
+        ((VAR a x) (RULE (READ states x (w e e a)) (WRITE states x fail)))
+        ((VAR a x) (RULE (READ states x (w a e e)) (WRITE states x fail)))
+        ((VAR a x) (RULE (READ states x (e w w a)) (WRITE states x fail)))
+        ((VAR a x) (RULE (READ states x (e a w w)) (WRITE states x fail)))
 
         // avoid repeating
-        ((VAR x) (VAR y) (RULE (READ (move wolf) (steps x wolf) (states y)) (WRITE (move goat) (steps x wolf) (states y))))
-        ((VAR x) (VAR y) (RULE (READ (move goat) (steps x goat) (states y)) (WRITE (move cabb) (steps x goat) (states y))))
-        ((VAR x) (VAR y) (RULE (READ (move cabb) (steps x cabb) (states y)) (WRITE (move noth) (steps x cabb) (states y))))
-        ((VAR x) (VAR y) (RULE (READ (move noth) (steps x noth) (states y)) (WRITE (move wolf) (steps x noth) (states y))))
+        ((VAR x y) (RULE (READ (move wolf) (steps x wolf) (states y)) (WRITE (move goat) (steps x wolf) (states y))))
+        ((VAR x y) (RULE (READ (move goat) (steps x goat) (states y)) (WRITE (move cabb) (steps x goat) (states y))))
+        ((VAR x y) (RULE (READ (move cabb) (steps x cabb) (states y)) (WRITE (move noth) (steps x cabb) (states y))))
+        ((VAR x y) (RULE (READ (move noth) (steps x noth) (states y)) (WRITE (move wolf) (steps x noth) (states y))))
 
         // move to east/west
-        (        (VAR a) (VAR b) (VAR f) (VAR x) (VAR y) (RULE (READ (move wolf) (steps x) (states y (f f a b))) (WRITE (steps (x wolf)) (states ((y (f f a b)) ((flip f) (flip f) a b))))))
-        (        (VAR a) (VAR b) (VAR f) (VAR x) (VAR y) (RULE (READ (move goat) (steps x) (states y (f a f b))) (WRITE (steps (x goat)) (states ((y (f a f b)) ((flip f) a (flip f) b))))))
-        (        (VAR a) (VAR b) (VAR f) (VAR x) (VAR y) (RULE (READ (move cabb) (steps x) (states y (f a b f))) (WRITE (steps (x cabb)) (states ((y (f a b f)) ((flip f) a b (flip f)))))))
-        ((VAR a) (VAR b) (VAR c) (VAR f) (VAR x) (VAR y) (RULE (READ (move noth) (steps x) (states y (f a b c))) (WRITE (steps (x noth)) (states ((y (f a b c)) ((flip f) a b c))))))
+        (  (VAR a b f x y) (RULE (READ (move wolf) (steps x) (states y (f f a b))) (WRITE (steps (x wolf)) (states ((y (f f a b)) ((flip f) (flip f) a b))))))
+        (  (VAR a b f x y) (RULE (READ (move goat) (steps x) (states y (f a f b))) (WRITE (steps (x goat)) (states ((y (f a f b)) ((flip f) a (flip f) b))))))
+        (  (VAR a b f x y) (RULE (READ (move cabb) (steps x) (states y (f a b f))) (WRITE (steps (x cabb)) (states ((y (f a b f)) ((flip f) a b (flip f)))))))
+        ((VAR a b c f x y) (RULE (READ (move noth) (steps x) (states y (f a b c))) (WRITE (steps (x noth)) (states ((y (f a b c)) ((flip f) a b c))))))
         
         // fall down to valid moves
-        ((VAR x) (VAR y) (RULE (READ (move wolf) (steps x) (states y)) (WRITE (move goat) (steps x) (states y))))
-        ((VAR x) (VAR y) (RULE (READ (move goat) (steps x) (states y)) (WRITE (move cabb) (steps x) (states y))))
-        ((VAR x) (VAR y) (RULE (READ (move cabb) (steps x) (states y)) (WRITE (move noth) (steps x) (states y))))
+        ((VAR x y) (RULE (READ (move wolf) (steps x) (states y)) (WRITE (move goat) (steps x) (states y))))
+        ((VAR x y) (RULE (READ (move goat) (steps x) (states y)) (WRITE (move cabb) (steps x) (states y))))
+        ((VAR x y) (RULE (READ (move cabb) (steps x) (states y)) (WRITE (move noth) (steps x) (states y))))
 
         // vertical loop progression
         (RULE (READ progress wolf) (WRITE goat))
@@ -425,28 +425,28 @@
 
         // search for move steps
         (
-            (VAR r) (VAR x) (VAR y) (VAR a) (VAR b)
+            (VAR r x y a b)
             (
                 RULE
                 (READ  loop (1 r) ((steps x y) (states a b)))
                 (WRITE loop (r) ((steps x y) (states a fail)))
             )
         ) (
-            (VAR r) (VAR x) (VAR y) (VAR a) (VAR b)
+            (VAR r x y a b)
             (
                 RULE
                 (READ  loop r ((steps x y) (states a succ)))
                 (WRITE solution: x y)
             )
         ) (
-            (VAR r) (VAR x) (VAR y) (VAR a) (VAR b)
+            (VAR r x y a b)
             (
                 RULE
                 (READ  loop r ((steps x y) (states a fail)))
                 (WRITE loop r ((move (progress y)) (steps x) (states a)))
             )
         ) (
-            (VAR r) (VAR x) (VAR y) (VAR a) (VAR b)
+            (VAR r x y a b)
             (
                 RULE
                 (READ  loop r ((steps x y) (states a b)))
@@ -469,28 +469,28 @@
         REWRITE
         
         // both numbers single digits
-        (                    (READ +       0       0) (WRITE                   0))
-        (                    (READ +       0       1) (WRITE                   1))
-        (                    (READ +       1       0) (WRITE                   1))
-        (                    (READ +       1       1) (WRITE                 1 0))
+        (              (RULE (READ +       0       0) (WRITE                   0)))
+        (              (RULE (READ +       0       1) (WRITE                   1)))
+        (              (RULE (READ +       1       0) (WRITE                   1)))
+        (              (RULE (READ +       1       1) (WRITE                 1 0)))
         
         // first number multiple digits, second number single digit
-        (          (VAR <a>) (READ + (<a> 0)       0) (WRITE               <a> 0))
-        (          (VAR <a>) (READ + (<a> 0)       1) (WRITE               <a> 1))
-        (          (VAR <a>) (READ + (<a> 1)       0) (WRITE               <a> 1))
-        (          (VAR <a>) (READ + (<a> 1)       1) (WRITE         (+ 1 <a>) 0))
+        (    (VAR <a>) (RULE (READ + (<a> 0)       0) (WRITE               <a> 0)))
+        (    (VAR <a>) (RULE (READ + (<a> 0)       1) (WRITE               <a> 1)))
+        (    (VAR <a>) (RULE (READ + (<a> 1)       0) (WRITE               <a> 1)))
+        (    (VAR <a>) (RULE (READ + (<a> 1)       1) (WRITE         (+ 1 <a>) 0)))
         
         // first number single digit, second number multiple digits
-        (          (VAR <b>) (READ +       0 (<b> 0)) (WRITE               <b> 0))
-        (          (VAR <b>) (READ +       0 (<b> 1)) (WRITE               <b> 1))
-        (          (VAR <b>) (READ +       1 (<b> 0)) (WRITE               <b> 1))
-        (          (VAR <b>) (READ +       1 (<b> 1)) (WRITE         (+ 1 <b>) 0))
+        (    (VAR <b>) (RULE (READ +       0 (<b> 0)) (WRITE               <b> 0)))
+        (    (VAR <b>) (RULE (READ +       0 (<b> 1)) (WRITE               <b> 1)))
+        (    (VAR <b>) (RULE (READ +       1 (<b> 0)) (WRITE               <b> 1)))
+        (    (VAR <b>) (RULE (READ +       1 (<b> 1)) (WRITE         (+ 1 <b>) 0)))
         
         // both numbers multiple digits
-        ((VAR <a>) (VAR <b>) (READ + (<a> 0) (<b> 0)) (WRITE       (+ <a> <b>) 0))
-        ((VAR <a>) (VAR <b>) (READ + (<a> 0) (<b> 1)) (WRITE       (+ <a> <b>) 1))
-        ((VAR <a>) (VAR <b>) (READ + (<a> 1) (<b> 0)) (WRITE       (+ <a> <b>) 1))
-        ((VAR <a>) (VAR <b>) (READ + (<a> 1) (<b> 1)) (WRITE (+ 1 (+ <a> <b>)) 0))
+        ((VAR <a> <b>) (RULE (READ + (<a> 0) (<b> 0)) (WRITE       (+ <a> <b>) 0)))
+        ((VAR <a> <b>) (RULE (READ + (<a> 0) (<b> 1)) (WRITE       (+ <a> <b>) 1)))
+        ((VAR <a> <b>) (RULE (READ + (<a> 1) (<b> 0)) (WRITE       (+ <a> <b>) 1)))
+        ((VAR <a> <b>) (RULE (READ + (<a> 1) (<b> 1)) (WRITE (+ 1 (+ <a> <b>)) 0)))
     )
 
     +
@@ -508,20 +508,26 @@
     (
         REWRITE
         (
-            (VAR <a>) (VAR <b>)
-            (READ <a> -> <b>)
-            (WRITE
-                REWRITE
-                (
-                    (VAR a) (VAR b) (VAR c) (VAR d) (VAR e)
-                    (READ  <a>)
-                    (WRITE <b>)
+            (VAR <a> <b>)
+            (
+                RULE
+                (READ <a> -> <b>)
+                (WRITE
+                    REWRITE
+                    (
+                        (VAR a b c d e)
+                        (
+                            RULE
+                            (READ  <a>)
+                            (WRITE <b>)
+                        )
+                    )
                 )
             )
         )
     )
 
-    ((a + a) -> (2 * a))
+    ((b + b) -> (2 * b))
     ((a * a) -> (a ^ 2))
     
     (x + x) * (x + x)
