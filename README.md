@@ -20,25 +20,25 @@ To try *Rewrite* within browser, please refer to [Rewrite Playground](https://co
 
 ## 1. introductory examples
 
-*Rewrite* is designed as a creation with only one built-in construct: rewriting rules. *Rewrite* brings only four keywords for declaring rewriting rules: `REWRITE`, `READ`, `WRITE`, and `VAR`. Rules are declared and applied by the following patern:
+*Rewrite* is designed as a creation with only one built-in construct: rewriting rules. *Rewrite* brings only five keywords for declaring rewriting rules: `REWRITE`, `RULE`, `READ`, `WRITE`, and `VAR`. Rules are declared and applied by the following patern:
 
     (
         (
             REWRITE
-            ((READ ...) (WRITE ...))
-            ((READ ...) (WRITE ...))
+            (RULE (READ ...) (WRITE ...))
+            (RULE (READ ...) (WRITE ...))
             ...
         )
         
         ...s-expression which rules operate on...
     )
 
-`REWRITE` keyword declares a list of rules. `READ` keyword declares s-expression match for triggering rule rewriting. `WRITE` keyword declares s-expression replacement in rule rewriting. This is called *reduction*, even if it sometimes looks more like expansion than like reduction. For example, code:
+`REWRITE` keyword declares a list of rules. `RULE` keyword announces a rule. `READ` keyword declares s-expression match for triggering rule rewriting. `WRITE` keyword declares s-expression replacement in rule rewriting. This is called *reduction*, even if it sometimes looks more like expansion than like reduction. For example, code:
 
     (
         (
             REWRITE
-            ((READ greet) (WRITE hello world))
+            (RULE (READ greet) (WRITE hello world))
         )
         
         greet
@@ -48,12 +48,12 @@ evaluates to:
 
     (hello world)
 
-We may also want to use rule variables, which we assert as a list of `VAR` tagged elements before `READ` and `WRITE` tagged elements. For example, code:
+We may also want to use rule variables, which we assert as a list of `VAR` tagged elements before `RULE` tagged element. For example, code:
 
     (
         (
             REWRITE
-            ((VAR <x>) (READ greet <x>) (WRITE hello <x>))
+            ((VAR <x>) (RULE (READ greet <x>) (WRITE hello <x>)))
         )
         
         greet world

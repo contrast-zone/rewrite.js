@@ -10,3 +10,6 @@
 - vars unbound in READ tag stand for undefined expression in WRITE tag
 - finalizing zeroth production version
 - a decent editor with syntax hilighting for playground
+
+**July, 2022**
+- added RULE keyword

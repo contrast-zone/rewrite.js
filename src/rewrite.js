@@ -258,7 +258,8 @@ var rewrite = (
             if (Array.isArray (node)) {
                 if (Array.isArray (node[0]) && node[0][0] === "REWRITE") {
                     tmprwrt = node[0][1];
-                    while (tmprwrt[0][0][0] === "VAR" || tmprwrt[0][0][0] === "READ") {
+                    //while (tmprwrt[0][0][0] === "VAR" || tmprwrt[0][0][0] === "READ") {
+                    while (tmprwrt[0][0][0] === "VAR" || tmprwrt[0][0] === "RULE") {
                         tmpvar = tmprwrt[0];
                         vars = [];
                         while (tmpvar[0][0] === "VAR") {
@@ -266,7 +267,9 @@ var rewrite = (
                             tmpvar = tmpvar[1];
                         }
                         
-                        thisrwrt.push ([vars, tmpvar]);
+                        if (tmpvar[0] === "RULE")
+                            thisrwrt.push ([vars, tmpvar[1]]);
+
                         tmprwrt = tmprwrt[1];
                     }
 
@@ -276,9 +279,9 @@ var rewrite = (
                         vars.push (tmpvar[0][1]);
                         tmpvar = tmpvar[1];
                     }
-                    
-                    if (tmpvar[0][0] === "READ")
-                        thisrwrt.push ([vars, tmpvar]);
+
+                    if (tmpvar[0] === "RULE")
+                        thisrwrt.push ([vars, tmpvar[1]]);
                 }
             }
 
