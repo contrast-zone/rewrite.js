@@ -253,45 +253,38 @@ var rewrite = (
         }
         
         var makeRules = function (node) {
-            var vars, tmprwrt, tmpvar, thisrwrt = [];
+            var tmprwrt, thisrwrt = [];
             
             if (Array.isArray (node)) {
                 if (Array.isArray (node[0]) && node[0][0] === "REWRITE") {
                     tmprwrt = node[0][1];
                     while (tmprwrt[0][0][0] === "VAR" || tmprwrt[0][0] === "RULE") {
-                        if (tmprwrt[0][0][0] === "VAR") {
-                            tmpvar = tmprwrt[0][0];
-                            vars = [];
-                            while (tmpvar[1]) {
-                                vars.push ([tmpvar[1][0], null]);
-                                tmpvar = tmpvar[1];
-                            }
-
-                            thisrwrt.push ([vars, tmprwrt[0][1][1]]);
-
-                        } else
-                            thisrwrt.push ([[], tmprwrt[0][1]]);
-
+                        thisrwrt.push (makeRule (tmprwrt[0]));
                         tmprwrt = tmprwrt[1];
                     }
                     
-                    if (tmprwrt[0][0] === "VAR") {
-                        tmpvar = tmprwrt[0];
-                        vars = [];
-                        while (tmpvar[1]) {
-                            vars.push ([tmpvar[1][0], null]);
-                            tmpvar = tmpvar[1];
-                        }
-
-                        thisrwrt.push ([vars, tmprwrt[1][1]]);
-
-                    } else
-                        thisrwrt.push ([[], tmprwrt[1]]);
-                    
+                    thisrwrt.push (makeRule (tmprwrt));
                 }
             }
 
             return thisrwrt;
+        }
+        
+        var makeRule = function (node, thisrwrt) {
+            var vars, tmpvar;
+
+            if (node[0][0] === "VAR") {
+                tmpvar = node[0];
+                vars = [];
+                while (tmpvar[1]) {
+                    vars.push ([tmpvar[1][0], null]);
+                    tmpvar = tmpvar[1];
+                }
+
+                return [vars, node[1][1]];
+
+            } else
+                return [[], node[1]];
         }
 
         var applyRules = function (node, rwrt) {
