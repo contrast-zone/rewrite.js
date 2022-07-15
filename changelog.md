@@ -13,4 +13,4 @@
 
 **July, 2022**
 - added RULE keyword
-- all vars under the same VAR keyword
+- all vars go under the same VAR keyword
