@@ -509,36 +509,37 @@
         REWRITE
         
         // both numbers single digits
-        (              (RULE (READ >       0       0) (WRITE             false)))
-        (              (RULE (READ >       0       1) (WRITE             false)))
-        (              (RULE (READ >       1       0) (WRITE             true )))
-        (              (RULE (READ >       1       1) (WRITE             false)))
+        (              (RULE (READ compare       0       0) (WRITE             eq)))
+        (              (RULE (READ compare       0       1) (WRITE             lt)))
+        (              (RULE (READ compare       1       0) (WRITE             gt)))
+        (              (RULE (READ compare       1       1) (WRITE             eq)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (RULE (READ > (<a> 0)       0) (WRITE (> <a>   0) false)))
-        (    (VAR <a>) (RULE (READ > (<a> 0)       1) (WRITE (> <a>   0) false)))
-        (    (VAR <a>) (RULE (READ > (<a> 1)       0) (WRITE (> <a>   0) true )))
-        (    (VAR <a>) (RULE (READ > (<a> 1)       1) (WRITE (> <a>   0) false)))
+        (    (VAR <a>) (RULE (READ compare (<a> 0)       0) (WRITE (compare <a>   0) eq)))
+        (    (VAR <a>) (RULE (READ compare (<a> 0)       1) (WRITE (compare <a>   0) lt)))
+        (    (VAR <a>) (RULE (READ compare (<a> 1)       0) (WRITE (compare <a>   0) gt)))
+        (    (VAR <a>) (RULE (READ compare (<a> 1)       1) (WRITE (compare <a>   0) eq)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (RULE (READ >       0 (<b> 0)) (WRITE (>   0 <b>) false)))
-        (    (VAR <b>) (RULE (READ >       0 (<b> 1)) (WRITE (>   0 <b>) false)))
-        (    (VAR <b>) (RULE (READ >       1 (<b> 0)) (WRITE (>   0 <b>) true )))
-        (    (VAR <b>) (RULE (READ >       1 (<b> 1)) (WRITE (>   0 <b>) false)))
+        (    (VAR <b>) (RULE (READ compare       0 (<b> 0)) (WRITE (compare   0 <b>) eq)))
+        (    (VAR <b>) (RULE (READ compare       0 (<b> 1)) (WRITE (compare   0 <b>) lt)))
+        (    (VAR <b>) (RULE (READ compare       1 (<b> 0)) (WRITE (compare   0 <b>) gt)))
+        (    (VAR <b>) (RULE (READ compare       1 (<b> 1)) (WRITE (compare   0 <b>) eq)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (RULE (READ > (<a> 0) (<b> 0)) (WRITE (> <a> <b>) false)))
-        ((VAR <a> <b>) (RULE (READ > (<a> 0) (<b> 1)) (WRITE (> <a> <b>) false)))
-        ((VAR <a> <b>) (RULE (READ > (<a> 1) (<b> 0)) (WRITE (> <a> <b>) true )))
-        ((VAR <a> <b>) (RULE (READ > (<a> 1) (<b> 1)) (WRITE (> <a> <b>) false)))
+        ((VAR <a> <b>) (RULE (READ compare (<a> 0) (<b> 0)) (WRITE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (RULE (READ compare (<a> 0) (<b> 1)) (WRITE (compare <a> <b>) lt)))
+        ((VAR <a> <b>) (RULE (READ compare (<a> 1) (<b> 0)) (WRITE (compare <a> <b>) gt)))
+        ((VAR <a> <b>) (RULE (READ compare (<a> 1) (<b> 1)) (WRITE (compare <a> <b>) eq)))
         
         // reduce to final value
-        ((VAR <x>) (RULE (READ false <x>) (WRITE <x>)))
-        ((VAR <x>) (RULE (READ  true <x>) (WRITE true)))
+        ((VAR <x>) (RULE (READ gt <x>) (WRITE gt )))
+        ((VAR <x>) (RULE (READ lt <x>) (WRITE lt )))
+        ((VAR <x>) (RULE (READ eq <x>) (WRITE <x>)))
     )
 
-    >
-    (((1 1) 0) 0)
+    compare
+    (((1 1) 0) 1)
     (((0 1) 0) 1)
 )
 </script>
