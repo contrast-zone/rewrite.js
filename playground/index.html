@@ -469,31 +469,31 @@
         REWRITE
         
         // both numbers single digits
-        (              (RULE (READ +       0       0) (WRITE                   0)))
-        (              (RULE (READ +       0       1) (WRITE                   1)))
-        (              (RULE (READ +       1       0) (WRITE                   1)))
-        (              (RULE (READ +       1       1) (WRITE                 1 0)))
+        (              (RULE (READ add       0       0) (WRITE                       0)))
+        (              (RULE (READ add       0       1) (WRITE                       1)))
+        (              (RULE (READ add       1       0) (WRITE                       1)))
+        (              (RULE (READ add       1       1) (WRITE                     1 0)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (RULE (READ + (<a> 0)       0) (WRITE               <a> 0)))
-        (    (VAR <a>) (RULE (READ + (<a> 0)       1) (WRITE               <a> 1)))
-        (    (VAR <a>) (RULE (READ + (<a> 1)       0) (WRITE               <a> 1)))
-        (    (VAR <a>) (RULE (READ + (<a> 1)       1) (WRITE         (+ 1 <a>) 0)))
+        (    (VAR <a>) (RULE (READ add (<a> 0)       0) (WRITE                   <a> 0)))
+        (    (VAR <a>) (RULE (READ add (<a> 0)       1) (WRITE                   <a> 1)))
+        (    (VAR <a>) (RULE (READ add (<a> 1)       0) (WRITE                   <a> 1)))
+        (    (VAR <a>) (RULE (READ add (<a> 1)       1) (WRITE           (add 1 <a>) 0)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (RULE (READ +       0 (<b> 0)) (WRITE               <b> 0)))
-        (    (VAR <b>) (RULE (READ +       0 (<b> 1)) (WRITE               <b> 1)))
-        (    (VAR <b>) (RULE (READ +       1 (<b> 0)) (WRITE               <b> 1)))
-        (    (VAR <b>) (RULE (READ +       1 (<b> 1)) (WRITE         (+ 1 <b>) 0)))
+        (    (VAR <b>) (RULE (READ add       0 (<b> 0)) (WRITE                   <b> 0)))
+        (    (VAR <b>) (RULE (READ add       0 (<b> 1)) (WRITE                   <b> 1)))
+        (    (VAR <b>) (RULE (READ add       1 (<b> 0)) (WRITE                   <b> 1)))
+        (    (VAR <b>) (RULE (READ add       1 (<b> 1)) (WRITE           (add 1 <b>) 0)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (RULE (READ + (<a> 0) (<b> 0)) (WRITE       (+ <a> <b>) 0)))
-        ((VAR <a> <b>) (RULE (READ + (<a> 0) (<b> 1)) (WRITE       (+ <a> <b>) 1)))
-        ((VAR <a> <b>) (RULE (READ + (<a> 1) (<b> 0)) (WRITE       (+ <a> <b>) 1)))
-        ((VAR <a> <b>) (RULE (READ + (<a> 1) (<b> 1)) (WRITE (+ 1 (+ <a> <b>)) 0)))
+        ((VAR <a> <b>) (RULE (READ add (<a> 0) (<b> 0)) (WRITE         (add <a> <b>) 0)))
+        ((VAR <a> <b>) (RULE (READ add (<a> 0) (<b> 1)) (WRITE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (RULE (READ add (<a> 1) (<b> 0)) (WRITE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (RULE (READ add (<a> 1) (<b> 1)) (WRITE (add 1 (add <a> <b>)) 0)))
     )
 
-    +
+    add
     (((1 1) 0) 0)
     (((0 1) 0) 1)
 )
