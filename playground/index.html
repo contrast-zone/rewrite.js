@@ -499,6 +499,50 @@
 )
 </script>
 
+<script id="exmpl-bincompare" type="text/plain">
+/*
+    binary number comparison
+*/
+
+(
+    (
+        REWRITE
+        
+        // both numbers single digits
+        (              (RULE (READ >       0       0) (WRITE             false)))
+        (              (RULE (READ >       0       1) (WRITE             false)))
+        (              (RULE (READ >       1       0) (WRITE             true )))
+        (              (RULE (READ >       1       1) (WRITE             false)))
+        
+        // first number multiple digits, second number single digit
+        (    (VAR <a>) (RULE (READ > (<a> 0)       0) (WRITE (> <a>   0) false)))
+        (    (VAR <a>) (RULE (READ > (<a> 0)       1) (WRITE (> <a>   0) false)))
+        (    (VAR <a>) (RULE (READ > (<a> 1)       0) (WRITE (> <a>   0) true )))
+        (    (VAR <a>) (RULE (READ > (<a> 1)       1) (WRITE (> <a>   0) false)))
+        
+        // first number single digit, second number multiple digits
+        (    (VAR <b>) (RULE (READ >       0 (<b> 0)) (WRITE (>   0 <b>) false)))
+        (    (VAR <b>) (RULE (READ >       0 (<b> 1)) (WRITE (>   0 <b>) false)))
+        (    (VAR <b>) (RULE (READ >       1 (<b> 0)) (WRITE (>   0 <b>) true )))
+        (    (VAR <b>) (RULE (READ >       1 (<b> 1)) (WRITE (>   0 <b>) false)))
+        
+        // both numbers multiple digits
+        ((VAR <a> <b>) (RULE (READ > (<a> 0) (<b> 0)) (WRITE (> <a> <b>) false)))
+        ((VAR <a> <b>) (RULE (READ > (<a> 0) (<b> 1)) (WRITE (> <a> <b>) false)))
+        ((VAR <a> <b>) (RULE (READ > (<a> 1) (<b> 0)) (WRITE (> <a> <b>) true )))
+        ((VAR <a> <b>) (RULE (READ > (<a> 1) (<b> 1)) (WRITE (> <a> <b>) false)))
+        
+        // reduce to final value
+        ((VAR <x>) (RULE (READ false <x>) (WRITE <x>)))
+        ((VAR <x>) (RULE (READ  true <x>) (WRITE true)))
+    )
+
+    >
+    (((1 1) 0) 0)
+    (((0 1) 0) 1)
+)
+</script>
+
 <script id="exmpl-meta1" type="text/plain">
 /*
     meta-rules
@@ -690,9 +734,10 @@ mark {
         <a href="javascript:populate('exmpl-kk');">&nbsp;&nbsp;&nbsp; sat solver: knights and knaves</a>
         <a href="javascript:populate('exmpl-wgc');">&nbsp;&nbsp;&nbsp; planning: wolf, goat, cabbage</a>
 
-        <!--div class="droplbl"><hr/>unsorted</div>
+        <div class="droplbl"><hr/>unsorted</div>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
-        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a-->
+        <a href="javascript:populate('exmpl-bincompare');">&nbsp;&nbsp;&nbsp; binary number comparison</a>
+        <!--a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a-->
     </div>
 </div>
                 </b>
