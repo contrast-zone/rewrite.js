@@ -509,10 +509,10 @@
         REWRITE
         
         // both numbers single digits
-        (              (RULE (READ compare       0       0) (WRITE             eq)))
-        (              (RULE (READ compare       0       1) (WRITE             lt)))
-        (              (RULE (READ compare       1       0) (WRITE             gt)))
-        (              (RULE (READ compare       1       1) (WRITE             eq)))
+        (              (RULE (READ compare       0       0) (WRITE                   eq)))
+        (              (RULE (READ compare       0       1) (WRITE                   lt)))
+        (              (RULE (READ compare       1       0) (WRITE                   gt)))
+        (              (RULE (READ compare       1       1) (WRITE                   eq)))
         
         // first number multiple digits, second number single digit
         (    (VAR <a>) (RULE (READ compare (<a> 0)       0) (WRITE (compare <a>   0) eq)))
