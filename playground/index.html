@@ -389,7 +389,6 @@
         // flipping east/west
         (        (RULE (READ flip e     ) (WRITE w)))
         (        (RULE (READ flip w     ) (WRITE e)))
-        ((VAR a) (RULE (READ flip flip a) (WRITE a)))
         
         // success
         ((VAR x) (RULE (READ states x (e e e e)) (WRITE states x succ)))
