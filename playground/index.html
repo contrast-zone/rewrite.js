@@ -546,12 +546,14 @@
 
 <script id="exmpl-meta1" type="text/plain">
 /*
-    meta-rules
+    formula defining and applying
 */
 
 (
     (
         REWRITE
+        
+        // metarule for defining formulas
         (
             (VAR <a> <b>)
             (
@@ -571,11 +573,14 @@
             )
         )
     )
-
+    
+    // defining formulas
     ((b + b) -> (2 * b))
     ((a * a) -> (a ^ 2))
+    ((a / a) -> 1)
     
-    (x + x) * (x + x)
+    // applying formulas
+    ((2 * x) ^ 2) / ((x + x) * (x + x))
 )
 </script>
 
@@ -735,10 +740,12 @@ mark {
         <a href="javascript:populate('exmpl-kk');">&nbsp;&nbsp;&nbsp; sat solver: knights and knaves</a>
         <a href="javascript:populate('exmpl-wgc');">&nbsp;&nbsp;&nbsp; planning: wolf, goat, cabbage</a>
 
-        <div class="droplbl"><hr/>unsorted</div>
+        <div class="droplbl"><hr/>binary number operations</div>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
         <a href="javascript:populate('exmpl-bincompare');">&nbsp;&nbsp;&nbsp; binary number comparison</a>
-        <!--a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a-->
+
+        <div class="droplbl"><hr/>meta section</div>
+        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; formula defining and application</a>
     </div>
 </div>
                 </b>
