@@ -6,12 +6,14 @@ var edit = function (node, options) {
             tabWidth: 4,
             colorText: "rgb(208,208,208)",
             colorTextBack: "black",
+            colorSelection: "white",
+            colorSelectionBack: "gray",
             colorKeyword: "rgb(104,104,104)",
             colorKeywordBack: "transparent",
             colorBracketMatch: "white",
             colorBracketMatchBack: "rgb(75,75,75)",
-            colorStringAndComment: "rgb(128,128,128)",
-            keywords: ["REWRITE", "RULE", "READ", "WRITE", "VAR"],
+            colorStringAndComment: "rgb(104,104,104)",
+            keywords: ["\\bRULE\\b|\\bREWRITE\\b|\\bREAD\\b|\\bWRITE\\b|\\bVAR\\b"],
             stringsAndComments: "(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
         }
 
@@ -27,7 +29,7 @@ var edit = function (node, options) {
         <div id="hilights${rndid}" style="wrap: none; font: ${options.font}; white-space: pre; color: ${options.colorText}; background-color: ${options.colorTextBack}; width: inherit; height: inherit; overflow: hidden; margin: 0; padding:5px;">
         </div>
       </div>
-      <textarea id="input${rndid}" spellcheck="false" wrap="off" style="z-index: 0; width: inherit; height: inherit; border-style: none; border-radius: 0; outline: none; resize: none; box-sizing: border-box; display: block; background-color: transparent; color: transparent; caret-color: white; font: ${options.font}; margin: 0; padding:5px; position: absolute; top: 0; left: 0;">
+      <textarea class="cls${rndid}" id="input${rndid}" spellcheck="false" wrap="off" style="z-index: 0; width: inherit; height: inherit; border-style: none; border-radius: 0; outline: none; resize: none; box-sizing: border-box; display: block; background-color: transparent; color: transparent; caret-color: white; font: ${options.font}; margin: 0; padding:5px; position: absolute; top: 0; left: 0;">
       </textarea>
     </div>
     `
@@ -36,6 +38,17 @@ var edit = function (node, options) {
     var hilights = document.getElementById(`hilights${rndid}`);
     var backdrop = document.getElementById(`backdrop${rndid}`);
     var container = document.getElementById(`container${rndid}`);
+    
+    var style=document.createElement('style');
+    style.innerHTML = `
+        .cls${rndid}::selection {
+            background-color: var(--selbackcolor);
+            color: var(--selcolor);
+        }
+    ` 
+    document.head.appendChild(style);
+    input.style.setProperty('--selbackcolor', options.colorSelectionBack)
+    input.style.setProperty('--selcolor', options.colorSelection)
     
     container.style.width = "inherit";
     container.style.height = "inherit";
@@ -87,11 +100,20 @@ var edit = function (node, options) {
 
     function hilightKeywords (text) {
         for (var i = 0; i < options.keywords.length; i++) {
-            var reg = new RegExp(`\\b${options.keywords[i]}\\b`, "g");
-            text = text.replaceAll (reg, `<span style="color: ${options.colorKeyword}; background-color: ${options.colorKeywordBack}; font-weight: bold;">${options.keywords[i]}</span>`);
+            var reg = new RegExp(options.keywords[i], "g");
+            var result;
+            var text1 = "";
+            var pos1 = 0;
+            while((result = reg.exec(text)) !== null) {
+                text1 += text.substring(pos1, result.index);
+                text1 += `<span style="color: ${options.colorKeyword}; background-color: ${options.colorKeywordBack}; font-weight: bold;">${result[0]}</span>`;
+                pos1 = result.index + result[0].length;
+            }
+            text1 += text.substring(pos1, text.length);
+            text = text1;
         }
         
-        return text;
+        return text1;
     }
     
     function prepareBraces (text, open, close) {
