@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Rewrite</title>
-<script src="../src/rewrite.js"></script>
+<title>Lissy</title>
+<script src="../src/lissy.js"></script>
 <script src="edit.js"></script>
 
 <script id="exmpl1" type="text/plain">
@@ -701,7 +701,7 @@ mark {
 <tbody>
 <tr>
 <td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
-<font size="5"><strong>rewrite playground</strong></font>
+<font size="5"><strong>lissy playground</strong></font>
 </td>
 </tr>
 <tr>
@@ -926,7 +926,7 @@ mark {
     function compile () {
         output1.value = "";
         setTimeout (function (){
-            var p = rewrite (input1.getValue (), 10000);
+            var p = lissy (input1.getValue (), 10000);
             if (p.err) {
                 var c = getCoords (input1.getValue (), p.pos)
                 output1.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
