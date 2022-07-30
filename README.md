@@ -6,7 +6,7 @@ Nevertheless, its potential capabilities reach far beyond templating. *Lissy* op
 
 ---
 
-To try *Lissy* within browser, please refer to [Rewrite Playground](https://contrast-zone.github.io/rewrite/playground/index.html). The playground may also be run locally, after downloading this package.
+To try *Lissy* within browser, please refer to [Lissy Playground](https://contrast-zone.github.io/lissy/playground/index.html). The playground may also be run locally, after downloading this package.
 
 ---
 
@@ -16,7 +16,7 @@ To try *Lissy* within browser, please refer to [Rewrite Playground](https://cont
 - [2. further examples](#2-further-examples)
 - [3. how does it work](#3-how-does-it-work)
 - [4. speed performance](#4-speed-performance)
-- [5. using rewrite](#5-using-rewrite)
+- [5. using lissy](#5-using-lissy)
 
 ## 1. introductory examples
 
@@ -67,7 +67,7 @@ also evaluates to:
 
 ## 2. further examples
 
-Please refer to the *Rewrite Playground* from the above link for more thorough examples exposure. Available examples include some basic term rewriting setups, as well as equality predicate, branching choice, Boolean operations, proof checking, SAT solver, and action planning use.
+Please refer to the *Lissy Playground* from the above link for more thorough examples exposure. Available examples include some basic term rewriting setups, as well as equality predicate, branching choice, Boolean operations, proof checking, SAT solver, and action planning use.
 
 ## 3. how does it work
 
@@ -81,7 +81,7 @@ Being such a minimalist creation with only one kind of built-in constructs, the 
 
 ## 5. using rewrite
 
-This package contains a naive Javascript implementation of *Lissy*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite(...s-expression string..., ...timeout...)` function to return an output s-expression packed within an array.
+This package contains a naive Javascript implementation of *Lissy*. Just include `src/lissy.js` in your HTML or js file, and call `lissy(...s-expression string..., ...timeout...)` function to return an output s-expression packed within an array.
 
-In a case of any bugs, please open a new issue on the [project home page](https://github.com/contrast-zone/rewrite).
+In a case of any bugs, please open a new issue at the [project home page](https://github.com/contrast-zone/lissy).
 
