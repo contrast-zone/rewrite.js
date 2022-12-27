@@ -11,8 +11,14 @@ To get a feeling about *rewrite.js*, this is some math rewriting example code in
     (
         (
             REWRITE
-            ((VAR <a>) (RULE (READ  <a> + <a>) (WRITE 2 * <a>)))
-            ((VAR <a>) (RULE (READ  <a> * <a>) (WRITE <a> ^ 2)))
+            (
+                (VAR <a>)
+                (RULE (READ  <a> + <a>) (WRITE 2 * <a>))
+            )
+            (
+                (VAR <a>)
+                (RULE (READ  <a> * <a>) (WRITE <a> ^ 2))
+            )
         )
 
         (X + X) * (X + X)
