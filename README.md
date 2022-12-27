@@ -1,8 +1,6 @@
 # rewrite.js
 
-*rewrite.js* is estimated to be a [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), [s-expression](https://en.wikipedia.org/wiki/S-expression) based [term rewriting](https://en.wikipedia.org/wiki/Rewriting) system. Its original intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users.
-
-*rewrite.js* may be used as a curiosity computing platform, formula application system, proof checker, problem solver, and pretty much anywhere where any kind of computation is required, as long as slower performance on intensive computations doesn't go beyond limits of user patience.
+*rewrite.js* is estimated to be a [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), [s-expression](https://en.wikipedia.org/wiki/S-expression) based [term rewriting](https://en.wikipedia.org/wiki/Rewriting) system. It may be used as a curiosity computing platform, formula application system, proof checker, problem solver, and pretty much anywhere where any kind of computation is required, as long as slower performance on intensive computations doesn't go beyond limits of user patience.
 
 ---
 
@@ -30,7 +28,7 @@ The above example results with:
 
 ---
 
-To try *rewrite.js* within browser, please refer to [rewrite.js playground](https://contrast-zone.github.io/rewrite.js/playground/index.html). The playground may also be run locally, after downloading this package.
+To try *rewrite.js* within browser, please refer to [online rewrite.js playground](https://contrast-zone.github.io/rewrite.js/playground/index.html). The playground may also be run locally, after downloading this package.
 
 ---
 
