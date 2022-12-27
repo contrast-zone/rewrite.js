@@ -6,7 +6,7 @@ Nevertheless, its potential capabilities reach far beyond templating. *lissy.js*
 
 ---
 
-To try *lissy.js* within browser, please refer to [lissy.js Playground](https://contrast-zone.github.io/lissy/playground/index.html). The playground may also be run locally, after downloading this package.
+To try *lissy.js* within browser, please refer to [lissy.js Playground](https://contrast-zone.github.io/lissy.js/playground/index.html). The playground may also be run locally, after downloading this package.
 
 ---
 
