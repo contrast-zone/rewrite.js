@@ -19,12 +19,12 @@ To get a feeling about *rewrite.js* appearance, this is a math expression rewrit
             )
         )
 
-        (X + X) * (X + X)
+        (x + x) * (x + x)
     )
 
 The above example results with:
 
-    ((2 * X) ^ 2)
+    ((2 * x) ^ 2)
 
 ---
 
