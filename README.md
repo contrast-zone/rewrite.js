@@ -1,4 +1,4 @@
-# lissy
+# lissy.js
 
 *Lissy* is estimated to be a [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), [s-expression](https://en.wikipedia.org/wiki/S-expression) based [term rewriting](https://en.wikipedia.org/wiki/Rewriting) system. Its original intention is operating over s-expressions to expand asserted template occurrences while aiming to be intuitive enough to introduce code templating to non-technical users.
 
