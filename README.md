@@ -6,7 +6,7 @@ Nevertheless, its potential capabilities reach far beyond templating. *rewrite.j
 
 ---
 
-To get a feeling about *rewrite.js*, this is some math rewriting example code in *rewrite.js*:
+To get a feeling about *rewrite.js*, this is a math rewriting example code in *rewrite.js*:
 
     (
         (
