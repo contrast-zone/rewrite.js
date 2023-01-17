@@ -40,7 +40,7 @@
 (
     (
         REWRITE
-        ((VAR <x>) (RULE (READ greet <x>) (WRITE hello <x>)))
+        (MATCH (VAR <x>) (RULE (READ greet <x>) (WRITE hello <x>)))
     )
 
     greet world
@@ -72,6 +72,7 @@
     (
         REWRITE
         (
+            MATCH
             (VAR <a> <b>)
             (RULE (READ l <a> <b>) (WRITE <a> likes <b>))
         )
@@ -92,6 +93,7 @@
         (RULE (READ x) (WRITE Nikki ))
         (RULE (READ y) (WRITE cheese))
         (
+            MATCH
             (VAR <a> <b>)
             (RULE (READ l <a> <b>) (WRITE <a> likes <b>))
         )
@@ -110,9 +112,11 @@
     (
         REWRITE
         (
+            MATCH
             (VAR <x>)
             (RULE (READ <x> == <x>) (WRITE true ))
         ) (
+            MATCH
             (VAR <x> <y>)
             (RULE (READ <x> == <y>) (WRITE false))
         )
@@ -134,9 +138,11 @@
     (
         REWRITE
         (
+            MATCH
             (VAR <x> <y>)
             (RULE (READ if true then <x> else <y> ) (WRITE <x>))
         ) (
+            MATCH
             (VAR <x> <y>)
             (RULE (READ if false then <x> else <y>) (WRITE <y>))
         )
@@ -188,23 +194,23 @@
         REWRITE
         
         // logic rules
-        ((VAR a b) (RULE (READ                                 [/\Intro] a b) (WRITE a /\ b )))
-        ((VAR a b) (RULE (READ                              [/\Elim1] a /\ b) (WRITE a      )))
-        ((VAR a b) (RULE (READ                              [/\Elim2] a /\ b) (WRITE b      )))
-        ((VAR a b) (RULE (READ                                  [\/Intro1] a) (WRITE a \/ b )))
-        ((VAR a b) (RULE (READ                                  [\/Intro2] b) (WRITE a \/ b )))
-        ((VAR a b) (RULE (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  )))
-        ((VAR a b) (RULE (READ                             [->Intro] a ... b) (WRITE a -> b )))
-        ((VAR a b) (RULE (READ                           [->Elim] (a -> b) a) (WRITE b      )))
-        ((VAR a b) (RULE (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b)))
-        ((VAR a b) (RULE (READ                        [<->Elim1] (a <-> b) a) (WRITE b      )))
-        ((VAR a b) (RULE (READ                        [<->Elim2] (a <-> b) b) (WRITE a      )))
-        (  (VAR a) (RULE (READ                          [~Intro] a ... False) (WRITE ~ a    )))
-        (  (VAR a) (RULE (READ                               [~Elim] (~ a) a) (WRITE False  )))
-        (  (VAR a) (RULE (READ                                     [X] False) (WRITE a      )))
-        (  (VAR a) (RULE (READ                          [IP] (~ a) ... False) (WRITE a      )))
+        (MATCH (VAR a b) (RULE (READ                                 [/\Intro] a b) (WRITE a /\ b )))
+        (MATCH (VAR a b) (RULE (READ                              [/\Elim1] a /\ b) (WRITE a      )))
+        (MATCH (VAR a b) (RULE (READ                              [/\Elim2] a /\ b) (WRITE b      )))
+        (MATCH (VAR a b) (RULE (READ                                  [\/Intro1] a) (WRITE a \/ b )))
+        (MATCH (VAR a b) (RULE (READ                                  [\/Intro2] b) (WRITE a \/ b )))
+        (MATCH (VAR a b) (RULE (READ [\/Elim] (a \/ b) (a ... False) (b ... False)) (WRITE False  )))
+        (MATCH (VAR a b) (RULE (READ                             [->Intro] a ... b) (WRITE a -> b )))
+        (MATCH (VAR a b) (RULE (READ                           [->Elim] (a -> b) a) (WRITE b      )))
+        (MATCH (VAR a b) (RULE (READ                  [<->Intro] (a -> b) (b -> a)) (WRITE a <-> b)))
+        (MATCH (VAR a b) (RULE (READ                        [<->Elim1] (a <-> b) a) (WRITE b      )))
+        (MATCH (VAR a b) (RULE (READ                        [<->Elim2] (a <-> b) b) (WRITE a      )))
+        (MATCH   (VAR a) (RULE (READ                          [~Intro] a ... False) (WRITE ~ a    )))
+        (MATCH   (VAR a) (RULE (READ                               [~Elim] (~ a) a) (WRITE False  )))
+        (MATCH   (VAR a) (RULE (READ                                     [X] False) (WRITE a      )))
+        (MATCH   (VAR a) (RULE (READ                          [IP] (~ a) ... False) (WRITE a      )))
     
-        ((VAR a) (RULE (READ [Assume] a) (WRITE a)))
+        (MATCH (VAR a) (RULE (READ [Assume] a) (WRITE a)))
 
         /*
             a proof for De Morgan's law
@@ -282,6 +288,7 @@
         
         // build the truth table
         (
+            MATCH
             (VAR <a> <b>)
             (
                 RULE
@@ -328,6 +335,7 @@
         
         // deduce consistency
         (
+            MATCH
             (VAR b c d x y)
             (
                 RULE
@@ -335,6 +343,7 @@
                 (WRITE (A is personality x) (B is personality y))
             )
         ) (
+            MATCH
             (VAR a c d x y)
             (
                 RULE
@@ -342,6 +351,7 @@
                 (WRITE (A is personality x) (B is personality y))
             )
         ) (
+            MATCH
             (VAR a b d x y)
             (
                 RULE
@@ -349,6 +359,7 @@
                 (WRITE (A is personality x) (B is personality y))
             )
         ) (
+            MATCH
             (VAR a b c x y)
             (
                 RULE
@@ -356,6 +367,7 @@
                 (WRITE (A is personality x) (B is personality y))
             )
         ) (
+            MATCH
             (VAR a b c d)
             (
                 RULE
@@ -391,30 +403,30 @@
         (        (RULE (READ flip w     ) (WRITE e)))
         
         // success
-        ((VAR x) (RULE (READ states x (e e e e)) (WRITE states x succ)))
+        (MATCH (VAR x) (RULE (READ states x (e e e e)) (WRITE states x succ)))
 
         // failures
-        ((VAR a x) (RULE (READ states x (w e e a)) (WRITE states x fail)))
-        ((VAR a x) (RULE (READ states x (w a e e)) (WRITE states x fail)))
-        ((VAR a x) (RULE (READ states x (e w w a)) (WRITE states x fail)))
-        ((VAR a x) (RULE (READ states x (e a w w)) (WRITE states x fail)))
+        (MATCH (VAR a x) (RULE (READ states x (w e e a)) (WRITE states x fail)))
+        (MATCH (VAR a x) (RULE (READ states x (w a e e)) (WRITE states x fail)))
+        (MATCH (VAR a x) (RULE (READ states x (e w w a)) (WRITE states x fail)))
+        (MATCH (VAR a x) (RULE (READ states x (e a w w)) (WRITE states x fail)))
 
         // avoid repeating
-        ((VAR x y) (RULE (READ (move wolf) (steps x wolf) (states y)) (WRITE (move goat) (steps x wolf) (states y))))
-        ((VAR x y) (RULE (READ (move goat) (steps x goat) (states y)) (WRITE (move cabb) (steps x goat) (states y))))
-        ((VAR x y) (RULE (READ (move cabb) (steps x cabb) (states y)) (WRITE (move noth) (steps x cabb) (states y))))
-        ((VAR x y) (RULE (READ (move noth) (steps x noth) (states y)) (WRITE (move wolf) (steps x noth) (states y))))
+        (MATCH (VAR x y) (RULE (READ (move wolf) (steps x wolf) (states y)) (WRITE (move goat) (steps x wolf) (states y))))
+        (MATCH (VAR x y) (RULE (READ (move goat) (steps x goat) (states y)) (WRITE (move cabb) (steps x goat) (states y))))
+        (MATCH (VAR x y) (RULE (READ (move cabb) (steps x cabb) (states y)) (WRITE (move noth) (steps x cabb) (states y))))
+        (MATCH (VAR x y) (RULE (READ (move noth) (steps x noth) (states y)) (WRITE (move wolf) (steps x noth) (states y))))
 
         // move to east/west
-        (  (VAR a b f x y) (RULE (READ (move wolf) (steps x) (states y (f f a b))) (WRITE (steps (x wolf)) (states ((y (f f a b)) ((flip f) (flip f) a b))))))
-        (  (VAR a b f x y) (RULE (READ (move goat) (steps x) (states y (f a f b))) (WRITE (steps (x goat)) (states ((y (f a f b)) ((flip f) a (flip f) b))))))
-        (  (VAR a b f x y) (RULE (READ (move cabb) (steps x) (states y (f a b f))) (WRITE (steps (x cabb)) (states ((y (f a b f)) ((flip f) a b (flip f)))))))
-        ((VAR a b c f x y) (RULE (READ (move noth) (steps x) (states y (f a b c))) (WRITE (steps (x noth)) (states ((y (f a b c)) ((flip f) a b c))))))
+        (MATCH   (VAR a b f x y) (RULE (READ (move wolf) (steps x) (states y (f f a b))) (WRITE (steps (x wolf)) (states ((y (f f a b)) ((flip f) (flip f) a b))))))
+        (MATCH   (VAR a b f x y) (RULE (READ (move goat) (steps x) (states y (f a f b))) (WRITE (steps (x goat)) (states ((y (f a f b)) ((flip f) a (flip f) b))))))
+        (MATCH   (VAR a b f x y) (RULE (READ (move cabb) (steps x) (states y (f a b f))) (WRITE (steps (x cabb)) (states ((y (f a b f)) ((flip f) a b (flip f)))))))
+        (MATCH (VAR a b c f x y) (RULE (READ (move noth) (steps x) (states y (f a b c))) (WRITE (steps (x noth)) (states ((y (f a b c)) ((flip f) a b c))))))
         
         // fall down to valid moves
-        ((VAR x y) (RULE (READ (move wolf) (steps x) (states y)) (WRITE (move goat) (steps x) (states y))))
-        ((VAR x y) (RULE (READ (move goat) (steps x) (states y)) (WRITE (move cabb) (steps x) (states y))))
-        ((VAR x y) (RULE (READ (move cabb) (steps x) (states y)) (WRITE (move noth) (steps x) (states y))))
+        (MATCH (VAR x y) (RULE (READ (move wolf) (steps x) (states y)) (WRITE (move goat) (steps x) (states y))))
+        (MATCH (VAR x y) (RULE (READ (move goat) (steps x) (states y)) (WRITE (move cabb) (steps x) (states y))))
+        (MATCH (VAR x y) (RULE (READ (move cabb) (steps x) (states y)) (WRITE (move noth) (steps x) (states y))))
 
         // vertical loop progression
         (RULE (READ progress wolf) (WRITE goat))
@@ -424,6 +436,7 @@
 
         // search for move steps
         (
+            MATCH
             (VAR r x y a b)
             (
                 RULE
@@ -431,6 +444,7 @@
                 (WRITE loop (r) ((steps x y) (states a fail)))
             )
         ) (
+            MATCH
             (VAR r x y a b)
             (
                 RULE
@@ -438,6 +452,7 @@
                 (WRITE solution: x y)
             )
         ) (
+            MATCH
             (VAR r x y a b)
             (
                 RULE
@@ -445,6 +460,7 @@
                 (WRITE loop r ((move (progress y)) (steps x) (states a)))
             )
         ) (
+            MATCH
             (VAR r x y a b)
             (
                 RULE
@@ -926,7 +942,7 @@ mark {
     function compile () {
         output1.value = "";
         setTimeout (function (){
-            var p = rewrite (input1.getValue (), 10000);
+            var p = rewrite (input1.getValue (), 1000000);
             if (p.err) {
                 var c = getCoords (input1.getValue (), p.pos)
                 output1.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");

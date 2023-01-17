@@ -258,7 +258,8 @@ var rewrite = (
             if (Array.isArray (node)) {
                 if (Array.isArray (node[0]) && node[0][0] === "REWRITE") {
                     tmprwrt = node[0][1];
-                    while (tmprwrt[0][0][0] === "VAR" || tmprwrt[0][0] === "RULE") {
+
+                    while (tmprwrt[0][0] === "MATCH" || tmprwrt[0][0] === "RULE") {
                         thisrwrt.push (makeRule (tmprwrt[0]));
                         tmprwrt = tmprwrt[1];
                     }
@@ -272,16 +273,17 @@ var rewrite = (
         
         var makeRule = function (node, thisrwrt) {
             var vars, tmpvar;
-
-            if (node[0][0] === "VAR") {
-                tmpvar = node[0];
+            
+            if (node[0] === "MATCH") {
+                tmpvar = node[1][0];
                 vars = [];
                 while (tmpvar[1]) {
                     vars.push ([tmpvar[1][0], null]);
                     tmpvar = tmpvar[1];
                 }
 
-                return [vars, node[1][1]];
+                return [vars, node[1][1][1]];
+            
 
             } else
                 return [[], node[1]];

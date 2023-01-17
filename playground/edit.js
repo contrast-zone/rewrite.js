@@ -13,7 +13,7 @@ var edit = function (node, options) {
             colorBracketMatch: "white",
             colorBracketMatchBack: "rgb(75,75,75)",
             colorStringAndComment: "rgb(104,104,104)",
-            keywords: ["\\bRULE\\b|\\bREWRITE\\b|\\bREAD\\b|\\bWRITE\\b|\\bVAR\\b"],
+            keywords: ["\\bRULE\\b|\\bREWRITE\\b|\\bREAD\\b|\\bWRITE\\b|\\bMATCH\\b|\\bVAR\\b"],
             stringsAndComments: "(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
         }
 

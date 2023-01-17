@@ -13,3 +13,6 @@
 **July, 2022**
 - added RULE keyword
 - all vars go under the same VAR keyword
+
+**JAN, 2023**
+- added MATCH keyword

@@ -10,12 +10,14 @@ To get a feeling about *rewrite.js* appearance, this is a math expression rewrit
         (
             REWRITE
             (
+                MATCH
                 (VAR <a>)
-                (RULE (READ  <a> + <a>) (WRITE 2 * <a>))
+                (RULE (READ <a> + <a>) (WRITE 2 * <a>))
             )
             (
+                MATCH
                 (VAR <a>)
-                (RULE (READ  <a> * <a>) (WRITE <a> ^ 2))
+                (RULE (READ <a> * <a>) (WRITE <a> ^ 2))
             )
         )
 
@@ -75,7 +77,7 @@ We may also want to use rule variables, which we assert as a list of `VAR` tagge
     (
         (
             REWRITE
-            ((VAR <x>) (RULE (READ greet <x>) (WRITE hello <x>)))
+            (MATCH (VAR <x>) (RULE (READ greet <x>) (WRITE hello <x>)))
         )
         
         greet world
@@ -89,11 +91,11 @@ also evaluates to:
 
 ## 2. further examples
 
-Please refer to the *rewrite.js playground* from the above link for more thorough examples exposure. Available examples include some basic term rewriting setups, as well as equality predicate, branching choice, Boolean operations, proof checking, SAT solver, and action planning use.
+Please refer to the [rewrite.js online playground](https://contrast-zone.github.io/rewrite.js/playground/index.html) from the above link for more thorough examples exposure. Available examples include some basic term rewriting setups, as well as equality predicate, branching choice, Boolean operations, proof checking, SAT solver, and action planning use.
 
 ## 3. how does it work
 
-*rewrite.js* looks deep down the whole s-expression for nodes containing `REWRITE` keyword, and takes contained rules in noted order. Then it applies the ordered rules from the deepest nodes to the right towards the shallowest nodes to the left. During such node visiting, if the first available rule `READ` tag expression matches a node, then `WRITE` tag counterpart replacement is being made. When the replacement takes place, the rewriting procedure for the current node is triggered from the start (from deep to shallow), seeking to again apply the same set of rules. When there are no more rule matches, rewriting is considered done for the current node, and rewriting continues to the parent node, lifting the rewriting executiom to upper level, towards the top node. Finally, when the top node is done, the output expression is being reported to the calling system.
+*rewrite.js* looks deep down the whole s-expression for nodes containing `REWRITE` keyword, and takes contained rules in noted order. Then it applies the ordered rules from the deepest nodes to the right towards the shallowest nodes to the left. During such node visiting, if the first available rule `READ` tag expression matches a node, then `WRITE` tag counterpart replacement is being made. When the replacement takes place, the rewriting procedure for the current node is triggered from the start (from deep to shallow), seeking to again apply the same set of rules. When there are no more rule matches, rewriting is considered done for the current node, and rewriting continues to the parent node, lifting the rewriting execution to upper level, towards the top node. Finally, when the top node is done, the output expression is being reported to the calling system.
 
 During rewriting, some helper parenthesis normalizations are being made. Firstly, all the `(a (b (c (...))))` expressions are considered equal to `(a b c ...)`. Secondly, if a pair of outer parenthesis contains only a single pair of inner parenthesis, the outer parenhesis pair is left out. Thirdly, if any parenthesis contain only a single identifier, the parenthesis are also being left out. These normalizations make the pattern matching flexible enough to tame the possible parenthesis accumulation that would otherwise appear on repeatable read-write cycles.
 
