@@ -942,7 +942,7 @@ mark {
     function compile () {
         output1.value = "";
         setTimeout (function (){
-            var p = rewrite (input1.getValue (), 1000000);
+            var p = rewrite (input1.getValue (), 10000);
             if (p.err) {
                 var c = getCoords (input1.getValue (), p.pos)
                 output1.value = "Error: " + p.err + (p.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
