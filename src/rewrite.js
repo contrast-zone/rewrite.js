@@ -7,23 +7,11 @@ var rewrite = (
         "use strict";
         var startTime, timeout;
         
-        var parse = function (text, tmout) {
+        var doParse = function (text) {
             var ret;
             
-            startTime = new Date().getTime();
-            timeout = tmout? tmout: Infinity;
             ret = deepParse (text, 0);
 
-            try {
-                normalize (ret.arr);
-                reduce (ret.arr, []);
-                stripRules (ret.arr);
-                normalize (ret.arr);
-                ret.arr = flatten (ret.arr);
-            } catch (e) {
-                ret = {err: e, pos: -1};
-            }
-            
             if (ret.err)
                 return ret;
             
@@ -32,6 +20,29 @@ var rewrite = (
             
             else
                 return {err: "unexpected characters", pos: ret.pos};
+        }
+        
+        var doReduce = function (node, tmout) {
+            var ret = {};
+            
+            startTime = new Date().getTime();
+            timeout = tmout? tmout: Infinity;
+
+            try {
+                normalize (node);
+                reduce (node, []);
+                stripRules (node);
+                normalize (node);
+                ret.arr = flatten (node);
+            } catch (e) {
+                ret = {err: e, pos: -1};
+            }
+            
+            if (ret.err)
+                return ret;
+            
+            else
+                return ret.arr;
         }
 
         var deepParse = function (text, pos) {
@@ -395,6 +406,9 @@ var rewrite = (
             return (typeof str === 'string' || str instanceof String)
         }
 
-        return parse;
+        return {
+            parse: doParse,
+            reduce: doReduce
+        }
     }) ()
 );

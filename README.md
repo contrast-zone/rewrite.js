@@ -105,7 +105,7 @@ Being such a minimalist creation with only one kind of built-in constructs, the 
 
 ## 5. using rewrite
 
-This package contains a naive Javascript implementation of *rewrite.js*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite(...s-expression string..., ...timeout...)` function to return an output s-expression packed within an array.
+This package contains a naive Javascript implementation of *rewrite.js*. Just include `src/rewrite.js` in your HTML or js file, and call `rewrite.reduce(rewrite.parse(...s-expression string...), ...timeout...)` function to return an output s-expression packed within an array.
 
 In a case of any bugs, please open a new issue at the [project home page](https://github.com/contrast-zone/rewrite.js).
 
