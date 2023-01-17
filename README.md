@@ -101,7 +101,7 @@ During rewriting, some helper parenthesis normalizations are being made. Firstly
 
 ## 4. speed performance
 
-Being such a minimalist creation with only one kind of built-in constructs, the complete *rewrite.js* implementation takes about 400 Javascript lines of code. Despite the implementation small size, and since it covers Turing complete class of computations, worst case scenario time complexity for processing input may reach `O(∞)`. Nevertheless, further optimizations of the search-replace algorithm are possible, and once that the project reaches a stable state, beside possible optimizations, there may be future plans to target *rewrite.js* to Webasssembly to gain better speed performance, depending on the final speed marks.
+Being such a minimalist creation with only one kind of built-in constructs, the complete *rewrite.js* implementation takes a bit more than 400 Javascript lines of code. Despite the implementation small size, and since it covers Turing complete class of computations, worst case scenario time complexity for processing input may reach `O(∞)`. Nevertheless, further optimizations of the search-replace algorithm are possible, and once that the project reaches a stable state, beside possible optimizations, there may be future plans to target *rewrite.js* to Webasssembly to gain better speed performance, depending on the final speed marks.
 
 ## 5. using rewrite
 
