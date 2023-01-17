@@ -44,7 +44,7 @@ To try *rewrite.js* within browser, please refer to [online rewrite.js playgroun
 
 ## 1. introductory examples
 
-*rewrite.js* is designed as a creation with only one built-in construct: rewriting rules. *rewrite.js* brings only five keywords for declaring rewriting rules: `REWRITE`, `RULE`, `READ`, `WRITE`, and `VAR`. Rules are declared and applied by the following patern:
+*rewrite.js* is designed as a creation with only one built-in construct: rewriting rules. *rewrite.js* brings only six keywords for declaring rewriting rules: `REWRITE`, `RULE`, `READ`, `WRITE`, `MATCH`, and `VAR`. Rules are declared and applied by the following patern:
 
     (
         (
