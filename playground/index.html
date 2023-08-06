@@ -246,18 +246,8 @@
         (RULE (READ FINAL   ) (WRITE [<->Intro] F1 F2                    )) // (A /\ B) <-> (~ ((~ A) \/ (~ B)))
     )
 
-    /*
-        proof listing
-    */
-    
-    // elaborating F1 (A /\ B) -> (~ ((~ A) \/ (~ B)))
-    ("### formula set 1 ###" (#1 f1) (#2 f2) (#3 f3) (#4 f4) (#5 f5) (#6 f6) (#7 f7) (#8 f8) (#9 f9) (#10 f10) (#F1 F1))
-    
-    // elaborating F2 (~ (~A \/ ~B)) -> (A /\ B)
-    ("### formula set 2 ###" (#11 f11) (#12 f12) (#13 f13) (#14 f14) (#15 f15) (#16 f16) (#17 f17) (#18 f18) (#19 f19) (#20 f20) (#F2 F2))
-    
-    // deriving FINAL (A /\ B) <-> (~ ((~ A) \/ (~ B)))
-    ("### final formula ###" (#FINAL f FINAL))
+    // deriving (A /\ B) <-> (~ ((~ A) \/ (~ B)))
+    ("### computed final formula ###" FINAL)
 )
 </script>
 
