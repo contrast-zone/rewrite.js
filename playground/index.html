@@ -216,7 +216,7 @@
             a proof for De Morgan's law
         */
         
-        // (A /\ B) -> ~((~ A) \/ (~ B))
+        // (A /\ B) -> ~(~ A \/ ~ B)
         (RULE (READ f1       ) (WRITE [Assume] A /\ B                    ))
         (RULE (READ   f2     ) (WRITE [Assume] (~ A) \/ (~ B)            ))
         (RULE (READ     f3   ) (WRITE [Assume] ~ A                       ))
